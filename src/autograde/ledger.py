@@ -45,7 +45,8 @@ def _dec(x):
     return Literal(str(Decimal(str(x))), datatype=XSD.decimal)
 
 
-def to_graph(qid, entries):
+def to_graph(qid, entries, gaps=()):
+    """ledger.ttl; `gaps` (Rule 4 PremiseGaps) add ag:lacksPremise links, which the score query ignores."""
     g = io.bind_namespaces(Graph())
     for e in entries:
         node = ANS[e.entry_id]
@@ -61,6 +62,8 @@ def to_graph(qid, entries):
         g.add((node, AG.contradiction, _dec(int(e.contradiction))))
         if e.override:
             g.add((node, RDFS.comment, Literal(f"override by {e.override['by']}: {e.override['reason']}")))
+    for gap in gaps:
+        g.add((ANS[gap.entry_id], AG.lacksPremise, ANS[gap.premise_entry_id]))
     return g
 
 
@@ -95,7 +98,7 @@ def answer_graph(answer_id, students, sentences, qid=None, trace=None):
     return g
 
 
-def write(out_dir, qid, entries, suffix=""):
+def write(out_dir, qid, entries, suffix="", gaps=()):
     out_dir.mkdir(parents=True, exist_ok=True)
     rows = [e.model_dump() for e in entries]
     save_json(rows, out_dir / f"ledger{suffix}.json")
@@ -104,7 +107,7 @@ def write(out_dir, qid, entries, suffix=""):
         w.writeheader()
         for row in rows:
             w.writerow({**row, "sentence_ids": " ".join(row["sentence_ids"]), "override": row["override"] or ""})
-    to_graph(qid, entries).serialize(out_dir / f"ledger{suffix}.ttl", format="turtle")
+    to_graph(qid, entries, gaps).serialize(out_dir / f"ledger{suffix}.ttl", format="turtle")
 
 
 def recompute_sparql(ledger_ttl, gold_ttl, lam):

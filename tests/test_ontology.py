@@ -7,8 +7,8 @@ CLASSES = ["Concept", "Relation", "Triple", "ReferenceTriple", "StudentTriple", 
            "Answer", "Sentence", "LedgerEntry", "Status"]
 OBJECT_PROPS = ["hasSubject", "hasPredicate", "hasObject", "criterion", "equivalentPredicate",
                 "incompatibleWith", "alignedSubject", "alignedObject", "contradicts", "inAnswer",
-                "answer", "reference", "matchedBy", "contradictedBy", "status"]
-DATA_PROPS = ["weight", "negated", "credit", "contradiction"]
+                "answer", "reference", "matchedBy", "contradictedBy", "status", "requiresPremise", "lacksPremise"]
+DATA_PROPS = ["weight", "negated", "credit", "contradiction", "isCredited"]
 
 
 @pytest.fixture(scope="module")
@@ -31,11 +31,17 @@ def test_characteristics(onto):
     assert o.FunctionalProperty not in onto.hasSubject.is_a  # several accepted subjects
 
 
-def test_three_rules_present(onto):
+def test_four_rules_present(onto):
     rules = [str(r) for r in onto.world.rules()]
-    assert len(rules) == 3
+    assert len(rules) == 4
     assert sum("negated(?t, false)" in r for r in rules) == 1
     assert sum("negated(?t, true)" in r for r in rules) == 2
+    assert sum("-> lacksPremise(?ec, ?ep)" in r for r in rules) == 1  # Rule 4
+
+
+def test_status_credit_flags(onto):
+    assert {i.name: i.isCredited for i in onto.Status.instances()} == \
+        {"Cocok": True, "Parsial": True, "Hilang": False, "Kontradiksi": False}
 
 
 def test_status_individuals(onto):

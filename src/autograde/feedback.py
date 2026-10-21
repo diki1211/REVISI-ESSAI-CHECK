@@ -30,17 +30,35 @@ def triple_label(ref):
     return f"{ref.s[0]} {ref.p} {ref.o}"
 
 
-def ledger_view(entries, refs, rubric, sentences):
+# Added to SYSTEM only when Rule 4 found premise gaps, so cached prompts for other answers stay valid.
+PREMISE_RULE = """
+- kind "premise" is only for an entry listed with missing_premises: cite that entry and its missing premise
+  entries, and explain that the conclusion is stated without the premise it rests on. This does not lower
+  the score."""
+
+
+def ledger_view(entries, refs, rubric, sentences, gaps=()):
     desc = {c["id"]: c["description"] for c in rubric["criteria"]}
     by_ref, text = {r.id: r for r in refs}, dict(sentences)
-    return [{"entry_id": e.entry_id, "status": e.status, "criterion": desc[e.criterion],
-             "reference_triple": triple_label(by_ref[e.reference_id]),
-             "quoted_sentences": [text[s] for s in e.sentence_ids if s in text]} for e in entries]
+    rows = []
+    for e in entries:
+        row = {"entry_id": e.entry_id, "status": e.status, "criterion": desc[e.criterion],
+               "reference_triple": triple_label(by_ref[e.reference_id]),
+               "quoted_sentences": [text[s] for s in e.sentence_ids if s in text]}
+        missing = [g.premise_entry_id for g in gaps if g.entry_id == e.entry_id]
+        if missing:
+            row["missing_premises"] = missing
+        rows.append(row)
+    return rows
 
 
-def schema(entries):
+def kinds(gaps=()):
+    return [*KIND_STATUS, *(["premise"] if gaps else [])]
+
+
+def schema(entries, gaps=()):
     claim = {"type": "object",
-             "properties": {"text": {"type": "string"}, "kind": {"type": "string", "enum": list(KIND_STATUS)},
+             "properties": {"text": {"type": "string"}, "kind": {"type": "string", "enum": kinds(gaps)},
                             "ledger_entry_ids": {"type": "array",
                                                  "items": {"type": "string", "enum": [e.entry_id for e in entries]}}},
              "required": ["text", "kind", "ledger_entry_ids"], "additionalProperties": False}
@@ -48,7 +66,17 @@ def schema(entries):
             "required": ["claims", "summary"], "additionalProperties": False}
 
 
-def validate(fb, entries, score):
+def premise_errors(i, claim, gaps):
+    """A premise claim cites at least one recorded gap (conclusion and premise) and nothing outside the gaps."""
+    pairs = {(g.entry_id, g.premise_entry_id) for g in gaps}
+    cited = set(claim.ledger_entry_ids)
+    if not any(c in cited and p in cited for c, p in pairs):
+        return [f"claim {i} is 'premise' but cites no recorded premise gap"]
+    stray = sorted(cited - {x for pair in pairs for x in pair})
+    return [f"claim {i} is 'premise' but {eid} is in no premise gap" for eid in stray]
+
+
+def validate(fb, entries, score, gaps=()):
     status = {e.entry_id: e.status for e in entries}
     errors = []
     if len(fb.claims) > MAX_CLAIMS:
@@ -59,8 +87,10 @@ def validate(fb, entries, score):
         for eid in c.ledger_entry_ids:
             if eid not in status:
                 errors.append(f"claim {i} cites unknown entry {eid}")
-            elif status[eid] != KIND_STATUS[c.kind]:
+            elif c.kind != "premise" and status[eid] != KIND_STATUS[c.kind]:
                 errors.append(f"claim {i} is '{c.kind}' but {eid} is {status[eid]}")
+        if c.kind == "premise" and all(eid in status for eid in c.ledger_entry_ids):
+            errors += premise_errors(i, c, gaps)
     allowed = allowed_numbers(score)
     for text in [fb.summary, *(c.text for c in fb.claims)]:
         bad = [n for n in NUMBER.findall(unicodedata.normalize("NFKC", text)) if n not in allowed]
@@ -77,7 +107,11 @@ TEMPLATES = [  # (kind, sentence) in display order
 ]
 
 
-def template(answer_id, entries, refs, score):
+PREMISE_TEMPLATE = ("Kesimpulan sudah disebut, tetapi premis yang mendasarinya belum ditemukan: {}. "
+                    "Ini tidak mengurangi skor; lengkapi alasannya.")
+
+
+def template(answer_id, entries, refs, score, gaps=()):
     by_ref = {r.id: r for r in refs}
     claims = []
     for kind, sentence in TEMPLATES:
@@ -85,23 +119,31 @@ def template(answer_id, entries, refs, score):
         if hits:
             claims.append({"text": sentence.format("; ".join(triple_label(by_ref[e.reference_id]) for e in hits)),
                            "kind": kind, "ledger_entry_ids": [e.entry_id for e in hits]})
+    if gaps:  # one claim for every gap, after the status claims (at most 5 claims in total)
+        conclusions = list(dict.fromkeys(g.entry_id for g in gaps))
+        parts = ["{} ← {}".format(triple_label(by_ref[next(g.reference_id for g in gaps if g.entry_id == c)]),
+                                  ", ".join(triple_label(by_ref[g.premise_id]) for g in gaps if g.entry_id == c))
+                 for c in conclusions]
+        claims.append({"text": PREMISE_TEMPLATE.format("; ".join(parts)), "kind": "premise",
+                       "ledger_entry_ids": list(dict.fromkeys(x for g in gaps for x in (g.entry_id, g.premise_entry_id)))})
     return Feedback(answer_id=answer_id, claims=claims, source="template",
                     summary=f"Skor: {display_score(score)}. Perhatikan bagian yang belum disebutkan atau bertentangan.")
 
 
-def generate(answer_id, entries, refs, rubric, sentences, score, *, backend=None, use_llm=True):
-    """LLM feedback, one retry with the validator's errors, then the template."""
+def generate(answer_id, entries, refs, rubric, sentences, score, *, backend=None, use_llm=True, gaps=()):
+    """LLM feedback, one retry with the validator's errors, then the template. `gaps`: Rule 4 premise gaps."""
     if use_llm:
         user = json.dumps({"score_display": display_score(score),
-                           "ledger": ledger_view(entries, refs, rubric, sentences)}, ensure_ascii=False, indent=1)
+                           "ledger": ledger_view(entries, refs, rubric, sentences, gaps)}, ensure_ascii=False, indent=1)
         for _ in range(2):
             try:
-                data = llm.complete_json(SYSTEM, user, schema(entries), backend=backend)
+                data = llm.complete_json(SYSTEM + (PREMISE_RULE if gaps else ""), user, schema(entries, gaps),
+                                         backend=backend)
             except llm.LLMError:  # no key, refusal, API error: use the template
                 break
             fb = Feedback(answer_id=answer_id, source="llm", **data)
-            errors = validate(fb, entries, score)
+            errors = validate(fb, entries, score, gaps)
             if not errors:
                 return fb
             user += "\n\nYour previous feedback was rejected: " + "; ".join(errors)
-    return template(answer_id, entries, refs, score)
+    return template(answer_id, entries, refs, score, gaps)

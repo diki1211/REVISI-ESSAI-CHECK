@@ -41,7 +41,10 @@ def test_evaluate_synthetic_and_deterministic(synthetic_run):
     text = report.read_text()
     assert "SYNTHETIC DATA" in text and "B2 LLM-only not computed" in text
     metrics = pd.read_csv(synthetic_run / "metrics.csv")
-    assert set(metrics.system) == {"System (gold mode)", "System (gold mode), λ = 0.5", "B1 keyword"}
+    assert set(metrics.system) == {"System (gold mode)", "System (gold mode), λ = 0.5", "B1 keyword",
+                                   "B3 exact triple", "G1 graph F1", "G2 graph edit similarity"}
+    graph = pd.read_csv(synthetic_run / "graph_similarity.csv").set_index("answer_id")
+    assert graph.loc["Q1_A07", "B3 exact triple"] == pytest.approx(60.0)
 
 
 def test_unfrozen_real_run_refused(synthetic_run):

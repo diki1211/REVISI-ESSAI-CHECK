@@ -3,8 +3,9 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from autograde import baselines, gold, io, llm
-from autograde.models import LedgerEntry
+from autograde import baselines, gold, graphsim, io, llm
+from autograde.match import Relations
+from autograde.models import LedgerEntry, StudentTriple
 from autograde.score import score
 
 
@@ -59,6 +60,16 @@ def agreement(system, human):
 
 def load_ledger(run_dir, answer_id, suffix=""):
     return [LedgerEntry(**e) for e in io.load_json(run_dir / answer_id / f"ledger{suffix}.json")]
+
+
+def graph_metrics(run_dir, answer_ids, refs_of):
+    """B3/G1/G2 (graphsim) per answer from the run's stored student triples; comparison only."""
+    rel = Relations.from_ontology()
+    rows = []
+    for a in answer_ids:
+        students = [StudentTriple(**t) for t in io.load_json(run_dir / a / "student_triples.json")]
+        rows.append({"answer_id": a, **graphsim.all_metrics(refs_of(a), students, rel)})
+    return pd.DataFrame(rows, columns=["answer_id", *graphsim.METRICS]).set_index("answer_id")
 
 
 def criterion_scores(entries):
@@ -119,6 +130,9 @@ def evaluate(run_id, gold_run_id=None, b2_backend=None):
         systems["System (gold mode)"] = g.loc[runs.answer_id, "score"].to_numpy()
     systems["B1 keyword"] = np.array([baselines.b1_keyword(texts[a], ctx[question_of[a]][2],
                                                             ctx[question_of[a]][0]["concepts"]) for a in runs.answer_id])
+    graph = graph_metrics(run_dir, runs.answer_id, lambda a: ctx[question_of[a]][2])
+    for name in graphsim.METRICS:
+        systems[name] = graph.loc[runs.answer_id, name].to_numpy()
     try:
         systems["B2 LLM-only"] = np.array([baselines.b2_llm(question_of[a], texts[a], ctx[question_of[a]][2],
                                                              ctx[question_of[a]][1], backend=b2_backend)
@@ -155,6 +169,7 @@ def evaluate(run_id, gold_run_id=None, b2_backend=None):
     metrics.round(6).to_csv(run_dir / "metrics.csv", index=False)
     per_question.round(6).to_csv(run_dir / "metrics_per_question.csv", index=False)
     per_criterion.round(6).to_csv(run_dir / "per_criterion_mae.csv")
+    graph.round(6).to_csv(run_dir / "graph_similarity.csv")
     figures(run_dir, runs.score.to_numpy(), h, per_criterion)
     report = render(run, metrics, per_criterion, icc, recon, audit, b2_note, len(runs))
     (run_dir / "evaluation.md").write_text(report, encoding="utf-8")
@@ -206,6 +221,9 @@ def render(run, metrics, per_criterion, icc, recon, audit, b2_note, n):
                      f"{fmt(m.spearman_rho)} ({fmt(m.spearman_p)}) | {fmt(m.MAE, 2)} | {fmt(m.RMSE, 2)} |")
     if b2_note:
         lines += ["", f"_{b2_note}_"]
+    lines += ["", "B3, G1 and G2 are graph-level comparison metrics (`graphsim.py`, per answer in "
+              "`graph_similarity.csv`): exact-id triple recall, graph F1 (penalizes extra edges), and normalized "
+              "graph edit similarity. They never change the system score."]
     lines += ["", "Per-question rows: `metrics_per_question.csv`.", "",
               "## Per-criterion error (system ledger vs lecturer criterion score)", "",
               "| Criterion | MAE |", "|---|---|"]

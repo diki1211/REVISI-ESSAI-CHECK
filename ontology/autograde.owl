@@ -96,6 +96,16 @@
   <rdfs:range rdf:resource="#Status"/>
 </owl:ObjectProperty>
 
+<owl:ObjectProperty rdf:about="#requiresPremise">
+  <rdfs:domain rdf:resource="#ReferenceTriple"/>
+  <rdfs:range rdf:resource="#ReferenceTriple"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:about="#lacksPremise">
+  <rdfs:domain rdf:resource="#LedgerEntry"/>
+  <rdfs:range rdf:resource="#LedgerEntry"/>
+</owl:ObjectProperty>
+
 <owl:ObjectProperty rdf:about="http://www.w3.org/ns/prov#wasDerivedFrom">
   <rdfs:domain rdf:resource="#StudentTriple"/>
   <rdfs:range rdf:resource="#Sentence"/>
@@ -123,6 +133,12 @@
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
   <rdfs:domain rdf:resource="#LedgerEntry"/>
   <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:about="#isCredited">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  <rdfs:domain rdf:resource="#Status"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
 </owl:DatatypeProperty>
 
 <owl:Class rdf:about="#Concept">
@@ -178,18 +194,22 @@
 
 <owl:NamedIndividual rdf:about="#Cocok">
   <rdf:type rdf:resource="#Status"/>
+  <isCredited rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isCredited>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Parsial">
   <rdf:type rdf:resource="#Status"/>
+  <isCredited rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</isCredited>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Hilang">
   <rdf:type rdf:resource="#Status"/>
+  <isCredited rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isCredited>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#Kontradiksi">
   <rdf:type rdf:resource="#Status"/>
+  <isCredited rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</isCredited>
 </owl:NamedIndividual>
 
 <owl:NamedIndividual rdf:about="#menggunakan">
@@ -307,6 +327,153 @@
 <swrl:Variable rdf:about="urn:swrl#pr"/>
 
 <swrl:Variable rdf:about="urn:swrl#p"/>
+
+<swrl:Variable rdf:about="urn:swrl#ec"/>
+
+<swrl:Variable rdf:about="urn:swrl#c"/>
+
+<swrl:Variable rdf:about="urn:swrl#sc"/>
+
+<swrl:Variable rdf:about="urn:swrl#ep"/>
+
+<swrl:Variable rdf:about="urn:swrl#a"/>
+
+<swrl:Variable rdf:about="urn:swrl#sp"/>
+
+<swrl:Imp>
+  <swrl:body>
+    <rdf:Description>
+      <rdf:first>
+        <swrl:ClassAtom>
+          <swrl:classPredicate rdf:resource="#LedgerEntry"/>
+          <swrl:argument1 rdf:resource="urn:swrl#ec"/>
+        </swrl:ClassAtom>
+      </rdf:first>
+      <rdf:rest>
+        <rdf:Description>
+          <rdf:first>
+            <swrl:IndividualPropertyAtom>
+              <swrl:propertyPredicate rdf:resource="#reference"/>
+              <swrl:argument1 rdf:resource="urn:swrl#ec"/>
+              <swrl:argument2 rdf:resource="urn:swrl#c"/>
+            </swrl:IndividualPropertyAtom>
+          </rdf:first>
+          <rdf:rest>
+            <rdf:Description>
+              <rdf:first>
+                <swrl:IndividualPropertyAtom>
+                  <swrl:propertyPredicate rdf:resource="#status"/>
+                  <swrl:argument1 rdf:resource="urn:swrl#ec"/>
+                  <swrl:argument2 rdf:resource="urn:swrl#sc"/>
+                </swrl:IndividualPropertyAtom>
+              </rdf:first>
+              <rdf:rest>
+                <rdf:Description>
+                  <rdf:first>
+                    <swrl:DatavaluedPropertyAtom>
+                      <swrl:propertyPredicate rdf:resource="#isCredited"/>
+                      <swrl:argument1 rdf:resource="urn:swrl#sc"/>
+                      <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrl:argument2>
+                    </swrl:DatavaluedPropertyAtom>
+                  </rdf:first>
+                  <rdf:rest>
+                    <rdf:Description>
+                      <rdf:first>
+                        <swrl:IndividualPropertyAtom>
+                          <swrl:propertyPredicate rdf:resource="#requiresPremise"/>
+                          <swrl:argument1 rdf:resource="urn:swrl#c"/>
+                          <swrl:argument2 rdf:resource="urn:swrl#p"/>
+                        </swrl:IndividualPropertyAtom>
+                      </rdf:first>
+                      <rdf:rest>
+                        <rdf:Description>
+                          <rdf:first>
+                            <swrl:ClassAtom>
+                              <swrl:classPredicate rdf:resource="#LedgerEntry"/>
+                              <swrl:argument1 rdf:resource="urn:swrl#ep"/>
+                            </swrl:ClassAtom>
+                          </rdf:first>
+                          <rdf:rest>
+                            <rdf:Description>
+                              <rdf:first>
+                                <swrl:IndividualPropertyAtom>
+                                  <swrl:propertyPredicate rdf:resource="#reference"/>
+                                  <swrl:argument1 rdf:resource="urn:swrl#ep"/>
+                                  <swrl:argument2 rdf:resource="urn:swrl#p"/>
+                                </swrl:IndividualPropertyAtom>
+                              </rdf:first>
+                              <rdf:rest>
+                                <rdf:Description>
+                                  <rdf:first>
+                                    <swrl:IndividualPropertyAtom>
+                                      <swrl:propertyPredicate rdf:resource="#answer"/>
+                                      <swrl:argument1 rdf:resource="urn:swrl#ec"/>
+                                      <swrl:argument2 rdf:resource="urn:swrl#a"/>
+                                    </swrl:IndividualPropertyAtom>
+                                  </rdf:first>
+                                  <rdf:rest>
+                                    <rdf:Description>
+                                      <rdf:first>
+                                        <swrl:IndividualPropertyAtom>
+                                          <swrl:propertyPredicate rdf:resource="#answer"/>
+                                          <swrl:argument1 rdf:resource="urn:swrl#ep"/>
+                                          <swrl:argument2 rdf:resource="urn:swrl#a"/>
+                                        </swrl:IndividualPropertyAtom>
+                                      </rdf:first>
+                                      <rdf:rest>
+                                        <rdf:Description>
+                                          <rdf:first>
+                                            <swrl:IndividualPropertyAtom>
+                                              <swrl:propertyPredicate rdf:resource="#status"/>
+                                              <swrl:argument1 rdf:resource="urn:swrl#ep"/>
+                                              <swrl:argument2 rdf:resource="urn:swrl#sp"/>
+                                            </swrl:IndividualPropertyAtom>
+                                          </rdf:first>
+                                          <rdf:rest>
+                                            <rdf:Description>
+                                              <rdf:first>
+                                                <swrl:DatavaluedPropertyAtom>
+                                                  <swrl:propertyPredicate rdf:resource="#isCredited"/>
+                                                  <swrl:argument1 rdf:resource="urn:swrl#sp"/>
+                                                  <swrl:argument2 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</swrl:argument2>
+                                                </swrl:DatavaluedPropertyAtom>
+                                              </rdf:first>
+                                              <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                            </rdf:Description>
+                                          </rdf:rest>
+                                        </rdf:Description>
+                                      </rdf:rest>
+                                    </rdf:Description>
+                                  </rdf:rest>
+                                </rdf:Description>
+                              </rdf:rest>
+                            </rdf:Description>
+                          </rdf:rest>
+                        </rdf:Description>
+                      </rdf:rest>
+                    </rdf:Description>
+                  </rdf:rest>
+                </rdf:Description>
+              </rdf:rest>
+            </rdf:Description>
+          </rdf:rest>
+        </rdf:Description>
+      </rdf:rest>
+    </rdf:Description>
+  </swrl:body>
+  <swrl:head>
+    <rdf:Description>
+      <rdf:first>
+        <swrl:IndividualPropertyAtom>
+          <swrl:propertyPredicate rdf:resource="#lacksPremise"/>
+          <swrl:argument1 rdf:resource="urn:swrl#ec"/>
+          <swrl:argument2 rdf:resource="urn:swrl#ep"/>
+        </swrl:IndividualPropertyAtom>
+      </rdf:first>
+      <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    </rdf:Description>
+  </swrl:head>
+</swrl:Imp>
 
 <swrl:Imp>
   <swrl:body>

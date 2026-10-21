@@ -15,9 +15,12 @@ concepts:
   Makanan:      {aliases: [zat makanan, bahan makanan]}
   Gas:          {aliases: [gas-gas]}
   Energi:       {aliases: [sumber energi]}
+# requires: premise triples a conclusion rests on (Rule 4). Demonstration, to confirm with the lecturer:
+# glucose is made from the CO2 and water consumed. A credited R4 without credited R2/R3 is reported as a
+# premise gap in the feedback; it never changes the score.
 triples:
   - {id: R1, s: [Tumbuhan, Fotosintesis], p: menggunakan,  o: Cahaya,  criterion: K3_Energi, weight: 2}
   - {id: R2, s: [Fotosintesis, Tumbuhan], p: mengonsumsi,  o: CO2,     criterion: K1_Bahan,  weight: 2}
   - {id: R3, s: [Fotosintesis, Tumbuhan], p: mengonsumsi,  o: Air,     criterion: K1_Bahan,  weight: 2}
-  - {id: R4, s: [Fotosintesis, Tumbuhan], p: menghasilkan, o: Glukosa, criterion: K2_Produk, weight: 2}
+  - {id: R4, s: [Fotosintesis, Tumbuhan], p: menghasilkan, o: Glukosa, criterion: K2_Produk, weight: 2, requires: [R2, R3]}
   - {id: R5, s: [Fotosintesis, Tumbuhan], p: menghasilkan, o: Oksigen, criterion: K2_Produk, weight: 2}
