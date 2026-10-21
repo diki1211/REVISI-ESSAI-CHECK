@@ -109,6 +109,10 @@ def page_ontology():
             st.code(rule.replace(" ^ ", " ^\n  ").replace(" -> ", "\n  -> "), language="text")
         st.markdown("1 = predikat inkompatibel dan **tidak** dinegasi · 2 = predikat sama dinegasi · "
                     "3 = predikat setara dinegasi. Asumsi dunia terbuka: triple yang tidak ada **tidak** pernah jadi kontradiksi.")
+        st.markdown("4 = **logika argumen**: kesimpulan (triple acuan dengan `requires`) sudah dikreditkan, tetapi premisnya "
+                    "berstatus Hilang/Kontradiksi → `ag:lacksPremise`. Aturan ini berjalan **setelah** ledger dibuat, hanya "
+                    "untuk umpan balik dan tinjauan dosen, dan **tidak** mengubah skor. `ag:isCredited` pada setiap status "
+                    "membuat \"belum dikreditkan\" menjadi fakta positif, jadi aturan tidak memakai negasi (dunia terbuka tetap dihormati).")
     with tabs[4]:
         owl = io.ontology_path().read_text(encoding="utf-8")
         st.download_button("Unduh autograde.owl (RDF/XML)", owl, file_name="autograde.owl")
@@ -132,7 +136,8 @@ def page_question():
     st.dataframe(pd.DataFrame([{"Kriteria": c["id"], "Deskripsi": c["description"], "Bobot total": w[c["id"]]}
                                for c in ctx.rubric["criteria"]]), hide_index=True, use_container_width=True)
     st.dataframe(pd.DataFrame([{"ID": r.id, "Subjek (diterima)": " / ".join(r.s), "Predikat": r.p, "Objek": r.o,
-                                "Kriteria": r.criterion, "Bobot": r.weight} for r in ctx.refs]),
+                                "Kriteria": r.criterion, "Bobot": r.weight, "Premis (requires)": ", ".join(r.requires)}
+                               for r in ctx.refs]),
                  hide_index=True, use_container_width=True)
     view = st.radio("Tampilan graf", ["Graf konsep", "RDF terreifikasi"], horizontal=True)
     if view == "Graf konsep":
@@ -254,6 +259,10 @@ def show_ledger(ctx, answer_id, res):
     st.markdown("<table><tr><th>Ref</th><th>Triple acuan</th><th>Kriteria</th><th>w</th><th>Status</th><th>m</th>"
                 f"<th>σ</th><th>Kalimat bukti</th></tr>{rows}</table>", unsafe_allow_html=True)
     st.caption("⚑ = parsial, perlu ditinjau dosen. Setiap baris ditelusuri ke triple acuan, kriteria, bobot, dan kalimat.")
+    for g in res["trace"].get("premise_gaps", []):
+        st.warning(f"Aturan 4: {g.reference_id} ({fb_mod.triple_label(refs[g.reference_id])}) dikreditkan, tetapi premis "
+                   f"{g.premise_id} ({fb_mod.triple_label(refs[g.premise_id])}) berstatus "
+                   f"{STATUS_IRI_NAME[g.premise_status]}. Hanya catatan; skor tidak berubah.")
     ov_path = io.ROOT / "data" / "human" / "overrides.yaml"
     overrides = [o for o in (io.load_yaml(ov_path) or []) if o["answer_id"] == answer_id] if ov_path.exists() else []
     if overrides:
@@ -296,6 +305,16 @@ def show_reasoning(ctx, res):
         st.code("\n".join(f"ans:{t} ag:contradicts key:{ctx.qid}_{r} ." for t, r in contra), language="turtle")
     else:
         st.caption("Tidak ada kontradiksi. Triple acuan yang tidak disebut tetap Hilang (asumsi dunia terbuka).")
+    gaps = res["trace"].get("premise_gaps", [])
+    st.markdown(f"**5 · Aturan 4 (logika argumen) atas ledger:** {len(gaps)} `ag:lacksPremise` — tidak mengubah skor")
+    if gaps:
+        st.code("\n".join(f"ans:{g.entry_id} ag:lacksPremise ans:{g.premise_entry_id} .  "
+                          f"# {g.reference_id} dikreditkan, premis {g.premise_id} {STATUS_IRI_NAME[g.premise_status]}"
+                          for g in gaps), language="turtle")
+    elif any(r.requires for r in ctx.refs):
+        st.caption("Setiap kesimpulan yang dikreditkan didukung premis yang juga dikreditkan.")
+    else:
+        st.caption("Kunci soal ini tidak mencantumkan premis (`requires`).")
     if res["log"]:
         with st.expander(f"{len(res['log'])} triple dibuang saat ekstraksi (cek grounding)"):
             st.json(res["log"])

@@ -40,7 +40,14 @@ RULES = [
     "StudentTriple(?t) ^ ReferenceTriple(?r) ^ hasPredicate(?t, ?pt) ^ hasPredicate(?r, ?pr) ^ "
     "equivalentPredicate(?pt, ?pr) ^ negated(?t, true) ^ alignedSubject(?t, ?r) ^ alignedObject(?t, ?r) "
     "-> contradicts(?t, ?r)",
+    # Rule 4: a credited conclusion whose required premise was not credited (diagnostic; never changes the score).
+    # Every ledger entry has exactly one asserted status and every status asserts isCredited, so "not credited"
+    # is a positive fact here: the open-world assumption is respected (no negation as failure).
+    "LedgerEntry(?ec) ^ reference(?ec, ?c) ^ status(?ec, ?sc) ^ isCredited(?sc, true) ^ requiresPremise(?c, ?p) ^ "
+    "LedgerEntry(?ep) ^ reference(?ep, ?p) ^ answer(?ec, ?a) ^ answer(?ep, ?a) ^ status(?ep, ?sp) ^ "
+    "isCredited(?sp, false) -> lacksPremise(?ec, ?ep)",
 ]
+CREDITED = {"Cocok": True, "Parsial": True, "Hilang": False, "Kontradiksi": False}  # status -> earns credit
 
 
 def build(world=None):
@@ -75,11 +82,14 @@ def build(world=None):
         class matchedBy(o.ObjectProperty, o.FunctionalProperty): domain = [LedgerEntry]; range = [StudentTriple]
         class contradictedBy(o.ObjectProperty, o.FunctionalProperty): domain = [LedgerEntry]; range = [StudentTriple]
         class status(o.ObjectProperty, o.FunctionalProperty): domain = [LedgerEntry]; range = [Status]
+        class requiresPremise(o.ObjectProperty): domain = [ReferenceTriple]; range = [ReferenceTriple]
+        class lacksPremise(o.ObjectProperty): domain = [LedgerEntry]; range = [LedgerEntry]  # inferred by Rule 4
 
         class weight(o.DataProperty, o.FunctionalProperty): domain = [ReferenceTriple]; range = [float]
         class negated(o.DataProperty, o.FunctionalProperty): domain = [StudentTriple]; range = [bool]
         class credit(o.DataProperty, o.FunctionalProperty): domain = [LedgerEntry]; range = [float]
         class contradiction(o.DataProperty, o.FunctionalProperty): domain = [LedgerEntry]; range = [float]
+        class isCredited(o.DataProperty, o.FunctionalProperty): domain = [Status]; range = [bool]
 
     with prov:
         class wasDerivedFrom(o.ObjectProperty):
@@ -90,7 +100,10 @@ def build(world=None):
         for cls, label in LABELS.items():
             onto[cls].label = [o.locstr(label, lang="id")]
         o.AllDisjoint([ReferenceTriple, StudentTriple])
-        o.AllDifferent([Status(name) for name in ("Cocok", "Parsial", "Hilang", "Kontradiksi")])
+        statuses = [Status(name) for name in CREDITED]
+        o.AllDifferent(statuses)
+        for st in statuses:
+            st.isCredited = CREDITED[st.name]
         rel = {name: Relation(name) for name in RELATIONS}
         for a, b in EQUIVALENT:
             rel[a].equivalentPredicate.append(rel[b])

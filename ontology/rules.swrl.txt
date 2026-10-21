@@ -6,3 +6,6 @@ StudentTriple(?t) ^ ReferenceTriple(?r) ^ hasPredicate(?t, ?p) ^ hasPredicate(?r
 
 # Rule 3
 StudentTriple(?t) ^ ReferenceTriple(?r) ^ hasPredicate(?t, ?pt) ^ hasPredicate(?r, ?pr) ^ equivalentPredicate(?pt, ?pr) ^ negated(?t, true) ^ alignedSubject(?t, ?r) ^ alignedObject(?t, ?r) -> contradicts(?t, ?r)
+
+# Rule 4
+LedgerEntry(?ec) ^ reference(?ec, ?c) ^ status(?ec, ?sc) ^ isCredited(?sc, true) ^ requiresPremise(?c, ?p) ^ LedgerEntry(?ep) ^ reference(?ep, ?p) ^ answer(?ec, ?a) ^ answer(?ep, ?a) ^ status(?ep, ?sp) ^ isCredited(?sp, false) -> lacksPremise(?ec, ?ep)

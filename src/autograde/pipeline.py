@@ -5,7 +5,7 @@ from datetime import datetime
 
 import pandas as pd
 
-from autograde import extract, feedback, gold, io, ledger, reason, segment
+from autograde import extract, feedback, gold, io, ledger, premise, reason, segment
 from autograde.match import Relations, match
 from autograde.normalize import ConceptIndex, Embedder, fill_concepts, make_sim
 from autograde.score import score
@@ -44,7 +44,8 @@ def grade(ctx, answer_id, students, params=None):
     """Matching, reasoning, ledger and score for already-extracted triples (no files written).
 
     Returns (students, entries, score, trace); trace holds σ for every pair, the aligned pairs given to the
-    reasoner, and the contradictions it inferred."""
+    reasoner, the contradictions it inferred, and the premise gaps (Rule 4, PremiseGap records; no effect on
+    the score)."""
     params = params or ctx.params
     if not params["tau_l"] <= ctx.broader_similarity < params["tau_h"]:
         raise ValueError(f"broader_similarity {ctx.broader_similarity} must lie in the partial band "
@@ -53,7 +54,8 @@ def grade(ctx, answer_id, students, params=None):
     results, sigmas, aligned = match(ctx.refs, students, params, ctx.sim, ctx.rel)
     contra = reason.contradictions(ctx.qid, ctx.refs, students, aligned, ctx.reasoner)
     entries = ledger.build(answer_id, ctx.refs, results, sigmas, contra, students, params)
-    trace = {"sigmas": sigmas, "aligned": aligned, "contradictions": sorted(contra)}
+    gaps = premise.to_gaps(reason.premise_gaps(ctx.qid, ctx.refs, entries, ctx.reasoner), ctx.refs, entries)
+    trace = {"sigmas": sigmas, "aligned": aligned, "contradictions": sorted(contra), "premise_gaps": gaps}
     return students, entries, score(answer_id, entries, params), trace
 
 
@@ -69,13 +71,14 @@ def run_answer(ctx, answer_id, text, mode, out_dir, use_llm_feedback=True):
     sentences = segment.split(answer_id, text)
     students, log = extract_triples(ctx, answer_id, sentences, mode)
     students, entries, sc, trace = grade(ctx, answer_id, students)
-    ledger.write(out_dir, ctx.qid, entries)
+    ledger.write(out_dir, ctx.qid, entries, gaps=trace["premise_gaps"])
     ledger.answer_graph(answer_id, students, sentences, ctx.qid, trace).serialize(out_dir / "answer.ttl", format="turtle")
     sc.sparql_score = ledger.recompute_sparql(out_dir / "ledger.ttl", io.question_dir(ctx.qid) / "gold.ttl",
                                               ctx.params["lambda"])
     if abs(sc.score - sc.sparql_score) >= 1e-9:
         raise ParityError(f"{answer_id}: Python score {sc.score} != SPARQL score {sc.sparql_score}")
-    fb = feedback.generate(answer_id, entries, ctx.refs, ctx.rubric, sentences, sc.score, use_llm=use_llm_feedback)
+    fb = feedback.generate(answer_id, entries, ctx.refs, ctx.rubric, sentences, sc.score, use_llm=use_llm_feedback,
+                           gaps=trace["premise_gaps"])
     io.save_json(sentences, out_dir / "sentences.json")
     io.save_json([t.model_dump() for t in students], out_dir / "student_triples.json")
     io.save_json(sc.model_dump(), out_dir / "score.json")
@@ -83,7 +86,8 @@ def run_answer(ctx, answer_id, text, mode, out_dir, use_llm_feedback=True):
     with open(out_dir / "extraction_log.jsonl", "w", encoding="utf-8") as f:
         f.writelines(json.dumps(row, ensure_ascii=False) + "\n" for row in log)
     io.save_json({"sigmas": [[t, r, s] for (t, r), s in sorted(trace["sigmas"].items())],
-                  "aligned": trace["aligned"], "contradictions": trace["contradictions"]}, out_dir / "trace.json")
+                  "aligned": trace["aligned"], "contradictions": trace["contradictions"],
+                  "premise_gaps": [g.model_dump() for g in trace["premise_gaps"]]}, out_dir / "trace.json")
     return {"sentences": sentences, "students": students, "entries": entries, "score": sc, "feedback": fb, "log": log,
             "trace": trace, "out_dir": out_dir}
 

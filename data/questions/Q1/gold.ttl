@@ -12,28 +12,14 @@ key:Q1_R1 a ag:ReferenceTriple ;
         key:Tumbuhan ;
     ag:weight 2.0 .
 
-key:Q1_R2 a ag:ReferenceTriple ;
-    ag:criterion key:Q1_K1_Bahan ;
-    ag:hasObject key:CO2 ;
-    ag:hasPredicate ag:mengonsumsi ;
-    ag:hasSubject key:Fotosintesis,
-        key:Tumbuhan ;
-    ag:weight 2.0 .
-
-key:Q1_R3 a ag:ReferenceTriple ;
-    ag:criterion key:Q1_K1_Bahan ;
-    ag:hasObject key:Air ;
-    ag:hasPredicate ag:mengonsumsi ;
-    ag:hasSubject key:Fotosintesis,
-        key:Tumbuhan ;
-    ag:weight 2.0 .
-
 key:Q1_R4 a ag:ReferenceTriple ;
     ag:criterion key:Q1_K2_Produk ;
     ag:hasObject key:Glukosa ;
     ag:hasPredicate ag:menghasilkan ;
     ag:hasSubject key:Fotosintesis,
         key:Tumbuhan ;
+    ag:requiresPremise key:Q1_R2,
+        key:Q1_R3 ;
     ag:weight 2.0 .
 
 key:Q1_R5 a ag:ReferenceTriple ;
@@ -71,6 +57,22 @@ key:Oksigen a ag:Concept,
 
 key:Q1_K3_Energi a ag:Criterion ;
     rdfs:comment "Menyebutkan sumber energi"@id .
+
+key:Q1_R2 a ag:ReferenceTriple ;
+    ag:criterion key:Q1_K1_Bahan ;
+    ag:hasObject key:CO2 ;
+    ag:hasPredicate ag:mengonsumsi ;
+    ag:hasSubject key:Fotosintesis,
+        key:Tumbuhan ;
+    ag:weight 2.0 .
+
+key:Q1_R3 a ag:ReferenceTriple ;
+    ag:criterion key:Q1_K1_Bahan ;
+    ag:hasObject key:Air ;
+    ag:hasPredicate ag:mengonsumsi ;
+    ag:hasSubject key:Fotosintesis,
+        key:Tumbuhan ;
+    ag:weight 2.0 .
 
 key:Gas a ag:Concept,
         skos:Concept .

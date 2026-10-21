@@ -78,6 +78,7 @@ def validate(gold, rubric, relations):
     ids = [r.id for r in refs]
     if len(ids) != len(set(ids)):
         errors.append("duplicate reference triple ids")
+    errors += premise_errors(refs)
     for c in sorted(criteria - {r.criterion for r in refs}):
         errors.append(f"criterion {c} has no reference triple")
     for c, broader in broader_links(gold.get("concepts") or {}).items():
@@ -91,6 +92,31 @@ def validate(gold, rubric, relations):
     if errors:
         raise GoldError("; ".join(errors))
     return refs
+
+
+def premise_errors(refs):
+    """`requires:` must name other reference triples of the same question and must not form a cycle."""
+    ids, errors = {r.id for r in refs}, []
+    for r in refs:
+        for p in r.requires:
+            if p == r.id:
+                errors.append(f"{r.id}: requires itself")
+            elif p not in ids:
+                errors.append(f"{r.id}: requires unknown reference triple {p!r}")
+    if errors:
+        return errors
+    links = {r.id: set(r.requires) for r in refs}
+    for start in links:  # depth-first search for a path back to the start
+        stack, seen = list(links[start]), set()
+        while stack:
+            n = stack.pop()
+            if n == start:
+                errors.append(f"{start}: premise cycle through requires")
+                break
+            if n not in seen:
+                seen.add(n)
+                stack.extend(links[n])
+    return errors
 
 
 def load(qid):
@@ -131,6 +157,8 @@ def to_graph(qid, refs, rubric, concepts=None):
         g.add((KEY[r.o], RDF.type, AG.Concept))
         g.add((node, AG.criterion, criterion_iri(qid, r.criterion)))
         g.add((node, AG.weight, Literal(str(r.weight), datatype=XSD.decimal)))
+        for p in r.requires:  # argument structure for Rule 4 (premise gaps)
+            g.add((node, AG.requiresPremise, ref_iri(qid, p)))
     return g
 
 
@@ -139,11 +167,11 @@ def review_md(qid, gold, rubric, refs):
     lines = [f"# Gold triples for {qid} — lecturer review", "",
              f"Validated by: {gold.get('validated_by') or '________'}  ",
              f"Date: {gold.get('validated_on') or '________'}", "",
-             "| ID | Subjek (diterima) | Predikat | Objek | Kriteria | Bobot | OK? |",
-             "|---|---|---|---|---|---|---|"]
+             "| ID | Subjek (diterima) | Predikat | Objek | Kriteria | Bobot | Premis | OK? |",
+             "|---|---|---|---|---|---|---|---|"]
     for r in refs:
         lines.append(f"| {r.id} | {' / '.join(r.s)} | {r.p} | {r.o} | {r.criterion} ({desc[r.criterion]}) "
-                     f"| {r.weight:g} | ☐ |")
+                     f"| {r.weight:g} | {', '.join(r.requires) or '—'} | ☐ |")
     lines += ["", "## Konsep dan alias", ""]
     for c, v in (gold.get("concepts") or {}).items():
         broader = (v or {}).get("broader") or []

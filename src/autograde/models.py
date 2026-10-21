@@ -15,6 +15,7 @@ class ReferenceTriple(BaseModel):
     o: str
     criterion: str
     weight: float = Field(gt=0)
+    requires: list[str] = []  # premise reference ids this triple (a conclusion) depends on; diagnostic only
 
     @field_validator("s", mode="before")
     @classmethod
@@ -51,6 +52,17 @@ class LedgerEntry(BaseModel):
     override: dict | None = None
 
 
+class PremiseGap(BaseModel):
+    """Rule 4: a credited conclusion whose required premise was not credited (MISSING or CONTRADICTED).
+
+    A finding for feedback and lecturer review only; it never changes credit or the score (Eq. 6)."""
+    entry_id: str  # the conclusion's ledger entry
+    reference_id: str
+    premise_entry_id: str
+    premise_id: str
+    premise_status: Status
+
+
 class ScoreResult(BaseModel):
     answer_id: str
     score: float
@@ -63,7 +75,7 @@ class ScoreResult(BaseModel):
 
 class FeedbackClaim(BaseModel):
     text: str
-    kind: Literal["correct", "missing", "contradiction", "partial"]
+    kind: Literal["correct", "missing", "contradiction", "partial", "premise"]
     ledger_entry_ids: list[str]
 
 
