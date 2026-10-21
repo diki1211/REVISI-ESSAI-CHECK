@@ -1,0 +1,7 @@
+# SYNTHETIC: invented answer, annotated by an AI (Claude) for the offline demo. Not real data.
+annotated_by: Claude (AI)
+triples:
+  - {s: password yang lemah, p: menyebabkan, o: sql injection, sentences: [1]}
+  - {s: prepared statement, p: memisahkan, o: kode sql dan data, sentences: [2]}
+  - {s: prepared statement, p: mencegah, o: sql injection, sentences: [2]}
+  - {s: hak akses minimal, p: mengurangi, o: dampak serangan, sentences: [3]}

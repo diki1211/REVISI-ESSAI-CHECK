@@ -1,0 +1,124 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:HS1_R1 a ag:ReferenceTriple ;
+    ag:criterion key:HS1_K1_Pemberitahuan ;
+    ag:hasObject key:SubjekDataPribadi ;
+    ag:hasPredicate ag:memberitahu ;
+    ag:hasSubject key:PengendaliDataPribadi ;
+    ag:weight 2.0 .
+
+key:HS1_R10 a ag:ReferenceTriple ;
+    ag:criterion key:HS1_K3_Sanksi ;
+    ag:hasObject key:DendaAdministratif ;
+    ag:hasPredicate ag:mencakup ;
+    ag:hasSubject key:SanksiAdministratif ;
+    ag:weight 0.5 .
+
+key:HS1_R2 a ag:ReferenceTriple ;
+    ag:criterion key:HS1_K1_Pemberitahuan ;
+    ag:hasObject key:LembagaPDP ;
+    ag:hasPredicate ag:memberitahu ;
+    ag:hasSubject key:PengendaliDataPribadi ;
+    ag:weight 2.0 .
+
+key:HS1_R3 a ag:ReferenceTriple ;
+    ag:criterion key:HS1_K1_Pemberitahuan ;
+    ag:hasObject key:BatasWaktu72Jam ;
+    ag:hasPredicate ag:memiliki ;
+    ag:hasSubject key:Pemberitahuan ;
+    ag:weight 2.0 .
+
+key:HS1_R4 a ag:ReferenceTriple ;
+    ag:criterion key:HS1_K2_Isi ;
+    ag:hasObject key:DataTerungkap ;
+    ag:hasPredicate ag:memuat ;
+    ag:hasSubject key:Pemberitahuan ;
+    ag:weight 1.0 .
+
+key:HS1_R5 a ag:ReferenceTriple ;
+    ag:criterion key:HS1_K2_Isi ;
+    ag:hasObject key:WaktuDanCaraTerungkap ;
+    ag:hasPredicate ag:memuat ;
+    ag:hasSubject key:Pemberitahuan ;
+    ag:weight 1.0 .
+
+key:HS1_R6 a ag:ReferenceTriple ;
+    ag:criterion key:HS1_K2_Isi ;
+    ag:hasObject key:UpayaPemulihan ;
+    ag:hasPredicate ag:memuat ;
+    ag:hasSubject key:Pemberitahuan ;
+    ag:weight 1.0 .
+
+key:HS1_R7 a ag:ReferenceTriple ;
+    ag:criterion key:HS1_K3_Sanksi ;
+    ag:hasObject key:PeringatanTertulis ;
+    ag:hasPredicate ag:mencakup ;
+    ag:hasSubject key:SanksiAdministratif ;
+    ag:weight 0.5 .
+
+key:HS1_R8 a ag:ReferenceTriple ;
+    ag:criterion key:HS1_K3_Sanksi ;
+    ag:hasObject key:PenghentianPemrosesan ;
+    ag:hasPredicate ag:mencakup ;
+    ag:hasSubject key:SanksiAdministratif ;
+    ag:weight 0.5 .
+
+key:HS1_R9 a ag:ReferenceTriple ;
+    ag:criterion key:HS1_K3_Sanksi ;
+    ag:hasObject key:PenghapusanData ;
+    ag:hasPredicate ag:mencakup ;
+    ag:hasSubject key:SanksiAdministratif ;
+    ag:weight 0.5 .
+
+key:BatasWaktu72Jam a ag:Concept,
+        skos:Concept .
+
+key:DataTerungkap a ag:Concept,
+        skos:Concept .
+
+key:DendaAdministratif a ag:Concept,
+        skos:Concept .
+
+key:LembagaPDP a ag:Concept,
+        skos:Concept .
+
+key:PenghapusanData a ag:Concept,
+        skos:Concept .
+
+key:PenghentianPemrosesan a ag:Concept,
+        skos:Concept .
+
+key:PeringatanTertulis a ag:Concept,
+        skos:Concept .
+
+key:SubjekDataPribadi a ag:Concept,
+        skos:Concept .
+
+key:UpayaPemulihan a ag:Concept,
+        skos:Concept .
+
+key:WaktuDanCaraTerungkap a ag:Concept,
+        skos:Concept .
+
+key:PengendaliDataPribadi a ag:Concept,
+        skos:Concept .
+
+key:HS1_K1_Pemberitahuan a ag:Criterion ;
+    rdfs:comment "Menyebutkan kepada siapa dan kapan pemberitahuan wajib disampaikan"@id .
+
+key:HS1_K2_Isi a ag:Criterion ;
+    rdfs:comment "Menyebutkan isi minimal pemberitahuan"@id .
+
+key:HS1_K3_Sanksi a ag:Criterion ;
+    rdfs:comment "Menyebutkan bentuk sanksi administratif"@id .
+
+key:Pemberitahuan a ag:Concept,
+        skos:Concept .
+
+key:SanksiAdministratif a ag:Concept,
+        skos:Concept .
+

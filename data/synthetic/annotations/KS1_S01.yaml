@@ -1,0 +1,8 @@
+# SYNTHETIC: invented answer, annotated by an AI (Claude) for the offline demo. Not real data.
+annotated_by: Claude (AI)
+triples:
+  - {s: kerahasiaan, p: mencegah, o: orang yang tidak berwenang membaca data, sentences: [1]}
+  - {s: integritas, p: menjaga, o: data tidak diubah tanpa izin, sentences: [2]}
+  - {s: ketersediaan, p: memastikan, o: sistem bisa diakses saat dibutuhkan, sentences: [3]}
+  - {s: sniffing, p: mengancam, o: kerahasiaan, sentences: [4]}
+  - {s: serangan ddos, p: mengancam, o: ketersediaan, sentences: [4]}

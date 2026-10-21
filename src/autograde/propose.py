@@ -21,7 +21,8 @@ from autograde.match import Relations
 from autograde.normalize import STOPWORDS, concept_label, content_tokens, norm_text
 
 COORDINATION = {"dan", "serta", "atau", "and", "or", ","}
-CLAUSE_MARKERS = {"lalu", "kemudian", "sehingga", "yang", "whereby", "where", "which", "then", "so", "while",
+# "yang" is not a marker: in Indonesian it usually continues the noun phrase ("akses yang tidak sah").
+CLAUSE_MARKERS = {"lalu", "kemudian", "sehingga", "whereby", "where", "which", "then", "so", "while",
                   "sedangkan", ";", ":"}
 NEGATION = {"tidak", "bukan", "tanpa", "not", "never", "no"}
 IMPORTANCE_WEIGHT = {"essential": 2.0, "supporting": 1.0, "optional": 0.5}  # a suggestion; the lecturer decides
@@ -113,16 +114,26 @@ def strip_edges(span):
     return span
 
 
-def split_items(span):
+def split_on(span, separators):
     items, cur = [], []
     for w in span:
-        if w in COORDINATION:
+        if w in separators:
             items.append(cur)
             cur = []
         else:
             cur.append(w)
     items.append(cur)
     return [strip_edges(i) for i in items if strip_edges(i)]
+
+
+def split_items(span, table=None):
+    """Coordinated objects: split on commas first, then on dan/serta/atau/and/or, but keep a part whole when it is
+    a known surface form ("waktu dan cara data terungkap", "modifikasi atau perusakan informasi")."""
+    known = lambda part: table is not None and " ".join(part) in table
+    out = []
+    for part in split_on(span, {",", ";"}):
+        out.extend([part] if known(part) else split_on(part, COORDINATION))
+    return out
 
 
 # ---------- rule method ----------
@@ -172,7 +183,7 @@ def propose_rule(sentences, concepts, predicates, language):
             if subject is None or subject[0][0] is None:
                 log.append({"sentence_id": sid, "reason": "no_subject", "predicate": pid})
                 continue
-            for item in split_items(obj):
+            for item in split_items(obj, ctable):
                 (o_id, o_new), ((s_id, s_new), s_text) = resolve(item, ctable), subject
                 if o_id is None or o_id == s_id:
                     continue

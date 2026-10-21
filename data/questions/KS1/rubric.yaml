@@ -1,0 +1,9 @@
+# Cyber law & security set (HS/KS): drafted by an AI (Claude) from the public sources in question.md.
+# NOT lecturer-validated. Validate the triples, weights and aliases with the lecturer before real use.
+question_id: KS1
+language: id
+criteria:
+  - id: K1_Definisi
+    description: Menjelaskan arti kerahasiaan, integritas, dan ketersediaan
+  - id: K2_Ancaman
+    description: Memberi contoh serangan untuk setiap tujuan

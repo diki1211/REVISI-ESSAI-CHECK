@@ -1,0 +1,10 @@
+# SYNTHETIC: invented answer, annotated by an AI (Claude) for the offline demo. Not real data.
+annotated_by: Claude (AI)
+triples:
+  - {s: pengendali data, p: memberitahukan, o: pemilik data, sentences: [1]}
+  - {s: pemberitahuan, p: mempunyai, o: batas waktu 3x24 jam, sentences: [2]}
+  - {s: pengendali, p: melapor kepada, o: lembaga pengawas, sentences: [3]}
+  - {s: notifikasi, p: berisi, o: data yang bocor, sentences: [4]}
+  - {s: notifikasi, p: berisi, o: upaya pemulihan, sentences: [4]}
+  - {s: sanksi administratif, p: berupa, o: peringatan tertulis, sentences: [5]}
+  - {s: sanksi administratif, p: berupa, o: denda, sentences: [5]}

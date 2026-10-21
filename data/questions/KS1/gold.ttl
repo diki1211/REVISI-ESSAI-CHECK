@@ -1,0 +1,81 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:KS1_R1 a ag:ReferenceTriple ;
+    ag:criterion key:KS1_K1_Definisi ;
+    ag:hasObject key:PengungkapanTidakSah ;
+    ag:hasPredicate ag:mencegah ;
+    ag:hasSubject key:Kerahasiaan ;
+    ag:weight 2.0 .
+
+key:KS1_R2 a ag:ReferenceTriple ;
+    ag:criterion key:KS1_K1_Definisi ;
+    ag:hasObject key:ModifikasiTidakSah ;
+    ag:hasPredicate ag:mencegah ;
+    ag:hasSubject key:Integritas ;
+    ag:weight 2.0 .
+
+key:KS1_R3 a ag:ReferenceTriple ;
+    ag:criterion key:KS1_K1_Definisi ;
+    ag:hasObject key:AksesTepatWaktu ;
+    ag:hasPredicate ag:menjamin ;
+    ag:hasSubject key:Ketersediaan ;
+    ag:weight 2.0 .
+
+key:KS1_R4 a ag:ReferenceTriple ;
+    ag:criterion key:KS1_K2_Ancaman ;
+    ag:hasObject key:Kerahasiaan ;
+    ag:hasPredicate ag:mengancam ;
+    ag:hasSubject key:Penyadapan ;
+    ag:weight 1.0 .
+
+key:KS1_R5 a ag:ReferenceTriple ;
+    ag:criterion key:KS1_K2_Ancaman ;
+    ag:hasObject key:Integritas ;
+    ag:hasPredicate ag:mengancam ;
+    ag:hasSubject key:ManipulasiData ;
+    ag:weight 1.0 .
+
+key:KS1_R6 a ag:ReferenceTriple ;
+    ag:criterion key:KS1_K2_Ancaman ;
+    ag:hasObject key:Ketersediaan ;
+    ag:hasPredicate ag:mengancam ;
+    ag:hasSubject key:DDoS ;
+    ag:weight 1.0 .
+
+key:AksesTepatWaktu a ag:Concept,
+        skos:Concept .
+
+key:DDoS a ag:Concept,
+        skos:Concept .
+
+key:ManipulasiData a ag:Concept,
+        skos:Concept .
+
+key:ModifikasiTidakSah a ag:Concept,
+        skos:Concept .
+
+key:PengungkapanTidakSah a ag:Concept,
+        skos:Concept .
+
+key:Penyadapan a ag:Concept,
+        skos:Concept .
+
+key:Integritas a ag:Concept,
+        skos:Concept .
+
+key:Kerahasiaan a ag:Concept,
+        skos:Concept .
+
+key:Ketersediaan a ag:Concept,
+        skos:Concept .
+
+key:KS1_K1_Definisi a ag:Criterion ;
+    rdfs:comment "Menjelaskan arti kerahasiaan, integritas, dan ketersediaan"@id .
+
+key:KS1_K2_Ancaman a ag:Criterion ;
+    rdfs:comment "Memberi contoh serangan untuk setiap tujuan"@id .
+

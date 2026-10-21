@@ -1,0 +1,9 @@
+# Cyber law & security set (HS/KS): drafted by an AI (Claude) from the public sources in question.md.
+# NOT lecturer-validated. Validate the triples, weights and aliases with the lecturer before real use.
+question_id: HS2
+language: id
+criteria:
+  - id: K1_Peran
+    description: Membedakan peran pengendali dan prosesor data pribadi
+  - id: K2_Spesifik
+    description: Menyebutkan jenis data pribadi yang bersifat spesifik

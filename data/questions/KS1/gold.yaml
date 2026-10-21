@@ -1,0 +1,23 @@
+# Cyber law & security set (HS/KS): drafted by an AI (Claude) from the public sources in question.md.
+# NOT lecturer-validated. Validate the triples, weights and aliases with the lecturer before real use.
+question_id: KS1
+validated_by: null
+validated_on: null
+drafted_by: Claude (AI draft)
+concepts:
+  Kerahasiaan:          {aliases: [kerahasiaan, confidentiality]}
+  Integritas:           {aliases: [integritas, integrity, keutuhan data]}
+  Ketersediaan:         {aliases: [ketersediaan, availability]}
+  PengungkapanTidakSah: {aliases: [pengungkapan informasi yang tidak sah, pengungkapan yang tidak sah, pengungkapan tidak sah, akses tidak sah, kebocoran informasi, pihak yang tidak berwenang membaca informasi]}
+  ModifikasiTidakSah:   {aliases: [modifikasi atau perusakan informasi yang tidak sah, modifikasi yang tidak sah, perubahan data yang tidak sah, perusakan informasi, perubahan tidak sah]}
+  AksesTepatWaktu:      {aliases: [akses yang tepat waktu dan andal terhadap informasi, akses yang tepat waktu, akses yang andal, informasi dapat diakses saat dibutuhkan, akses terhadap informasi]}
+  Penyadapan:           {aliases: [penyadapan, eavesdropping, sniffing, intersepsi]}
+  ManipulasiData:       {aliases: [manipulasi data, pengubahan data, man in the middle, serangan man in the middle]}
+  DDoS:                 {aliases: [serangan ddos, ddos, distributed denial of service, denial of service, serangan dos, dos]}
+triples:
+  - {id: R1, s: Kerahasiaan,    p: mencegah,  o: PengungkapanTidakSah, criterion: K1_Definisi, weight: 2}
+  - {id: R2, s: Integritas,     p: mencegah,  o: ModifikasiTidakSah,   criterion: K1_Definisi, weight: 2}
+  - {id: R3, s: Ketersediaan,   p: menjamin,  o: AksesTepatWaktu,      criterion: K1_Definisi, weight: 2}
+  - {id: R4, s: Penyadapan,     p: mengancam, o: Kerahasiaan,          criterion: K2_Ancaman,  weight: 1}
+  - {id: R5, s: ManipulasiData, p: mengancam, o: Integritas,           criterion: K2_Ancaman,  weight: 1}
+  - {id: R6, s: DDoS,           p: mengancam, o: Ketersediaan,         criterion: K2_Ancaman,  weight: 1}

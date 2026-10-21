@@ -1,0 +1,64 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:HS3_R1 a ag:ReferenceTriple ;
+    ag:criterion key:HS3_K1_Kedudukan ;
+    ag:hasObject key:AlatBuktiSah ;
+    ag:hasPredicate ag:merupakan ;
+    ag:hasSubject key:AlatBuktiElektronik,
+        key:DokumenElektronik,
+        key:HasilCetak,
+        key:InformasiElektronik ;
+    ag:requiresPremise key:HS3_R3 ;
+    ag:weight 2.0 .
+
+key:HS3_R2 a ag:ReferenceTriple ;
+    ag:criterion key:HS3_K2_Perluasan ;
+    ag:hasObject key:PerluasanAlatBukti ;
+    ag:hasPredicate ag:merupakan ;
+    ag:hasSubject key:AlatBuktiElektronik,
+        key:DokumenElektronik,
+        key:InformasiElektronik ;
+    ag:weight 1.0 .
+
+key:AlatBuktiSah a ag:Concept,
+        skos:Concept .
+
+key:HS3_K1_Kedudukan a ag:Criterion ;
+    rdfs:comment "Menyatakan informasi elektronik sebagai alat bukti hukum yang sah"@id .
+
+key:HS3_K2_Perluasan a ag:Criterion ;
+    rdfs:comment "Menjelaskan hubungannya dengan alat bukti menurut hukum acara"@id .
+
+key:HS3_K3_Syarat a ag:Criterion ;
+    rdfs:comment "Menyebutkan syarat keabsahan informasi elektronik"@id .
+
+key:HS3_R3 a ag:ReferenceTriple ;
+    ag:criterion key:HS3_K3_Syarat ;
+    ag:hasObject key:SistemElektronikSah ;
+    ag:hasPredicate ag:menggunakan ;
+    ag:hasSubject key:DokumenElektronik,
+        key:InformasiElektronik ;
+    ag:weight 2.0 .
+
+key:HasilCetak a ag:Concept,
+        skos:Concept .
+
+key:PerluasanAlatBukti a ag:Concept,
+        skos:Concept .
+
+key:SistemElektronikSah a ag:Concept,
+        skos:Concept .
+
+key:AlatBuktiElektronik a ag:Concept,
+        skos:Concept .
+
+key:DokumenElektronik a ag:Concept,
+        skos:Concept .
+
+key:InformasiElektronik a ag:Concept,
+        skos:Concept .
+

@@ -36,6 +36,12 @@ python -m autograde override --run <run_id>        # apply data/human/overrides.
 - **Tinjauan Dosen** (app): review queue (partial, contradicted, premise gaps), per-triple corrections with reason and reviewer; corrected copies only.
 - **Rule 4** (premise gaps): `requires: [..]` on a gold triple marks its premises; a credited conclusion without credited premises is flagged in feedback. It never changes the score.
 
+Cyber law & security set (Indonesian, AI-drafted keys from UU PDP, UU ITE, NIST, CISA and OWASP; see `docs/DECISIONS.md`):
+
+```bash
+python -m autograde run --question HS1 --mode gold --split all --synthetic --template-feedback   # HS1-HS3, KS1-KS3
+```
+
 SAF subset (real English answers, AI-drafted gold triples; see `data/external/saf/README.md`):
 
 ```bash

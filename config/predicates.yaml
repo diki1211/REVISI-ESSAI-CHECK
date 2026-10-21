@@ -20,6 +20,80 @@ predicates:
     description: subjek membuat atau mengeluarkan sesuatu sebagai hasil
     aliases: [memproduksi, membentuk, melepaskan]
 
+  # --- Indonesian, cyber law & security (HS*/KS*; AI-drafted, validate with the lecturer) ---
+  - id: merupakan
+    lang: id
+    description: subjek adalah jenis atau bentuk dari objek
+    aliases: [adalah, ialah, termasuk, tergolong, tergolong sebagai]
+  - id: memberitahu
+    lang: id
+    description: subjek menyampaikan pemberitahuan kepada objek
+    aliases: [memberitahukan, menyampaikan pemberitahuan kepada, melapor kepada, melaporkan kepada, memberi tahu]
+  - id: memuat
+    lang: id
+    description: subjek (dokumen, pemberitahuan) berisi objek
+    aliases: [berisi, mencantumkan, menyebutkan]
+  - id: memiliki
+    lang: id
+    description: subjek mempunyai objek sebagai sifat atau ketentuan
+    aliases: [mempunyai]
+  - id: mencakup
+    lang: id
+    description: subjek terdiri dari atau meliputi objek sebagai bagian atau jenisnya
+    aliases: [meliputi, berupa, terdiri dari, terdiri atas]
+  - id: menentukan
+    lang: id
+    description: subjek memutuskan atau menetapkan objek
+    aliases: [menetapkan, memutuskan]
+  - id: melaksanakan
+    lang: id
+    description: subjek menjalankan objek (misalnya perintah pihak lain)
+    aliases: [menjalankan, mengikuti, mematuhi, tunduk pada]
+  - id: mencegah
+    lang: id
+    description: subjek menghalangi objek terjadi
+    aliases: [menghindari, menangkal, menghalangi]
+  - id: menyebabkan
+    lang: id
+    description: subjek mengakibatkan objek terjadi
+    aliases: [mengakibatkan, menimbulkan, memicu]
+  - id: menjamin
+    lang: id
+    description: subjek memastikan objek terpenuhi
+    aliases: [memastikan, menjaga]
+  - id: mengancam
+    lang: id
+    description: subjek membahayakan atau menyerang objek
+    aliases: [membahayakan, menyerang, merusak]
+  - id: mengenkripsi
+    lang: id
+    description: subjek menyandikan objek sehingga tidak dapat dibaca tanpa kunci
+    aliases: [menyandikan, mengunci]
+  - id: meminta
+    lang: id
+    description: subjek menuntut objek dari pihak lain
+    aliases: [menuntut, memeras]
+  - id: memulihkan
+    lang: id
+    description: subjek mengembalikan objek ke keadaan semula
+    aliases: [mengembalikan, merestorasi]
+  - id: mengurangi
+    lang: id
+    description: subjek membuat objek lebih kecil atau terbatas
+    aliases: [membatasi, menekan, memperkecil, meminimalkan]
+  - id: meningkatkan
+    lang: id
+    description: subjek membuat objek lebih besar
+    aliases: [memperbesar, memperluas, menambah]
+  - id: menyisipkan
+    lang: id
+    description: subjek memasukkan objek ke dalam sesuatu
+    aliases: [menginjeksi, menyuntikkan, memasukkan]
+  - id: memisahkan
+    lang: id
+    description: subjek memisahkan objek (bagian-bagian) satu dari yang lain
+    aliases: [membedakan]
+
   # --- English (SAF subset; AI-drafted, not lecturer-validated) ---
   - id: is_a
     lang: en

@@ -1,0 +1,111 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:HS2_R1 a ag:ReferenceTriple ;
+    ag:criterion key:HS2_K1_Peran ;
+    ag:hasObject key:TujuanPemrosesan ;
+    ag:hasPredicate ag:menentukan ;
+    ag:hasSubject key:PengendaliDataPribadi ;
+    ag:weight 2.0 .
+
+key:HS2_R2 a ag:ReferenceTriple ;
+    ag:criterion key:HS2_K1_Peran ;
+    ag:hasObject key:KendaliPemrosesan ;
+    ag:hasPredicate ag:menentukan ;
+    ag:hasSubject key:PengendaliDataPribadi ;
+    ag:weight 1.0 .
+
+key:HS2_R3 a ag:ReferenceTriple ;
+    ag:criterion key:HS2_K1_Peran ;
+    ag:hasObject key:PerintahPengendali ;
+    ag:hasPredicate ag:melaksanakan ;
+    ag:hasSubject key:ProsesorDataPribadi ;
+    ag:weight 2.0 .
+
+key:HS2_R4 a ag:ReferenceTriple ;
+    ag:criterion key:HS2_K2_Spesifik ;
+    ag:hasObject key:DataKesehatan ;
+    ag:hasPredicate ag:mencakup ;
+    ag:hasSubject key:DataPribadiSpesifik ;
+    ag:weight 0.5 .
+
+key:HS2_R5 a ag:ReferenceTriple ;
+    ag:criterion key:HS2_K2_Spesifik ;
+    ag:hasObject key:DataBiometrik ;
+    ag:hasPredicate ag:mencakup ;
+    ag:hasSubject key:DataPribadiSpesifik ;
+    ag:weight 0.5 .
+
+key:HS2_R6 a ag:ReferenceTriple ;
+    ag:criterion key:HS2_K2_Spesifik ;
+    ag:hasObject key:DataGenetika ;
+    ag:hasPredicate ag:mencakup ;
+    ag:hasSubject key:DataPribadiSpesifik ;
+    ag:weight 0.5 .
+
+key:HS2_R7 a ag:ReferenceTriple ;
+    ag:criterion key:HS2_K2_Spesifik ;
+    ag:hasObject key:CatatanKejahatan ;
+    ag:hasPredicate ag:mencakup ;
+    ag:hasSubject key:DataPribadiSpesifik ;
+    ag:weight 0.5 .
+
+key:HS2_R8 a ag:ReferenceTriple ;
+    ag:criterion key:HS2_K2_Spesifik ;
+    ag:hasObject key:DataAnak ;
+    ag:hasPredicate ag:mencakup ;
+    ag:hasSubject key:DataPribadiSpesifik ;
+    ag:weight 0.5 .
+
+key:HS2_R9 a ag:ReferenceTriple ;
+    ag:criterion key:HS2_K2_Spesifik ;
+    ag:hasObject key:DataKeuanganPribadi ;
+    ag:hasPredicate ag:mencakup ;
+    ag:hasSubject key:DataPribadiSpesifik ;
+    ag:weight 0.5 .
+
+key:CatatanKejahatan a ag:Concept,
+        skos:Concept .
+
+key:DataAnak a ag:Concept,
+        skos:Concept .
+
+key:DataBiometrik a ag:Concept,
+        skos:Concept .
+
+key:DataGenetika a ag:Concept,
+        skos:Concept .
+
+key:DataKesehatan a ag:Concept,
+        skos:Concept .
+
+key:DataKeuanganPribadi a ag:Concept,
+        skos:Concept .
+
+key:KendaliPemrosesan a ag:Concept,
+        skos:Concept .
+
+key:PerintahPengendali a ag:Concept,
+        skos:Concept .
+
+key:ProsesorDataPribadi a ag:Concept,
+        skos:Concept .
+
+key:TujuanPemrosesan a ag:Concept,
+        skos:Concept .
+
+key:PengendaliDataPribadi a ag:Concept,
+        skos:Concept .
+
+key:HS2_K1_Peran a ag:Criterion ;
+    rdfs:comment "Membedakan peran pengendali dan prosesor data pribadi"@id .
+
+key:DataPribadiSpesifik a ag:Concept,
+        skos:Concept .
+
+key:HS2_K2_Spesifik a ag:Criterion ;
+    rdfs:comment "Menyebutkan jenis data pribadi yang bersifat spesifik"@id .
+

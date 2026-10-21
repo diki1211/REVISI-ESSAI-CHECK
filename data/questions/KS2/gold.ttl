@@ -1,0 +1,104 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:KS2_R1 a ag:ReferenceTriple ;
+    ag:criterion key:KS2_K1_Definisi ;
+    ag:hasObject key:Malware ;
+    ag:hasPredicate ag:merupakan ;
+    ag:hasSubject key:Ransomware ;
+    ag:weight 1.0 .
+
+key:KS2_R2 a ag:ReferenceTriple ;
+    ag:criterion key:KS2_K1_Definisi ;
+    ag:hasObject key:FileKorban ;
+    ag:hasPredicate ag:mengenkripsi ;
+    ag:hasSubject key:Ransomware ;
+    ag:weight 2.0 .
+
+key:KS2_R3 a ag:ReferenceTriple ;
+    ag:criterion key:KS2_K1_Definisi ;
+    ag:hasObject key:Tebusan ;
+    ag:hasPredicate ag:meminta ;
+    ag:hasSubject key:Penyerang,
+        key:Ransomware ;
+    ag:weight 1.0 .
+
+key:KS2_R4 a ag:ReferenceTriple ;
+    ag:criterion key:KS2_K2_Pemulihan ;
+    ag:hasObject key:Data ;
+    ag:hasPredicate ag:memulihkan ;
+    ag:hasSubject key:BackupOffline ;
+    ag:weight 2.0 .
+
+key:KS2_R5 a ag:ReferenceTriple ;
+    ag:criterion key:KS2_K3_Pencegahan ;
+    ag:hasObject key:EksploitasiKerentanan ;
+    ag:hasPredicate ag:mencegah ;
+    ag:hasSubject key:PembaruanPerangkatLunak ;
+    ag:weight 1.0 .
+
+key:KS2_R6 a ag:ReferenceTriple ;
+    ag:criterion key:KS2_K3_Pencegahan ;
+    ag:hasObject key:PengambilalihanAkun ;
+    ag:hasPredicate ag:mencegah ;
+    ag:hasSubject key:MFA ;
+    ag:weight 1.0 .
+
+key:KS2_R7 a ag:ReferenceTriple ;
+    ag:criterion key:KS2_K3_Pencegahan ;
+    ag:hasObject key:PenyebaranSerangan ;
+    ag:hasPredicate ag:mengurangi ;
+    ag:hasSubject key:SegmentasiJaringan ;
+    ag:weight 1.0 .
+
+key:BackupOffline a ag:Concept,
+        skos:Concept .
+
+key:Data a ag:Concept,
+        skos:Concept .
+
+key:EksploitasiKerentanan a ag:Concept,
+        skos:Concept .
+
+key:FileKorban a ag:Concept,
+        skos:Concept .
+
+key:KS2_K2_Pemulihan a ag:Criterion ;
+    rdfs:comment "Menjelaskan cara memulihkan data"@id .
+
+key:MFA a ag:Concept,
+        skos:Concept .
+
+key:Malware a ag:Concept,
+        skos:Concept .
+
+key:PembaruanPerangkatLunak a ag:Concept,
+        skos:Concept .
+
+key:PengambilalihanAkun a ag:Concept,
+        skos:Concept .
+
+key:PenyebaranSerangan a ag:Concept,
+        skos:Concept .
+
+key:Penyerang a ag:Concept,
+        skos:Concept .
+
+key:SegmentasiJaringan a ag:Concept,
+        skos:Concept .
+
+key:Tebusan a ag:Concept,
+        skos:Concept .
+
+key:KS2_K1_Definisi a ag:Criterion ;
+    rdfs:comment "Menjelaskan cara kerja ransomware"@id .
+
+key:KS2_K3_Pencegahan a ag:Criterion ;
+    rdfs:comment "Menyebutkan langkah pencegahan"@id .
+
+key:Ransomware a ag:Concept,
+        skos:Concept .
+

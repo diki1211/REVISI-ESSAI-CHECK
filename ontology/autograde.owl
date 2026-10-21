@@ -230,6 +230,80 @@
   <incompatibleWith rdf:resource="#mengonsumsi"/>
 </owl:NamedIndividual>
 
+<owl:NamedIndividual rdf:about="#merupakan">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#memberitahu">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#memuat">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#memiliki">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#mencakup">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#menentukan">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#melaksanakan">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#mencegah">
+  <rdf:type rdf:resource="#Relation"/>
+  <incompatibleWith rdf:resource="#menyebabkan"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#menyebabkan">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#menjamin">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#mengancam">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#mengenkripsi">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#meminta">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#memulihkan">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#mengurangi">
+  <rdf:type rdf:resource="#Relation"/>
+  <incompatibleWith rdf:resource="#meningkatkan"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#meningkatkan">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#menyisipkan">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
+<owl:NamedIndividual rdf:about="#memisahkan">
+  <rdf:type rdf:resource="#Relation"/>
+</owl:NamedIndividual>
+
 <owl:NamedIndividual rdf:about="#is_a">
   <rdf:type rdf:resource="#Relation"/>
 </owl:NamedIndividual>

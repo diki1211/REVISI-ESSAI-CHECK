@@ -1,0 +1,5 @@
+# SYNTHETIC: invented answer, annotated by an AI (Claude) for the offline demo. Not real data.
+annotated_by: Claude (AI)
+triples:
+  - {s: informasi elektronik, p: memakai, o: sistem elektronik yang sesuai ketentuan, sentences: [1]}
+  - {s: dokumen elektronik, p: merupakan, o: alat bukti yang sah, sentences: [2], negated: true}

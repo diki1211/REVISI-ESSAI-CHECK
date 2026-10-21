@@ -54,7 +54,8 @@ def answers_table():
 def question_label(qid):
     ctx = context(qid)
     lang = {"id": "ID", "en": "EN"}[ctx.rubric.get("language", "id")]
-    origin = "SAF, kunci draf AI" if qid.startswith("SAF_") else "contoh dek"
+    origin = ("SAF, kunci draf AI" if qid.startswith("SAF_") else "kunci draf AI" if ctx.gold_raw.get("drafted_by")
+              else "contoh dek")
     return f"{qid} · {lang} · {origin}"
 
 

@@ -1,0 +1,25 @@
+# Cyber law & security set (HS/KS): drafted by an AI (Claude) from the public sources in question.md.
+# NOT lecturer-validated. Validate the triples, weights and aliases with the lecturer before real use.
+question_id: KS3
+validated_by: null
+validated_on: null
+drafted_by: Claude (AI draft)
+concepts:
+  QueryDinamis:      {aliases: [query dinamis yang menggabungkan input pengguna tanpa validasi, query dinamis, penggabungan input pengguna ke query, konkatenasi input, konkatenasi string, input pengguna tanpa validasi, input yang tidak divalidasi, query yang menggabungkan input pengguna]}
+  SQLInjection:      {aliases: [sql injection, injeksi sql, serangan sql injection, sqli]}
+  Penyerang:         {aliases: [penyerang, peretas, hacker, pelaku, attacker]}
+  PerintahSQL:       {aliases: [perintah sql, kode sql, query sql berbahaya, perintah sql berbahaya, sintaks sql]}
+  PreparedStatement: {aliases: [prepared statement, prepared statements, parameterized query, query berparameter, kueri berparameter, parameterized queries]}
+  KodeDanData:       {aliases: [kode sql dari data, kode dan data, kode sql dan data, perintah dan data]}
+  ValidasiAllowList: {aliases: [validasi input dengan allow list, validasi input, allow list, whitelist, validasi masukan]}
+  RisikoSQLInjection: {aliases: [risiko sql injection, risiko injeksi sql, risiko serangan]}
+  LeastPrivilege:    {aliases: [prinsip hak akses minimal, hak akses minimal, least privilege, principle of least privilege, hak akses terbatas]}
+  DampakSerangan:    {aliases: [dampak serangan, dampak, kerusakan akibat serangan]}
+# requires (Rule 4, demonstration): "prepared statement prevents SQL injection" rests on "it separates code from data".
+triples:
+  - {id: R1, s: QueryDinamis,      p: menyebabkan, o: SQLInjection,       criterion: K1_Penyebab,   weight: 2}
+  - {id: R2, s: Penyerang,         p: menyisipkan, o: PerintahSQL,        criterion: K1_Penyebab,   weight: 1}
+  - {id: R3, s: PreparedStatement, p: memisahkan,  o: KodeDanData,        criterion: K2_Pencegahan, weight: 1}
+  - {id: R4, s: PreparedStatement, p: mencegah,    o: SQLInjection,       criterion: K2_Pencegahan, weight: 2, requires: [R3]}
+  - {id: R5, s: ValidasiAllowList, p: mengurangi,  o: RisikoSQLInjection, criterion: K2_Pencegahan, weight: 1}
+  - {id: R6, s: LeastPrivilege,    p: mengurangi,  o: DampakSerangan,     criterion: K3_Mitigasi,   weight: 1}

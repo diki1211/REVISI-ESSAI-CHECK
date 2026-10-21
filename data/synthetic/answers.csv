@@ -6,3 +6,15 @@ Q1_S02,Q1,"Tanaman membutuhkan sinar matahari dan air. Hasilnya adalah gula.",pi
 Q1_S03,Q1,"Fotosintesis tidak menghasilkan oksigen. Tumbuhan menghasilkan glukosa.",test
 Q1_S04,Q1,"Saya tidak tahu.",pilot
 Q1_S05,Q1,"Tumbuhan menyerap karbon dioksida dan air lalu menghasilkan oksigen.",test
+HS1_S01,HS1,"Kalau terjadi kebocoran data, pengendali data wajib memberitahukan pemilik data secara tertulis. Pemberitahuan tersebut mempunyai batas waktu 3x24 jam. Pengendali juga melapor kepada lembaga pengawas. Notifikasi berisi data yang bocor dan upaya pemulihan. Sanksi administratif berupa peringatan tertulis dan denda.",test
+HS1_S02,HS1,"Menurut saya pengendali data tidak perlu memberitahu pemilik data. Cukup pengendali melaporkan kepada Kominfo. Sanksi administratif berupa denda.",test
+HS2_S01,HS2,"Pengendali data pribadi menentukan tujuan pemrosesan data. Prosesor hanya menjalankan perintah pengendali. Data spesifik meliputi data kesehatan, biometrik, dan data anak.",test
+HS2_S02,HS2,"Prosesor data pribadi menentukan tujuan pemrosesan. Pengendali data hanya mengikuti perintah prosesor. Data spesifik meliputi nama lengkap dan agama.",test
+HS3_S01,HS3,"Informasi elektronik dan hasil cetaknya adalah alat bukti yang sah. Bukti elektronik merupakan perluasan alat bukti dalam hukum acara.",test
+HS3_S02,HS3,"Informasi elektronik sah sebagai alat bukti apabila memakai sistem elektronik yang sesuai ketentuan. Dokumen elektronik bukan alat bukti yang sah kalau tidak dicetak.",test
+KS1_S01,KS1,"Kerahasiaan mencegah orang yang tidak berwenang membaca data. Integritas menjaga agar data tidak diubah tanpa izin. Ketersediaan memastikan sistem bisa diakses saat dibutuhkan. Contohnya, sniffing mengancam kerahasiaan dan serangan DDoS mengancam ketersediaan.",test
+KS1_S02,KS1,"Kerahasiaan menyebabkan pengungkapan informasi yang tidak sah. Integritas mencegah perubahan data yang tidak sah. DDoS mengancam kerahasiaan.",test
+KS2_S01,KS2,"Ransomware adalah malware yang mengunci file korban, lalu pelaku meminta uang tebusan. Untuk pemulihan, backup offline mengembalikan data tanpa membayar. Patch mencegah eksploitasi kerentanan dan MFA mencegah pembajakan akun.",test
+KS2_S02,KS2,"Ransomware merupakan virus yang menghapus data. Cara mencegahnya adalah membayar tebusan agar data kembali. Segmentasi jaringan meningkatkan penyebaran serangan.",test
+KS3_S01,KS3,"SQL injection terjadi karena input pengguna tanpa validasi digabungkan ke query. Hacker menyisipkan kode SQL lewat form login. Prepared statement mencegah SQL injection.",test
+KS3_S02,KS3,"SQL injection disebabkan oleh password yang lemah. Prepared statement memisahkan kode SQL dan data sehingga mencegah SQL injection. Hak akses minimal mengurangi dampak serangan.",test

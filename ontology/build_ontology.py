@@ -15,12 +15,17 @@ IRI = "http://example.org/autograde/ontology#"  # schema namespace (prefix ag:)
 # Every predicate id in config/predicates.yaml except `other` must exist here.
 # Q1 (Indonesian; validate with the lecturer) and the SAF subset (English; AI-drafted).
 RELATIONS = ["menggunakan", "menyerap", "mengonsumsi", "menghasilkan",
+             # Indonesian, cyber law & security questions (HS*/KS*; AI-drafted)
+             "merupakan", "memberitahu", "memuat", "memiliki", "mencakup", "menentukan", "melaksanakan", "mencegah",
+             "menyebabkan", "menjamin", "mengancam", "mengenkripsi", "meminta", "memulihkan", "mengurangi",
+             "meningkatkan", "menyisipkan", "memisahkan",
              "is_a", "uses", "utilizes", "requires", "has", "lacks", "assigns", "provides", "replaces",
              "transmits", "allows", "enables", "prevents", "decreases", "increases",
              "causes", "determines", "follows", "precedes", "reduces"]
 EQUIVALENT = [("menyerap", "menggunakan"), ("utilizes", "uses"), ("enables", "allows"), ("provides", "assigns")]
 INCOMPATIBLE = [("menghasilkan", "mengonsumsi"), ("has", "lacks"), ("allows", "prevents"),
-                ("decreases", "increases"), ("causes", "prevents"), ("follows", "precedes")]
+                ("decreases", "increases"), ("causes", "prevents"), ("follows", "precedes"),
+                ("mencegah", "menyebabkan"), ("mengurangi", "meningkatkan")]
 
 LABELS = {  # Indonesian rdfs:label per class (Protégé can render labels instead of IRIs)
     "Concept": "Konsep", "Relation": "Relasi", "Triple": "Triple", "ReferenceTriple": "Triple Acuan",

@@ -1,0 +1,28 @@
+# Cyber law & security set (HS/KS): drafted by an AI (Claude) from the public sources in question.md.
+# NOT lecturer-validated. Validate the triples, weights and aliases with the lecturer before real use.
+question_id: KS2
+validated_by: null
+validated_on: null
+drafted_by: Claude (AI draft)
+concepts:
+  Ransomware:            {aliases: [ransomware, serangan ransomware]}
+  Malware:               {aliases: [malware, perangkat lunak berbahaya, program jahat, virus]}
+  FileKorban:            {aliases: [file pada perangkat korban, file korban, file, data korban, file dan sistem, dokumen korban]}
+  Penyerang:             {aliases: [penyerang, peretas, hacker, pelaku, attacker]}
+  Tebusan:               {aliases: [tebusan, uang tebusan, ransom, pembayaran tebusan]}
+  BackupOffline:         {aliases: [backup offline yang terenkripsi dan diuji secara berkala, backup offline, cadangan offline, backup, cadangan data, backup terenkripsi]}
+  Data:                  {aliases: [data, data yang terenkripsi, data penting]}
+  PembaruanPerangkatLunak: {aliases: [pembaruan perangkat lunak, patch, patching, update perangkat lunak, pembaruan sistem]}
+  EksploitasiKerentanan: {aliases: [eksploitasi kerentanan, celah keamanan, kerentanan]}
+  MFA:                   {aliases: [autentikasi multifaktor, multi factor authentication, mfa, otentikasi dua faktor, 2fa]}
+  PengambilalihanAkun:   {aliases: [pengambilalihan akun, pembajakan akun, account takeover]}
+  SegmentasiJaringan:    {aliases: [segmentasi jaringan, network segmentation, pemisahan jaringan]}
+  PenyebaranSerangan:    {aliases: [penyebaran serangan, penyebaran ransomware, penyebaran malware, penyebaran]}
+triples:
+  - {id: R1, s: Ransomware,              p: merupakan,    o: Malware,               criterion: K1_Definisi,   weight: 1}
+  - {id: R2, s: Ransomware,              p: mengenkripsi, o: FileKorban,            criterion: K1_Definisi,   weight: 2}
+  - {id: R3, s: [Penyerang, Ransomware], p: meminta,      o: Tebusan,               criterion: K1_Definisi,   weight: 1}
+  - {id: R4, s: BackupOffline,           p: memulihkan,   o: Data,                  criterion: K2_Pemulihan,  weight: 2}
+  - {id: R5, s: PembaruanPerangkatLunak, p: mencegah,     o: EksploitasiKerentanan, criterion: K3_Pencegahan, weight: 1}
+  - {id: R6, s: MFA,                     p: mencegah,     o: PengambilalihanAkun,   criterion: K3_Pencegahan, weight: 1}
+  - {id: R7, s: SegmentasiJaringan,      p: mengurangi,   o: PenyebaranSerangan,    criterion: K3_Pencegahan, weight: 1}

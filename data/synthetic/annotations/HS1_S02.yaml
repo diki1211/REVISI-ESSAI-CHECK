@@ -1,0 +1,6 @@
+# SYNTHETIC: invented answer, annotated by an AI (Claude) for the offline demo. Not real data.
+annotated_by: Claude (AI)
+triples:
+  - {s: pengendali data, p: memberitahu, o: pemilik data, sentences: [1], negated: true}
+  - {s: pengendali, p: melaporkan kepada, o: kominfo, sentences: [2]}
+  - {s: sanksi administratif, p: berupa, o: denda, sentences: [3]}

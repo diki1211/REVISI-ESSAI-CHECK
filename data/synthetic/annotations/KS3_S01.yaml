@@ -1,0 +1,6 @@
+# SYNTHETIC: invented answer, annotated by an AI (Claude) for the offline demo. Not real data.
+annotated_by: Claude (AI)
+triples:
+  - {s: input pengguna tanpa validasi, p: menyebabkan, o: sql injection, sentences: [1]}
+  - {s: hacker, p: menyisipkan, o: kode sql, sentences: [2]}
+  - {s: prepared statement, p: mencegah, o: sql injection, sentences: [3]}
