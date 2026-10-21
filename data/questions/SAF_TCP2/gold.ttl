@@ -1,0 +1,75 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:SAF_TCP2_R1 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_TCP2_K1_Phases ;
+    ag:hasObject key:SlowStart ;
+    ag:hasPredicate ag:has ;
+    ag:hasSubject key:CongestionControl ;
+    ag:weight 1.0 .
+
+key:SAF_TCP2_R2 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_TCP2_K1_Phases ;
+    ag:hasObject key:CongestionAvoidance ;
+    ag:hasPredicate ag:has ;
+    ag:hasSubject key:CongestionControl ;
+    ag:weight 1.0 .
+
+key:SAF_TCP2_R3 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_TCP2_K2_Growth ;
+    ag:hasObject key:Cwnd ;
+    ag:hasPredicate ag:increases ;
+    ag:hasSubject key:SlowStart ;
+    ag:weight 1.0 .
+
+key:SAF_TCP2_R4 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_TCP2_K2_Growth ;
+    ag:hasObject key:Cwnd ;
+    ag:hasPredicate ag:increases ;
+    ag:hasSubject key:CongestionAvoidance ;
+    ag:weight 1.0 .
+
+key:SAF_TCP2_R5 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_TCP2_K3_Loss ;
+    ag:hasObject key:SsThresh ;
+    ag:hasPredicate ag:decreases ;
+    ag:hasSubject key:PacketLoss ;
+    ag:weight 1.0 .
+
+key:SAF_TCP2_R6 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_TCP2_K3_Loss ;
+    ag:hasObject key:Cwnd ;
+    ag:hasPredicate ag:decreases ;
+    ag:hasSubject key:PacketLoss ;
+    ag:weight 1.0 .
+
+key:SsThresh a ag:Concept,
+        skos:Concept .
+
+key:CongestionAvoidance a ag:Concept,
+        skos:Concept .
+
+key:CongestionControl a ag:Concept,
+        skos:Concept .
+
+key:PacketLoss a ag:Concept,
+        skos:Concept .
+
+key:SAF_TCP2_K1_Phases a ag:Criterion ;
+    rdfs:comment "Names slow start and congestion avoidance"@en .
+
+key:SAF_TCP2_K2_Growth a ag:Criterion ;
+    rdfs:comment "Explains how cwnd grows in each phase"@en .
+
+key:SAF_TCP2_K3_Loss a ag:Criterion ;
+    rdfs:comment "Explains what happens to ss_thresh and cwnd after a loss"@en .
+
+key:SlowStart a ag:Concept,
+        skos:Concept .
+
+key:Cwnd a ag:Concept,
+        skos:Concept .
+

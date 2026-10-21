@@ -1,0 +1,10 @@
+# SAF subset: drafted by an AI (Claude) from the SAF reference answer. NOT lecturer-validated.
+question_id: SAF_CSMA
+validated_by: null
+validated_on: null
+drafted_by: Claude (AI draft)
+concepts:
+  CollisionDomainDiameter: {aliases: [collision domain diameter, the collision domain diameter, collision domain, diameter, the diameter, network diameter, maximum distance, maximal distance, max distance, the maximum distance, possible distance, the possible distance, distance, maximum segment length, cdd]}
+  FactorOfTen:             {aliases: [factor of 10, a factor of 10, the factor of 10, factor 10, the factor 10, by factor 10, factor of ten, 10 times, ten times, 10times, tenfold, 10x, one tenth, a tenth, 1/10, 1/10th, the same factor, same factor, by the same factor, 90%]}
+triples:
+  - {id: R1, s: CollisionDomainDiameter, p: decreases, o: FactorOfTen, criterion: K1_Effect, weight: 2}

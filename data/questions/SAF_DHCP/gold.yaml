@@ -1,0 +1,17 @@
+# SAF subset: drafted by an AI (Claude) from the SAF reference answer. NOT lecturer-validated.
+question_id: SAF_DHCP
+validated_by: null
+validated_on: null
+drafted_by: Claude (AI draft)
+concepts:
+  DHCP:            {aliases: [dhcp, dynamic host configuration protocol, the dynamic host configuration protocol, dhcp protocol]}
+  DHCPServer:      {aliases: [dhcp server, dhcp-server, a dhcp server, a specific dhcp server, the server, server]}
+  NetworkProtocol: {aliases: [network management protocol, a network management protocol, network protocol, communication protocol, protocol]}
+  IPAddress:       {aliases: [ip address, ip addresses, an ip address, the ip addresses, ip-address, ip-addresses, ip adress, ip adresses]}
+  Configuration:   {aliases: [configuration, network configuration, configuration parameters, network configuration parameters, other network configuration parameters, configuration information, additional configuration information, dns server, netmask, subnet mask, default router, default gateway]}
+  RARP:            {aliases: [rarp, bootp, rarp and bootp, reverse address resolution protocol]}
+triples:
+  - {id: R1, s: DHCP,                p: is_a,     o: NetworkProtocol, criterion: K1_Definition, weight: 1}
+  - {id: R2, s: [DHCP, DHCPServer],  p: assigns,  o: IPAddress,       criterion: K2_Purpose,    weight: 2}
+  - {id: R3, s: [DHCP, DHCPServer],  p: assigns,  o: Configuration,   criterion: K2_Purpose,    weight: 1}
+  - {id: R4, s: DHCP,                p: replaces, o: RARP,            criterion: K3_History,    weight: 1}

@@ -1,0 +1,6 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: RPF, p: avoids, o: duplicate packets, sentences: [1]}
+  - {s: RPB, p: avoids, o: duplicate packets, sentences: [1]}
+  - {s: RPF, p: uses, o: unicast routing information, sentences: [1]}

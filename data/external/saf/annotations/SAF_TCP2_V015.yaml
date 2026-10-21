@@ -1,0 +1,9 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: congestion control with TCP, p: has, o: Slow Start, sentences: [1]}
+  - {s: congestion control with TCP, p: has, o: Congestion Avoidance, sentences: [1]}
+  - {s: slow start phase, p: doubles, o: cwnd, sentences: [2]}
+  - {s: Congestion Avoidance Phase, p: increases, o: cwnd, sentences: [3]}
+  - {s: a timeout, p: halves, o: ss_tresh, sentences: [4]}
+  - {s: a timeout, p: resets, o: cwnd, sentences: [4]}

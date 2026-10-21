@@ -1,0 +1,36 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:SAF_POISSON_R1 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_POISSON_K1_Answer ;
+    ag:hasObject key:Burstiness ;
+    ag:hasPredicate ag:has ;
+    ag:hasSubject key:InternetTraffic ;
+    ag:weight 1.0 .
+
+key:SAF_POISSON_R2 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_POISSON_K1_Answer ;
+    ag:hasObject key:Independence ;
+    ag:hasPredicate ag:lacks ;
+    ag:hasSubject key:InternetTraffic,
+        key:PacketArrivals ;
+    ag:weight 1.0 .
+
+key:Burstiness a ag:Concept,
+        skos:Concept .
+
+key:Independence a ag:Concept,
+        skos:Concept .
+
+key:PacketArrivals a ag:Concept,
+        skos:Concept .
+
+key:InternetTraffic a ag:Concept,
+        skos:Concept .
+
+key:SAF_POISSON_K1_Answer a ag:Criterion ;
+    rdfs:comment "No; internet traffic is bursty"@en .
+

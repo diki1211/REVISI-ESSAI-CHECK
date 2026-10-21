@@ -1,0 +1,2 @@
+<!-- From SAF (Filighera et al., 2022), CC-BY-4.0. -->
+Consider the following network topology from the lecture:With routing, we want to find the best path for our packets. For this, we first need to define a metric to evaluate the quality of a path. One possible choice could be the current load (i.e. the current utilization in terms of sent packets/bytes) on this path. Assume that A wants to send data to G, could this routing strategy cause any problems at the receiver end? Please explain your answer in 1-2 sentences.

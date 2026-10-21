@@ -1,0 +1,5 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: Spanning Tree, p: minimizes, o: packet copies, sentences: [1]}
+  - {s: IS nodes, p: sends, o: link state packets, sentences: [3]}

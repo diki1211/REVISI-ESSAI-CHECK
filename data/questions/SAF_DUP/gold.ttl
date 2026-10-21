@@ -1,0 +1,36 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:SAF_DUP_R1 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DUP_K1_Problem ;
+    ag:hasObject key:RepeatedProcessing ;
+    ag:hasPredicate ag:causes ;
+    ag:hasSubject key:DuplicatePacket,
+        key:Receiver ;
+    ag:weight 1.0 .
+
+key:SAF_DUP_R2 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DUP_K1_Problem ;
+    ag:hasObject key:DuplicateDetection ;
+    ag:hasPredicate ag:lacks ;
+    ag:hasSubject key:Receiver ;
+    ag:weight 1.0 .
+
+key:DuplicateDetection a ag:Concept,
+        skos:Concept .
+
+key:DuplicatePacket a ag:Concept,
+        skos:Concept .
+
+key:RepeatedProcessing a ag:Concept,
+        skos:Concept .
+
+key:Receiver a ag:Concept,
+        skos:Concept .
+
+key:SAF_DUP_K1_Problem a ag:Criterion ;
+    rdfs:comment "Explains that the receiver may act on the same information twice"@en .
+

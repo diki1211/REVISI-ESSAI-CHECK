@@ -1,0 +1,5 @@
+triples:
+  - {s: tumbuhan,     p: menyerap,     o: sinar matahari,  sentences: [1]}
+  - {s: tumbuhan,     p: menghasilkan, o: makanan,         sentences: [1]}
+  - {s: tumbuhan,     p: menghasilkan, o: oksigen,         sentences: [1]}
+  - {s: fotosintesis, p: menghasilkan, o: karbon dioksida, sentences: [2]}

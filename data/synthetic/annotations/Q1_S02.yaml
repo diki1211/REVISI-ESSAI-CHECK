@@ -1,0 +1,4 @@
+triples:
+  - {s: tanaman, p: membutuhkan,  o: sinar matahari, sentences: [1]}
+  - {s: tanaman, p: membutuhkan,  o: air,            sentences: [1]}
+  - {s: tanaman, p: menghasilkan, o: gula,           sentences: [1, 2]}

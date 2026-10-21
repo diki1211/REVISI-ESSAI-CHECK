@@ -1,0 +1,10 @@
+annotated_by: Claude (AI draft, not checked by a human)
+triples:
+  - {s: Unconfirmed Connectionless Service, p: lacks, o: feedback, sentences: [1]}
+  - {s: Unconfirmed Connectionless Service, p: lacks, o: flow control, sentences: [1]}
+  - {s: Confirmed Connectionless Service, p: has, o: acknowledgement, sentences: [1]}
+  - {s: Confirmed Connectionless Service, p: prevents, o: loss, sentences: [1]}
+  - {s: Confirmed Connectionless Service, p: lacks, o: flow controls, sentences: [1]}
+  - {s: Connection-Oriented Service, p: has, o: 3-phased Communication, sentences: [1]}
+  - {s: Connection-Oriented Service, p: has, o: Flow control, sentences: [1, 4]}
+  - {s: Connection-Oriented Service, p: prevents, o: loss of data units, sentences: [1, 4]}

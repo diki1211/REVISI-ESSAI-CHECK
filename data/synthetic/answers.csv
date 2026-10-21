@@ -1,0 +1,8 @@
+answer_id,question_id,text,split
+Q1_A07,Q1,"Tumbuhan menyerap sinar matahari dan menghasilkan makanan serta oksigen. Tumbuhan juga mengonsumsi karbon dioksida.",test
+Q1_A08,Q1,"Tumbuhan menyerap sinar matahari dan menghasilkan makanan serta oksigen. Fotosintesis menghasilkan karbon dioksida.",test
+Q1_S01,Q1,"Fotosintesis adalah proses ketika tumbuhan menggunakan cahaya matahari. Proses ini mengubah karbon dioksida dan air menjadi glukosa. Oksigen dilepaskan sebagai hasil sampingan.",pilot
+Q1_S02,Q1,"Tanaman membutuhkan sinar matahari dan air. Hasilnya adalah gula.",pilot
+Q1_S03,Q1,"Fotosintesis tidak menghasilkan oksigen. Tumbuhan menghasilkan glukosa.",test
+Q1_S04,Q1,"Saya tidak tahu.",pilot
+Q1_S05,Q1,"Tumbuhan menyerap karbon dioksida dan air lalu menghasilkan oksigen.",test

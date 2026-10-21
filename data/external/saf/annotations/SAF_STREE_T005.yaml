@@ -1,0 +1,5 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: spanning tree, p: lacks, o: cycles, sentences: [1]}   # implied subject
+  - {s: link state packets, p: contains, o: information on multicast groups, sentences: [1]}

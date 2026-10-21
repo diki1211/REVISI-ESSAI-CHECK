@@ -1,0 +1,99 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:SAF_DLL_R1 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DLL_K1_Unconfirmed ;
+    ag:hasObject key:Acknowledgement ;
+    ag:hasPredicate ag:lacks ;
+    ag:hasSubject key:UnconfirmedConnectionless ;
+    ag:weight 1.0 .
+
+key:SAF_DLL_R2 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DLL_K1_Unconfirmed ;
+    ag:hasObject key:DataLoss ;
+    ag:hasPredicate ag:allows ;
+    ag:hasSubject key:UnconfirmedConnectionless ;
+    ag:weight 1.0 .
+
+key:SAF_DLL_R3 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DLL_K1_Unconfirmed ;
+    ag:hasObject key:FlowControl ;
+    ag:hasPredicate ag:lacks ;
+    ag:hasSubject key:UnconfirmedConnectionless ;
+    ag:weight 1.0 .
+
+key:SAF_DLL_R4 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DLL_K2_Confirmed ;
+    ag:hasObject key:Acknowledgement ;
+    ag:hasPredicate ag:has ;
+    ag:hasSubject key:ConfirmedConnectionless ;
+    ag:weight 1.0 .
+
+key:SAF_DLL_R5 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DLL_K2_Confirmed ;
+    ag:hasObject key:DataLoss ;
+    ag:hasPredicate ag:prevents ;
+    ag:hasSubject key:ConfirmedConnectionless ;
+    ag:weight 1.0 .
+
+key:SAF_DLL_R6 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DLL_K2_Confirmed ;
+    ag:hasObject key:FlowControl ;
+    ag:hasPredicate ag:lacks ;
+    ag:hasSubject key:ConfirmedConnectionless ;
+    ag:weight 1.0 .
+
+key:SAF_DLL_R7 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DLL_K3_ConnectionOriented ;
+    ag:hasObject key:FlowControl ;
+    ag:hasPredicate ag:has ;
+    ag:hasSubject key:ConnectionOriented ;
+    ag:weight 1.0 .
+
+key:SAF_DLL_R8 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DLL_K3_ConnectionOriented ;
+    ag:hasObject key:ConnectPhases ;
+    ag:hasPredicate ag:has ;
+    ag:hasSubject key:ConnectionOriented ;
+    ag:weight 1.0 .
+
+key:SAF_DLL_R9 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DLL_K3_ConnectionOriented ;
+    ag:hasObject key:DataLoss ;
+    ag:hasPredicate ag:prevents ;
+    ag:hasSubject key:ConnectionOriented ;
+    ag:weight 1.0 .
+
+key:ConnectPhases a ag:Concept,
+        skos:Concept .
+
+key:Acknowledgement a ag:Concept,
+        skos:Concept .
+
+key:ConfirmedConnectionless a ag:Concept,
+        skos:Concept .
+
+key:ConnectionOriented a ag:Concept,
+        skos:Concept .
+
+key:DataLoss a ag:Concept,
+        skos:Concept .
+
+key:FlowControl a ag:Concept,
+        skos:Concept .
+
+key:SAF_DLL_K1_Unconfirmed a ag:Criterion ;
+    rdfs:comment "Describes the unconfirmed connectionless service"@en .
+
+key:SAF_DLL_K2_Confirmed a ag:Criterion ;
+    rdfs:comment "Describes the confirmed connectionless service"@en .
+
+key:SAF_DLL_K3_ConnectionOriented a ag:Criterion ;
+    rdfs:comment "Describes the connection-oriented service"@en .
+
+key:UnconfirmedConnectionless a ag:Concept,
+        skos:Concept .
+

@@ -1,0 +1,22 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:SAF_CSMA_R1 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_CSMA_K1_Effect ;
+    ag:hasObject key:FactorOfTen ;
+    ag:hasPredicate ag:decreases ;
+    ag:hasSubject key:CollisionDomainDiameter ;
+    ag:weight 2.0 .
+
+key:CollisionDomainDiameter a ag:Concept,
+        skos:Concept .
+
+key:FactorOfTen a ag:Concept,
+        skos:Concept .
+
+key:SAF_CSMA_K1_Effect a ag:Criterion ;
+    rdfs:comment "States that the diameter decreases by the same factor of 10"@en .
+

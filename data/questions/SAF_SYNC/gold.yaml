@@ -1,0 +1,21 @@
+# SAF subset: drafted by an AI (Claude) from the SAF reference answer. NOT lecturer-validated.
+question_id: SAF_SYNC
+validated_by: null
+validated_on: null
+drafted_by: Claude (AI draft)
+concepts:
+  AsynchronousTransmission: {aliases: [asynchronous, asynchronous transmission, asynchronous mode, asynchronous transmission mode, async, unsynchronous transmission]}
+  SynchronousTransmission:  {aliases: [synchronous, synchronous transmission, synchronous mode, synchronous transmission mode, synchronus transmission]}
+  Character:                {aliases: [character, characters, each character, every character, single character, byte, bytes, each byte, single bytes]}
+  StartStopBits:            {aliases: [start bit and stop bit, start bit and a stop bit, start and stop bit, start and stop bits, start and end bit, start bit and an end bit, start/stop bits, start bit, stop bit]}
+  Frame:                    {aliases: [frame, frames, block, blocks, blocks or frames, block of bytes]}
+  SynFlag:                  {aliases: [syn, syn or flag, flag, flags, syn flag, syn flags, synchronisation flag, control flags]}
+  LowTransmissionRate:      {aliases: [low transmission rate, low transmission rates, lower transmission rate, low data rate]}
+  HighTransmissionRate:     {aliases: [high transmission rate, high transmission rates, higher transmission rate, higher transmission rates, higher data rate]}
+triples:
+  - {id: R1, s: AsynchronousTransmission, p: transmits, o: Character,            criterion: K1_Asynchronous, weight: 1}
+  - {id: R2, s: AsynchronousTransmission, p: uses,      o: StartStopBits,        criterion: K1_Asynchronous, weight: 1}
+  - {id: R3, s: AsynchronousTransmission, p: has,       o: LowTransmissionRate,  criterion: K1_Asynchronous, weight: 1}
+  - {id: R4, s: SynchronousTransmission,  p: transmits, o: Frame,                criterion: K2_Synchronous,  weight: 1}
+  - {id: R5, s: SynchronousTransmission,  p: uses,      o: SynFlag,              criterion: K2_Synchronous,  weight: 1}
+  - {id: R6, s: SynchronousTransmission,  p: has,       o: HighTransmissionRate, criterion: K2_Synchronous,  weight: 1}

@@ -1,0 +1,8 @@
+annotated_by: Claude (AI draft, not checked by a human)
+triples:
+  - {s: Asynchronous, p: transmits, o: each character, sentences: [1]}
+  - {s: Asynchronous, p: uses, o: start bit and a stop bit, sentences: [1]}
+  - {s: Asynchronous, p: has, o: low transmission rates, sentences: [1]}
+  - {s: Synchronous, p: transmits, o: frames, sentences: [1]}
+  - {s: Synchronous, p: uses, o: SYN or flag, sentences: [1]}
+  - {s: Synchronous, p: has, o: higher transmission rates, sentences: [1]}

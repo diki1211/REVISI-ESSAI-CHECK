@@ -1,0 +1,7 @@
+# SAF subset: drafted by an AI (Claude) from the SAF reference answer. NOT lecturer-validated.
+question_id: SAF_DLL
+language: en
+criteria:
+  - {id: K1_Unconfirmed, description: Describes the unconfirmed connectionless service}
+  - {id: K2_Confirmed, description: Describes the confirmed connectionless service}
+  - {id: K3_ConnectionOriented, description: Describes the connection-oriented service}

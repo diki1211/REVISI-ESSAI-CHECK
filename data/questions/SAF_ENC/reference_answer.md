@@ -1,0 +1,2 @@
+<!-- From SAF (Filighera et al., 2022), CC-BY-4.0. -->
+Binary Encoding, as it is the most efficient in terms of bandwidth since you get a full bit per baud instead of only 0.5. Additionally, you do not have to deal with clock drift and various ticking rates as all clocks are perfect. Therefore, self-clocking / clock recovery is not as necessary. Simple and cheap is also acceptable as one of the reasons.

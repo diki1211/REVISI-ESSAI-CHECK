@@ -1,0 +1,9 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: congestion control, p: has, o: Slow Start, sentences: [1]}   # implied subject
+  - {s: congestion control, p: has, o: Congestion Avoidance, sentences: [3]}   # implied subject
+  - {s: Slow Start, p: increases, o: cwnd, sentences: [1, 2]}
+  - {s: Congestion Avoidance phase, p: increases, o: cwnd, sentences: [3]}
+  - {s: a packet is lost, p: halves, o: ss_thresh, sentences: [4]}
+  - {s: a packet is lost, p: resets, o: cwnd, sentences: [4]}

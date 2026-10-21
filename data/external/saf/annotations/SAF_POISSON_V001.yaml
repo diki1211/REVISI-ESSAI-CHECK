@@ -1,0 +1,4 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: the arrivals, p: requires, o: each other, sentences: [1]}   # "depend on each other"

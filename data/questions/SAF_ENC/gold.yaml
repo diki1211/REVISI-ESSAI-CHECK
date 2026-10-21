@@ -1,0 +1,17 @@
+# SAF subset: drafted by an AI (Claude) from the SAF reference answer as a demonstration. NOT lecturer-validated.
+# The reference accepts any two reasons; the key lists three, so a correct answer can still miss one (see DECISIONS).
+question_id: SAF_ENC
+validated_by: null
+validated_on: null
+drafted_by: Claude (AI draft, demonstration)
+concepts:
+  Network:             {aliases: [network, the network, this network, users, the users, they, local network]}
+  BinaryEncoding:      {aliases: [binary encoding, binary coding, bianry encoding, binary, nrz, non-return-to-zero, binary encoding (nrz)]}
+  BandwidthEfficiency: {aliases: [bandwidth efficiency, good utilization of bandwidth, efficient use of bandwidth, best transfer rate, 1 bit per baud, one bit per baud, full bit per baud, efficiency, high efficiency]}
+  SelfClocking:        {aliases: [self-clocking, self clocking, clock recovery, self-clocking feature, clock information]}
+  Simplicity:          {aliases: [simple, simplicity, simple and cheap, cheap, inexpensive, low cost]}
+triples:
+  - {id: R1, s: Network,        p: uses,  o: BinaryEncoding,      criterion: K1_Choice,  weight: 1}
+  - {id: R2, s: BinaryEncoding, p: has,   o: BandwidthEfficiency, criterion: K2_Reasons, weight: 1}
+  - {id: R3, s: BinaryEncoding, p: lacks, o: SelfClocking,        criterion: K2_Reasons, weight: 0.5}
+  - {id: R4, s: BinaryEncoding, p: has,   o: Simplicity,          criterion: K2_Reasons, weight: 0.5}

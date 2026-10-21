@@ -1,0 +1,8 @@
+annotated_by: Claude (AI draft, not checked by a human)
+# The student calls phase 2 "Congestion control" instead of congestion avoidance; annotated as written.
+triples:
+  - {s: congestion control, p: has, o: Slow start, sentences: [1]}   # implied subject
+  - {s: Slow start, p: increases, o: cwnd, sentences: [1]}
+  - {s: Congestion control, p: increases, o: cwnd, sentences: [2]}
+  - {s: a congestion, p: halves, o: ss_thresh, sentences: [3]}
+  - {s: a congestion, p: resets, o: cwnd, sentences: [3, 4]}

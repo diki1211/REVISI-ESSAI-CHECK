@@ -1,0 +1,6 @@
+annotated_by: Claude (AI draft, not checked by a human)
+triples:
+  - {s: Dynamic Host Configuration Protocol, p: is_a, o: network management protocol, sentences: [1]}
+  - {s: DHCP server, p: assigns, o: IP address, sentences: [1]}
+  - {s: DHCP server, p: assigns, o: other network configuration parameters, sentences: [1]}
+  - {s: DHCP, p: provides, o: additional configuration information, sentences: [3]}

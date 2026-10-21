@@ -1,0 +1,6 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: bridge table, p: has, o: MAC addresses and ports of bridge, sentences: [1]}
+  - {s: bridge, p: uses, o: source address, sentences: [2]}
+  - {s: Bridge, p: uses, o: its table, sentences: [3]}

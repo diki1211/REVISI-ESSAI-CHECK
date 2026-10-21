@@ -1,0 +1,4 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: network, p: uses, o: Character oriented encoding, sentences: [1]}   # implied subject

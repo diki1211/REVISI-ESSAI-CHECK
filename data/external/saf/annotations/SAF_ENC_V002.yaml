@@ -1,0 +1,5 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: network, p: uses, o: Binary Encoding, sentences: [1]}   # implied subject
+  - {s: Binary Encoding, p: has, o: good utilization of the bandwidth, sentences: [1]}

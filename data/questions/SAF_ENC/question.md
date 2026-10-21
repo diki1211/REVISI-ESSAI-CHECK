@@ -1,0 +1,2 @@
+<!-- From SAF (Filighera et al., 2022), CC-BY-4.0. -->
+Assume you have a local network with 3 users that are all interconnected and have perfect clocks. Typically the network is often congested as all users generate more traffic than the link’s capacities. Which of the encoding techniques introduced in the lecture should be used in this network to encode bitstreams? Give two reasons for your answer in 2-4 sentences.

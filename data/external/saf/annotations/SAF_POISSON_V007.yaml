@@ -1,0 +1,5 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: packets, p: lacks, o: independently, sentences: [1]}
+  - {s: internet traffic, p: has, o: very bursty, sentences: [2]}

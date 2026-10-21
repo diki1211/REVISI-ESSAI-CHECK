@@ -1,0 +1,6 @@
+triples:
+  - {s: tumbuhan,     p: menggunakan,  o: cahaya matahari, sentences: [1]}
+  - {s: fotosintesis, p: mengubah,     o: karbon dioksida, sentences: [1, 2]}
+  - {s: fotosintesis, p: mengubah,     o: air,             sentences: [1, 2]}
+  - {s: fotosintesis, p: menghasilkan, o: glukosa,         sentences: [1, 2]}
+  - {s: fotosintesis, p: melepaskan,   o: oksigen,         sentences: [1, 3]}

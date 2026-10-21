@@ -1,0 +1,78 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:SAF_DUPMETH_R1 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DUPMETH_K1_TemporaryTSAP ;
+    ag:hasObject key:DuplicatePackets ;
+    ag:hasPredicate ag:prevents ;
+    ag:hasSubject key:TemporaryTSAP ;
+    ag:weight 1.0 .
+
+key:SAF_DUPMETH_R2 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DUPMETH_K1_TemporaryTSAP ;
+    ag:hasObject key:WellKnownTSAP ;
+    ag:hasPredicate ag:prevents ;
+    ag:hasSubject key:TemporaryTSAP ;
+    ag:weight 1.0 .
+
+key:SAF_DUPMETH_R3 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DUPMETH_K2_ConnectionIds ;
+    ag:hasObject key:DuplicatePackets ;
+    ag:hasPredicate ag:prevents ;
+    ag:hasSubject key:ConnectionIdentification ;
+    ag:weight 1.0 .
+
+key:SAF_DUPMETH_R4 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DUPMETH_K2_ConnectionIds ;
+    ag:hasObject key:PersistentStorage ;
+    ag:hasPredicate ag:requires ;
+    ag:hasSubject key:ConnectionIdentification ;
+    ag:weight 1.0 .
+
+key:SAF_DUPMETH_R5 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DUPMETH_K3_PduSeqNo ;
+    ag:hasObject key:DuplicatePackets ;
+    ag:hasPredicate ag:prevents ;
+    ag:hasSubject key:PDUSequenceNumbers ;
+    ag:weight 1.0 .
+
+key:SAF_DUPMETH_R6 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_DUPMETH_K3_PduSeqNo ;
+    ag:hasObject key:BandwidthOverhead ;
+    ag:hasPredicate ag:requires ;
+    ag:hasSubject key:PDUSequenceNumbers ;
+    ag:weight 1.0 .
+
+key:BandwidthOverhead a ag:Concept,
+        skos:Concept .
+
+key:PersistentStorage a ag:Concept,
+        skos:Concept .
+
+key:WellKnownTSAP a ag:Concept,
+        skos:Concept .
+
+key:ConnectionIdentification a ag:Concept,
+        skos:Concept .
+
+key:PDUSequenceNumbers a ag:Concept,
+        skos:Concept .
+
+key:SAF_DUPMETH_K1_TemporaryTSAP a ag:Criterion ;
+    rdfs:comment "Temporarily valid TSAPs"@en .
+
+key:SAF_DUPMETH_K2_ConnectionIds a ag:Criterion ;
+    rdfs:comment "Identifying connections individually"@en .
+
+key:SAF_DUPMETH_K3_PduSeqNo a ag:Criterion ;
+    rdfs:comment "Identifying PDUs individually"@en .
+
+key:TemporaryTSAP a ag:Concept,
+        skos:Concept .
+
+key:DuplicatePackets a ag:Concept,
+        skos:Concept .
+

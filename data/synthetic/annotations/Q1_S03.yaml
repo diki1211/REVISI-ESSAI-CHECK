@@ -1,0 +1,3 @@
+triples:
+  - {s: fotosintesis, p: menghasilkan, o: oksigen, negated: true, sentences: [1]}
+  - {s: tumbuhan,     p: menghasilkan, o: glukosa, sentences: [2]}

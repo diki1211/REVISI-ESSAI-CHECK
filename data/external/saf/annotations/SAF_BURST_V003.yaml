@@ -1,0 +1,6 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: Frame bursting, p: increases, o: the throughput of data, sentences: [1]}
+  - {s: Frame bursting, p: has, o: better efficiency, sentences: [1, 4]}
+  - {s: Frame bursting, p: requires, o: frames waiting for transmission, sentences: [1, 4]}

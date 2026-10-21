@@ -1,0 +1,58 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:SAF_IPV6EXT_R1 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_IPV6EXT_K1_Definition ;
+    ag:hasObject key:OptionalInformation ;
+    ag:hasPredicate ag:provides ;
+    ag:hasSubject key:ExtensionHeaders ;
+    ag:weight 1.0 .
+
+key:SAF_IPV6EXT_R2 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_IPV6EXT_K2_Location ;
+    ag:hasObject key:FixedHeader ;
+    ag:hasPredicate ag:follows ;
+    ag:hasSubject key:ExtensionHeaders ;
+    ag:weight 1.0 .
+
+key:SAF_IPV6EXT_R3 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_IPV6EXT_K2_Location ;
+    ag:hasObject key:Payload ;
+    ag:hasPredicate ag:precedes ;
+    ag:hasSubject key:ExtensionHeaders ;
+    ag:weight 1.0 .
+
+key:SAF_IPV6EXT_R4 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_IPV6EXT_K3_Advantage ;
+    ag:hasObject key:NewOptions ;
+    ag:hasPredicate ag:allows ;
+    ag:hasSubject key:ExtensionHeaders ;
+    ag:weight 1.0 .
+
+key:FixedHeader a ag:Concept,
+        skos:Concept .
+
+key:NewOptions a ag:Concept,
+        skos:Concept .
+
+key:OptionalInformation a ag:Concept,
+        skos:Concept .
+
+key:Payload a ag:Concept,
+        skos:Concept .
+
+key:SAF_IPV6EXT_K1_Definition a ag:Criterion ;
+    rdfs:comment "Extension headers carry optional extra information"@en .
+
+key:SAF_IPV6EXT_K3_Advantage a ag:Criterion ;
+    rdfs:comment "New options without changing the fixed header"@en .
+
+key:SAF_IPV6EXT_K2_Location a ag:Criterion ;
+    rdfs:comment "Between the fixed header and the payload"@en .
+
+key:ExtensionHeaders a ag:Concept,
+        skos:Concept .
+

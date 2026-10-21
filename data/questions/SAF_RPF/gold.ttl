@@ -1,0 +1,52 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:SAF_RPF_R1 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_RPF_K1_Purpose ;
+    ag:hasObject key:DuplicatePackets ;
+    ag:hasPredicate ag:reduces ;
+    ag:hasSubject key:RPB,
+        key:RPF ;
+    ag:weight 2.0 .
+
+key:SAF_RPF_R2 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_RPF_K2_RPF ;
+    ag:hasObject key:UnicastRoutingTable ;
+    ag:hasPredicate ag:uses ;
+    ag:hasSubject key:RPF ;
+    ag:weight 1.0 .
+
+key:SAF_RPF_R3 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_RPF_K3_RPB ;
+    ag:hasObject key:SpanningTree ;
+    ag:hasPredicate ag:uses ;
+    ag:hasSubject key:RPB ;
+    ag:weight 1.0 .
+
+key:DuplicatePackets a ag:Concept,
+        skos:Concept .
+
+key:SAF_RPF_K1_Purpose a ag:Criterion ;
+    rdfs:comment "Both reduce duplicate packets compared to flooding"@en .
+
+key:SAF_RPF_K2_RPF a ag:Criterion ;
+    rdfs:comment "RPF uses the unicast routing table"@en .
+
+key:SAF_RPF_K3_RPB a ag:Criterion ;
+    rdfs:comment "RPB forwards only along spanning-tree edges"@en .
+
+key:SpanningTree a ag:Concept,
+        skos:Concept .
+
+key:UnicastRoutingTable a ag:Concept,
+        skos:Concept .
+
+key:RPB a ag:Concept,
+        skos:Concept .
+
+key:RPF a ag:Concept,
+        skos:Concept .
+

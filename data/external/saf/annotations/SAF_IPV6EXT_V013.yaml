@@ -1,0 +1,6 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: Extension headers, p: is_a, o: a form of additional information, sentences: [1]}
+  - {s: extension headers, p: follows, o: the header, sentences: [1, 3]}
+  - {s: extension headers, p: precedes, o: the data, sentences: [1, 3]}

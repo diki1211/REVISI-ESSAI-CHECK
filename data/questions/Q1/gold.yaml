@@ -1,0 +1,23 @@
+# Example content from the presentation deck; not yet validated by a lecturer.
+question_id: Q1
+validated_by: null
+validated_on: null
+concepts:
+  # broader: the lecturer's concept hierarchy (skos:broader). A student who names the broader concept
+  # ("makanan" for Glukosa) earns partial credit; a narrower one counts as the concept itself.
+  Fotosintesis: {aliases: [proses fotosintesis]}
+  Tumbuhan:     {aliases: [tanaman]}
+  Cahaya:       {aliases: [sinar matahari, cahaya matahari], broader: [Energi]}
+  CO2:          {aliases: [karbon dioksida, CO2], broader: [Gas]}
+  Air:          {aliases: [H2O]}
+  Glukosa:      {aliases: [gula], broader: [Makanan]}
+  Oksigen:      {aliases: [O2], broader: [Gas]}
+  Makanan:      {aliases: [zat makanan, bahan makanan]}
+  Gas:          {aliases: [gas-gas]}
+  Energi:       {aliases: [sumber energi]}
+triples:
+  - {id: R1, s: [Tumbuhan, Fotosintesis], p: menggunakan,  o: Cahaya,  criterion: K3_Energi, weight: 2}
+  - {id: R2, s: [Fotosintesis, Tumbuhan], p: mengonsumsi,  o: CO2,     criterion: K1_Bahan,  weight: 2}
+  - {id: R3, s: [Fotosintesis, Tumbuhan], p: mengonsumsi,  o: Air,     criterion: K1_Bahan,  weight: 2}
+  - {id: R4, s: [Fotosintesis, Tumbuhan], p: menghasilkan, o: Glukosa, criterion: K2_Produk, weight: 2}
+  - {id: R5, s: [Fotosintesis, Tumbuhan], p: menghasilkan, o: Oksigen, criterion: K2_Produk, weight: 2}

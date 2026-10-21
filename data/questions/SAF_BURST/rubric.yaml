@@ -1,0 +1,7 @@
+# SAF subset: drafted by an AI (Claude) from the SAF reference answer as a demonstration. NOT lecturer-validated.
+question_id: SAF_BURST
+language: en
+criteria:
+  - {id: K1_Definition, description: Frame bursting sends several frames in one transmission}
+  - {id: K2_Advantage, description: More efficient than carrier extension}
+  - {id: K3_Disadvantage, description: Frames have to wait (delay, buffering)}

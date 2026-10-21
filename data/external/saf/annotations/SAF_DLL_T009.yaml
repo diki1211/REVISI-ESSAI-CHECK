@@ -1,0 +1,10 @@
+annotated_by: Claude (AI draft, not checked by a human)
+triples:
+  - {s: Unconfirmed Connectionless, p: lacks, o: confirmation, sentences: [1]}
+  - {s: Unconfirmed Connectionless, p: allows, o: loss of data units, sentences: [1]}
+  - {s: Unconfirmed Connectionless, p: lacks, o: flow control, sentences: [1]}
+  - {s: Confirmed Connectionless, p: has, o: acknowledgement, sentences: [2]}
+  - {s: Confirmed Connectionless, p: prevents, o: loss of data units, sentences: [2]}
+  - {s: Confirmed Connectionless, p: lacks, o: flow control, sentences: [2]}
+  - {s: Connection Oriented, p: prevents, o: loss of data units, sentences: [3]}
+  - {s: Connection Oriented, p: has, o: flow control, sentences: [3]}

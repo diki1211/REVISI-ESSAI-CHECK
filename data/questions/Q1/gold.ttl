@@ -1,0 +1,89 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:Q1_R1 a ag:ReferenceTriple ;
+    ag:criterion key:Q1_K3_Energi ;
+    ag:hasObject key:Cahaya ;
+    ag:hasPredicate ag:menggunakan ;
+    ag:hasSubject key:Fotosintesis,
+        key:Tumbuhan ;
+    ag:weight 2.0 .
+
+key:Q1_R2 a ag:ReferenceTriple ;
+    ag:criterion key:Q1_K1_Bahan ;
+    ag:hasObject key:CO2 ;
+    ag:hasPredicate ag:mengonsumsi ;
+    ag:hasSubject key:Fotosintesis,
+        key:Tumbuhan ;
+    ag:weight 2.0 .
+
+key:Q1_R3 a ag:ReferenceTriple ;
+    ag:criterion key:Q1_K1_Bahan ;
+    ag:hasObject key:Air ;
+    ag:hasPredicate ag:mengonsumsi ;
+    ag:hasSubject key:Fotosintesis,
+        key:Tumbuhan ;
+    ag:weight 2.0 .
+
+key:Q1_R4 a ag:ReferenceTriple ;
+    ag:criterion key:Q1_K2_Produk ;
+    ag:hasObject key:Glukosa ;
+    ag:hasPredicate ag:menghasilkan ;
+    ag:hasSubject key:Fotosintesis,
+        key:Tumbuhan ;
+    ag:weight 2.0 .
+
+key:Q1_R5 a ag:ReferenceTriple ;
+    ag:criterion key:Q1_K2_Produk ;
+    ag:hasObject key:Oksigen ;
+    ag:hasPredicate ag:menghasilkan ;
+    ag:hasSubject key:Fotosintesis,
+        key:Tumbuhan ;
+    ag:weight 2.0 .
+
+key:Air a ag:Concept,
+        skos:Concept .
+
+key:CO2 a ag:Concept,
+        skos:Concept ;
+    skos:broader key:Gas .
+
+key:Cahaya a ag:Concept,
+        skos:Concept ;
+    skos:broader key:Energi .
+
+key:Energi a ag:Concept,
+        skos:Concept .
+
+key:Glukosa a ag:Concept,
+        skos:Concept ;
+    skos:broader key:Makanan .
+
+key:Makanan a ag:Concept,
+        skos:Concept .
+
+key:Oksigen a ag:Concept,
+        skos:Concept ;
+    skos:broader key:Gas .
+
+key:Q1_K3_Energi a ag:Criterion ;
+    rdfs:comment "Menyebutkan sumber energi"@id .
+
+key:Gas a ag:Concept,
+        skos:Concept .
+
+key:Q1_K1_Bahan a ag:Criterion ;
+    rdfs:comment "Menyebutkan bahan fotosintesis"@id .
+
+key:Q1_K2_Produk a ag:Criterion ;
+    rdfs:comment "Menyebutkan hasil fotosintesis"@id .
+
+key:Fotosintesis a ag:Concept,
+        skos:Concept .
+
+key:Tumbuhan a ag:Concept,
+        skos:Concept .
+

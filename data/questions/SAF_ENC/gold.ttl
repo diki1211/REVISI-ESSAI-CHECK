@@ -1,0 +1,55 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:SAF_ENC_R1 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_ENC_K1_Choice ;
+    ag:hasObject key:BinaryEncoding ;
+    ag:hasPredicate ag:uses ;
+    ag:hasSubject key:Network ;
+    ag:weight 1.0 .
+
+key:SAF_ENC_R2 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_ENC_K2_Reasons ;
+    ag:hasObject key:BandwidthEfficiency ;
+    ag:hasPredicate ag:has ;
+    ag:hasSubject key:BinaryEncoding ;
+    ag:weight 1.0 .
+
+key:SAF_ENC_R3 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_ENC_K2_Reasons ;
+    ag:hasObject key:SelfClocking ;
+    ag:hasPredicate ag:lacks ;
+    ag:hasSubject key:BinaryEncoding ;
+    ag:weight 0.5 .
+
+key:SAF_ENC_R4 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_ENC_K2_Reasons ;
+    ag:hasObject key:Simplicity ;
+    ag:hasPredicate ag:has ;
+    ag:hasSubject key:BinaryEncoding ;
+    ag:weight 0.5 .
+
+key:BandwidthEfficiency a ag:Concept,
+        skos:Concept .
+
+key:Network a ag:Concept,
+        skos:Concept .
+
+key:SAF_ENC_K1_Choice a ag:Criterion ;
+    rdfs:comment "Recommends binary encoding"@en .
+
+key:SelfClocking a ag:Concept,
+        skos:Concept .
+
+key:Simplicity a ag:Concept,
+        skos:Concept .
+
+key:SAF_ENC_K2_Reasons a ag:Criterion ;
+    rdfs:comment "Gives reasons such as bandwidth efficiency"@en .
+
+key:BinaryEncoding a ag:Concept,
+        skos:Concept .
+

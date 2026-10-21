@@ -1,0 +1,110 @@
+# Controlled predicate vocabulary. Aliases only normalize raw LLM wording into ids;
+# equivalence and incompatibility live in the ontology (plan Section 5.1).
+# lang: id = Indonesian questions, en = English (SAF subset), any = offered for every language.
+predicates:
+  # --- Indonesian (Q1) ---
+  - id: menggunakan
+    lang: id
+    description: subjek memakai sesuatu sebagai sumber atau sarana
+    aliases: [memakai, membutuhkan, memerlukan]
+  - id: menyerap
+    lang: id
+    description: subjek mengambil sesuatu dari lingkungan ke dalam dirinya
+    aliases: []        # equivalentPredicate menggunakan, asserted in the ontology
+  - id: mengonsumsi
+    lang: id
+    description: subjek memakai habis atau mengubah sesuatu sebagai bahan
+    aliases: [menghabiskan, mengubah]       # validate with lecturer
+  - id: menghasilkan
+    lang: id
+    description: subjek membuat atau mengeluarkan sesuatu sebagai hasil
+    aliases: [memproduksi, membentuk, melepaskan]
+
+  # --- English (SAF subset; AI-drafted, not lecturer-validated) ---
+  - id: is_a
+    lang: en
+    description: the subject is a kind of the object
+    aliases: [is, is a, is an, is a type of, is a kind of]
+  - id: uses
+    lang: en
+    description: the subject makes use of the object
+    aliases: [utilises, employs, relies on, works with]
+  - id: utilizes
+    lang: en
+    description: the subject puts the object to use
+    aliases: []        # equivalentPredicate uses, asserted in the ontology
+  - id: requires
+    lang: en
+    description: the subject needs the object in order to work
+    aliases: [needs, depends on, presupposes, demands, only works with]
+  - id: has
+    lang: en
+    description: the subject has, contains or offers the object as a property
+    aliases: [contains, includes, carries, possesses, supports, offers]
+  - id: lacks
+    lang: en
+    description: the subject does not have the object (use this instead of a negated "has")
+    aliases: [has no, does not have, is without, provides no]
+  - id: assigns
+    lang: en
+    description: the subject gives the object to something
+    aliases: [allocates, hands out, distributes, gives]
+  - id: provides
+    lang: en
+    description: the subject supplies the object
+    aliases: [supplies, delivers, sends out]
+  - id: replaces
+    lang: en
+    description: the subject takes the place of the object
+    aliases: [supersedes, substitutes, succeeds]
+  - id: transmits
+    lang: en
+    description: the subject sends data in units of the object
+    aliases: [sends, transfers, sends data as]
+  - id: allows
+    lang: en
+    description: the subject makes the object possible
+    aliases: [permits, makes possible, can cause]
+  - id: enables
+    lang: en
+    description: the subject makes the object possible
+    aliases: []        # equivalentPredicate allows, asserted in the ontology
+  - id: prevents
+    lang: en
+    description: the subject rules the object out
+    aliases: [avoids, eliminates, rules out, protects against]
+  - id: decreases
+    lang: en
+    description: the subject becomes smaller (by the object), or makes the object smaller
+    aliases: [shrinks, drops, is reduced, gets smaller, decreases by, halves, is halved, resets, is reset, cuts, sets back]
+  - id: increases
+    lang: en
+    description: the subject becomes larger (by the object), or makes the object larger
+    aliases: [grows, rises, gets larger, increases by, expands, raises, doubles, is doubled, is incremented, increments]
+
+  - id: causes
+    lang: en
+    description: the subject brings about the object
+    aliases: [leads to, results in, may cause, can lead to, creates]
+  - id: determines
+    lang: en
+    description: the subject decides or strongly affects the object
+    aliases: [affects, influences, decides]
+  - id: follows
+    lang: en
+    description: the subject comes after the object (in order or position)
+    aliases: [comes after, is placed after, is located after]
+  - id: precedes
+    lang: en
+    description: the subject comes before the object (in order or position)
+    aliases: [comes before, is placed before, is located before]
+  - id: reduces
+    lang: en
+    description: the subject lessens the amount of the object
+    aliases: [minimizes, minimises, cuts down, lessens]
+
+  # --- every language ---
+  - id: other
+    lang: any
+    description: any other relation / relasi lain yang tidak ada di daftar ini
+    aliases: []        # catch-all; never matches anything

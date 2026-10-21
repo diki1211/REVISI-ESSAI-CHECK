@@ -1,0 +1,8 @@
+# SAF subset: drafted by an AI (Claude) from the SAF reference answer as a demonstration. NOT lecturer-validated.
+question_id: SAF_BRIDGE
+language: en
+criteria:
+  - {id: K1_Content, description: The table maps stations to LAN interfaces}
+  - {id: K2_Learning, description: Backward learning reads the source address of incoming frames}
+  - {id: K3_Forwarding, description: Forwarding looks up the table}
+  - {id: K4_Benefit, description: Less flooding than forwarding everywhere}

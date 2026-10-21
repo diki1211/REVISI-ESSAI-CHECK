@@ -1,0 +1,6 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: extension headers, p: follows, o: the fixed headers, sentences: [1]}
+  - {s: extension headers, p: precedes, o: the payload, sentences: [1]}
+  - {s: extension headers, p: allows, o: future requirements, sentences: [1, 2]}

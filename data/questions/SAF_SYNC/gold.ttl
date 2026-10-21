@@ -1,0 +1,78 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:SAF_SYNC_R1 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_SYNC_K1_Asynchronous ;
+    ag:hasObject key:Character ;
+    ag:hasPredicate ag:transmits ;
+    ag:hasSubject key:AsynchronousTransmission ;
+    ag:weight 1.0 .
+
+key:SAF_SYNC_R2 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_SYNC_K1_Asynchronous ;
+    ag:hasObject key:StartStopBits ;
+    ag:hasPredicate ag:uses ;
+    ag:hasSubject key:AsynchronousTransmission ;
+    ag:weight 1.0 .
+
+key:SAF_SYNC_R3 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_SYNC_K1_Asynchronous ;
+    ag:hasObject key:LowTransmissionRate ;
+    ag:hasPredicate ag:has ;
+    ag:hasSubject key:AsynchronousTransmission ;
+    ag:weight 1.0 .
+
+key:SAF_SYNC_R4 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_SYNC_K2_Synchronous ;
+    ag:hasObject key:Frame ;
+    ag:hasPredicate ag:transmits ;
+    ag:hasSubject key:SynchronousTransmission ;
+    ag:weight 1.0 .
+
+key:SAF_SYNC_R5 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_SYNC_K2_Synchronous ;
+    ag:hasObject key:SynFlag ;
+    ag:hasPredicate ag:uses ;
+    ag:hasSubject key:SynchronousTransmission ;
+    ag:weight 1.0 .
+
+key:SAF_SYNC_R6 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_SYNC_K2_Synchronous ;
+    ag:hasObject key:HighTransmissionRate ;
+    ag:hasPredicate ag:has ;
+    ag:hasSubject key:SynchronousTransmission ;
+    ag:weight 1.0 .
+
+key:Character a ag:Concept,
+        skos:Concept .
+
+key:Frame a ag:Concept,
+        skos:Concept .
+
+key:HighTransmissionRate a ag:Concept,
+        skos:Concept .
+
+key:LowTransmissionRate a ag:Concept,
+        skos:Concept .
+
+key:StartStopBits a ag:Concept,
+        skos:Concept .
+
+key:SynFlag a ag:Concept,
+        skos:Concept .
+
+key:AsynchronousTransmission a ag:Concept,
+        skos:Concept .
+
+key:SAF_SYNC_K1_Asynchronous a ag:Criterion ;
+    rdfs:comment "Describes asynchronous transmission"@en .
+
+key:SAF_SYNC_K2_Synchronous a ag:Criterion ;
+    rdfs:comment "Describes synchronous transmission"@en .
+
+key:SynchronousTransmission a ag:Concept,
+        skos:Concept .
+

@@ -1,0 +1,8 @@
+# Rule 1
+StudentTriple(?t) ^ ReferenceTriple(?r) ^ hasPredicate(?t, ?pt) ^ hasPredicate(?r, ?pr) ^ incompatibleWith(?pt, ?pr) ^ negated(?t, false) ^ alignedSubject(?t, ?r) ^ alignedObject(?t, ?r) -> contradicts(?t, ?r)
+
+# Rule 2
+StudentTriple(?t) ^ ReferenceTriple(?r) ^ hasPredicate(?t, ?p) ^ hasPredicate(?r, ?p) ^ negated(?t, true) ^ alignedSubject(?t, ?r) ^ alignedObject(?t, ?r) -> contradicts(?t, ?r)
+
+# Rule 3
+StudentTriple(?t) ^ ReferenceTriple(?r) ^ hasPredicate(?t, ?pt) ^ hasPredicate(?r, ?pr) ^ equivalentPredicate(?pt, ?pr) ^ negated(?t, true) ^ alignedSubject(?t, ?r) ^ alignedObject(?t, ?r) -> contradicts(?t, ?r)

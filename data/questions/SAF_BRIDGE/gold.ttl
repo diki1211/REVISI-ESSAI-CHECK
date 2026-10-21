@@ -1,0 +1,69 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:SAF_BRIDGE_R1 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_BRIDGE_K1_Content ;
+    ag:hasObject key:StationMapping ;
+    ag:hasPredicate ag:has ;
+    ag:hasSubject key:BridgeTable ;
+    ag:weight 1.0 .
+
+key:SAF_BRIDGE_R2 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_BRIDGE_K2_Learning ;
+    ag:hasObject key:SourceAddress ;
+    ag:hasPredicate ag:uses ;
+    ag:hasSubject key:BackwardLearning,
+        key:Bridge ;
+    ag:weight 1.0 .
+
+key:SAF_BRIDGE_R3 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_BRIDGE_K3_Forwarding ;
+    ag:hasObject key:BridgeTable ;
+    ag:hasPredicate ag:uses ;
+    ag:hasSubject key:Bridge,
+        key:Forwarding ;
+    ag:weight 1.0 .
+
+key:SAF_BRIDGE_R4 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_BRIDGE_K4_Benefit ;
+    ag:hasObject key:Flooding ;
+    ag:hasPredicate ag:reduces ;
+    ag:hasSubject key:Forwarding ;
+    ag:weight 1.0 .
+
+key:BackwardLearning a ag:Concept,
+        skos:Concept .
+
+key:Flooding a ag:Concept,
+        skos:Concept .
+
+key:SAF_BRIDGE_K1_Content a ag:Criterion ;
+    rdfs:comment "The table maps stations to LAN interfaces"@en .
+
+key:SAF_BRIDGE_K2_Learning a ag:Criterion ;
+    rdfs:comment "Backward learning reads the source address of incoming frames"@en .
+
+key:SAF_BRIDGE_K3_Forwarding a ag:Criterion ;
+    rdfs:comment "Forwarding looks up the table"@en .
+
+key:SAF_BRIDGE_K4_Benefit a ag:Criterion ;
+    rdfs:comment "Less flooding than forwarding everywhere"@en .
+
+key:SourceAddress a ag:Concept,
+        skos:Concept .
+
+key:StationMapping a ag:Concept,
+        skos:Concept .
+
+key:Bridge a ag:Concept,
+        skos:Concept .
+
+key:BridgeTable a ag:Concept,
+        skos:Concept .
+
+key:Forwarding a ag:Concept,
+        skos:Concept .
+

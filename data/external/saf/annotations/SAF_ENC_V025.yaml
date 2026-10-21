@@ -1,0 +1,7 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: network, p: uses, o: Binary Encoding, sentences: [1]}   # implied subject
+  - {s: users, p: has, o: perfect clocks, sentences: [2]}
+  - {s: users, p: requires, o: self-clocking, negated: true, sentences: [2]}
+  - {s: Binary Encoding, p: utilizes, o: the full bandwith, sentences: [1, 3]}

@@ -1,0 +1,9 @@
+# Example content from the presentation deck. Real rubrics come from the lecturer.
+question_id: Q1
+criteria:
+  - id: K1_Bahan
+    description: Menyebutkan bahan fotosintesis
+  - id: K2_Produk
+    description: Menyebutkan hasil fotosintesis
+  - id: K3_Energi
+    description: Menyebutkan sumber energi

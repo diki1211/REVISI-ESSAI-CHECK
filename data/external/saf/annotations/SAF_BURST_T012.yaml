@@ -1,0 +1,6 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: Frame bursting, p: is_a, o: Transmission technique, sentences: [1]}
+  - {s: Frame bursting, p: increases, o: Transmission rate of data Frames, sentences: [1]}
+  - {s: Frame bursting, p: reduces, o: number of collision chances, sentences: [1, 2]}

@@ -1,0 +1,5 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: congestion control, p: has, o: Slow start, sentences: [1]}   # implied subject
+  - {s: congestion control, p: has, o: congestion avoidance, sentences: [1]}   # implied subject

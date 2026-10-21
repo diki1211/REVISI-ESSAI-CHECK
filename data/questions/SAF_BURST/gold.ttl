@@ -1,0 +1,48 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:SAF_BURST_R1 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_BURST_K1_Definition ;
+    ag:hasObject key:MultipleFrames ;
+    ag:hasPredicate ag:transmits ;
+    ag:hasSubject key:FrameBursting ;
+    ag:weight 1.0 .
+
+key:SAF_BURST_R2 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_BURST_K2_Advantage ;
+    ag:hasObject key:Efficiency ;
+    ag:hasPredicate ag:has ;
+    ag:hasSubject key:FrameBursting ;
+    ag:weight 1.0 .
+
+key:SAF_BURST_R3 a ag:ReferenceTriple ;
+    ag:criterion key:SAF_BURST_K3_Disadvantage ;
+    ag:hasObject key:Delay ;
+    ag:hasPredicate ag:requires ;
+    ag:hasSubject key:FrameBursting ;
+    ag:weight 1.0 .
+
+key:Delay a ag:Concept,
+        skos:Concept .
+
+key:Efficiency a ag:Concept,
+        skos:Concept .
+
+key:MultipleFrames a ag:Concept,
+        skos:Concept .
+
+key:SAF_BURST_K1_Definition a ag:Criterion ;
+    rdfs:comment "Frame bursting sends several frames in one transmission"@en .
+
+key:SAF_BURST_K2_Advantage a ag:Criterion ;
+    rdfs:comment "More efficient than carrier extension"@en .
+
+key:SAF_BURST_K3_Disadvantage a ag:Criterion ;
+    rdfs:comment "Frames have to wait (delay"@en .
+
+key:FrameBursting a ag:Concept,
+        skos:Concept .
+

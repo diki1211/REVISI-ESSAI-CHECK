@@ -1,0 +1,768 @@
+<title>Skor Esai Teraudit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap">
+<style>
+/* Layout: a single-slide deck on a cool "lab notebook" ground; each slide is a sheet, owner colour marks the presenter; triples set in mono like RDF. */
+:root{
+  --bg:#eef1f4; --sheet:#ffffff; --sheet2:#f5f7f9; --ink:#15202b; --muted:#56636f; --line:#d3dae1;
+  --a:#1c5ea6; --b:#7b3f91; --c:#9a5d0c;
+  --good:#1f7a4c; --warn:#9a6200; --bad:#b0352c;
+  --a-soft:#e5eef8; --b-soft:#f2e9f5; --c-soft:#f7efe2; --good-soft:#e3f2ea; --warn-soft:#f8efdc; --bad-soft:#f8e4e2;
+  --code:#f1f4f7;
+  --f-display:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1319; --sheet:#151e27; --sheet2:#1b2631; --ink:#e6edf3; --muted:#9dacba; --line:#2b3a48;
+  --a:#86b6ee; --b:#cfa2e4; --c:#e8b46a;
+  --good:#74d3a1; --warn:#efc46e; --bad:#f19088;
+  --a-soft:#1a2c40; --b-soft:#2a1f33; --c-soft:#33281a; --good-soft:#16302a; --warn-soft:#332a17; --bad-soft:#3a1f1d;
+  --code:#101820; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1319; --sheet:#151e27; --sheet2:#1b2631; --ink:#e6edf3; --muted:#9dacba; --line:#2b3a48;
+  --a:#86b6ee; --b:#cfa2e4; --c:#e8b46a;
+  --good:#74d3a1; --warn:#efc46e; --bad:#f19088;
+  --a-soft:#1a2c40; --b-soft:#2a1f33; --c-soft:#33281a; --good-soft:#16302a; --warn-soft:#332a17; --bad-soft:#3a1f1d;
+  --code:#101820; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 96px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--a);outline-offset:2px}
+a{color:var(--a)}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-block:12px;border-bottom:1px solid var(--line);max-width:1200px;margin:0 auto}
+.bar .brand{font-family:var(--f-display);font-weight:600;font-size:17px}
+.bar .brand small{display:block;font-family:var(--f-body);font-weight:400;font-size:12px;color:var(--muted)}
+.bar .sp{flex:1}
+.who{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--muted);white-space:nowrap}
+.who b{font-weight:600}
+.btn{background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:13px}
+.btn:hover{border-color:var(--a)}
+.btn[disabled]{opacity:.4;cursor:default}
+
+/* slides */
+main{max-width:1200px;margin:20px auto 0}
+.slide{display:none;background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:clamp(20px,3.6vw,52px);position:relative;min-height:min(680px,calc(100vh - 190px))}
+.slide.on{display:flex;flex-direction:column;gap:18px}
+.slide::before{content:"";position:absolute;left:-1px;top:-1px;right:-1px;height:4px;border-radius:6px 6px 0 0;background:var(--own)}
+.slide[data-owner="A"]{--own:var(--a);--own-soft:var(--a-soft)}
+.slide[data-owner="B"]{--own:var(--b);--own-soft:var(--b-soft)}
+.slide[data-owner="C"]{--own:var(--c);--own-soft:var(--c-soft)}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--own);font-weight:600;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.eyebrow .sec{border:1px solid var(--own);border-radius:4px;padding:1px 7px;letter-spacing:.06em}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,4.2vw,54px);line-height:1.1;font-weight:700;letter-spacing:-.015em;max-width:24ch}
+h2{font-size:clamp(24px,2.9vw,38px);line-height:1.15;font-weight:600;letter-spacing:-.01em;max-width:38ch}
+h3{font-size:clamp(17px,1.5vw,21px);font-weight:600;line-height:1.25}
+p{margin:0}
+.lede{font-size:clamp(16px,1.5vw,20px);color:var(--muted);max-width:64ch}
+.small{font-size:13px;color:var(--muted)}
+.mono{font-family:var(--f-mono);font-size:.92em}
+em.k{font-style:normal;color:var(--own);font-weight:600}
+
+.grid{display:grid;gap:16px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.grid > *{min-width:0}
+.box{background:var(--sheet2);border:1px solid var(--line);border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.box.own{background:var(--own-soft);border-color:transparent}
+.box ul,.box ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.box h3{font-size:17px}
+.label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.callout{border-left:3px solid var(--own);padding:4px 0 4px 16px;font-family:var(--f-display);font-size:clamp(18px,1.8vw,24px);line-height:1.35;max-width:62ch}
+.note{background:var(--warn-soft);color:var(--ink);border-radius:6px;padding:12px 16px;font-size:14px}
+.note b{color:var(--warn)}
+.foot{margin-top:auto;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+.cite{font-size:12px;color:var(--muted)}
+
+/* chips */
+.chip{display:inline-block;font-size:12px;font-weight:600;border-radius:4px;padding:2px 7px;white-space:nowrap}
+.ok{background:var(--good-soft);color:var(--good)}
+.mid{background:var(--warn-soft);color:var(--warn)}
+.no{background:var(--bad-soft);color:var(--bad)}
+.unk{background:var(--sheet2);color:var(--muted);border:1px solid var(--line)}
+
+/* pipeline lanes */
+.lane{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:stretch}
+.lane > div{min-width:0;background:var(--sheet2);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:14px;position:relative}
+.lane > div b{display:block;font-size:13px;margin-bottom:3px}
+.lane > div.hot{background:var(--bad-soft);border-color:var(--bad)}
+.lane > div.cool{background:var(--good-soft);border-color:var(--good)}
+.lane .tagline{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:6px;display:block}
+.lane .hot .tagline{color:var(--bad)} .lane .cool .tagline{color:var(--good)}
+.lanehead{font-size:13px;font-weight:600;margin:4px 0 -4px}
+
+/* tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:6px;max-height:min(470px,62vh)}
+table{border-collapse:separate;border-spacing:0;font-size:13px;width:100%}
+th,td{padding:8px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--sheet2);position:sticky;top:0;z-index:2;font-weight:600;font-size:12px;white-space:nowrap}
+td:first-child,th:first-child{position:sticky;left:0;background:var(--sheet);z-index:1;min-width:150px;border-right:1px solid var(--line)}
+th:first-child{z-index:3;background:var(--sheet2)}
+.wide td{min-width:170px}
+.wide td:first-child{min-width:150px}
+tr.ours td{background:var(--own-soft)}
+tr.ours td:first-child{background:var(--own-soft);font-weight:600}
+tr.focus td:first-child{box-shadow:inset 3px 0 0 var(--b)}
+.newcol{color:var(--own)}
+
+/* code / formulas */
+pre{margin:0;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-family:var(--f-mono);font-size:12.5px;line-height:1.55;overflow-x:auto;white-space:pre}
+.formula{background:var(--code);border:1px solid var(--line);border-radius:6px;padding:12px 16px;font-family:var(--f-display);font-size:clamp(15px,1.4vw,18px);overflow-x:auto;white-space:nowrap}
+.formula .eq{float:right;color:var(--muted);font-family:var(--f-body);font-size:13px;margin-left:24px}
+.formula var{font-style:italic}
+.cmt{color:var(--muted)}
+
+/* architecture */
+.arch{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.4fr) minmax(0,1fr);gap:12px;align-items:stretch}
+.arch > div{min-width:0;display:flex;flex-direction:column;gap:8px}
+.node{border:1px solid var(--line);border-radius:6px;padding:10px 12px;background:var(--sheet2);font-size:14px}
+.node b{display:block;font-size:13px}
+.node.store{border-style:dashed}
+.node.core{background:var(--own-soft);border-color:var(--own)}
+.stage{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.stage .node{position:relative}
+.num{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--own);color:var(--sheet);font-size:11px;font-weight:700;margin-right:6px;vertical-align:1px}
+.arrowcol{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:20px}
+
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;counter-reset:f}
+.flow > div{min-width:0;border:1px solid var(--line);border-radius:6px;padding:10px 12px;background:var(--sheet2);font-size:14px}
+.flow > div b{display:block}
+.flow > div.dec{background:var(--warn-soft);border-color:var(--warn)}
+.flow > div.ev{background:var(--own-soft);border-color:var(--own)}
+
+/* ledger */
+.ledger td,.ledger th{white-space:nowrap}
+.ledger td:first-child{min-width:0}
+.tabular{font-variant-numeric:tabular-nums}
+
+/* notes */
+.notes{display:none;background:var(--sheet2);border:1px dashed var(--line);border-radius:6px;padding:12px 16px;font-size:14px}
+.notes-on .notes{display:block}
+.notes b{color:var(--own)}
+
+/* overview */
+#ov{position:fixed;inset:0;z-index:20;background:var(--bg);overflow:auto;padding-top:calc(env(safe-area-inset-top,0px) + 16px);padding-bottom:24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#ov .in{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+#ov .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+#ov .list button{text-align:left;background:var(--sheet);border:1px solid var(--line);border-left:4px solid var(--c1);border-radius:6px;padding:10px 12px;font-size:14px}
+#ov .list small{display:block;color:var(--muted);font-size:12px}
+#ov h2{display:flex;justify-content:space-between;gap:12px;align-items:center;max-width:none}
+.secrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;grid-column:1/-1;margin-top:6px}
+
+/* nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--bg);border-top:1px solid var(--line);display:flex;justify-content:center;align-items:center;gap:12px;padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.count{font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted);min-width:60px;text-align:center}
+.prog{position:fixed;left:0;right:0;bottom:calc(52px + env(safe-area-inset-bottom,0px));height:3px;z-index:9;background:transparent}
+.prog i{display:block;height:100%;background:var(--a);width:0;transition:width .2s}
+
+.refs{margin:0;padding:0;list-style:none;columns:2;column-gap:28px;font-size:13px}
+.refs li{break-inside:avoid;margin-bottom:8px;padding-left:34px;text-indent:-34px}
+.refs a{overflow-wrap:anywhere}
+
+@media (max-width:860px){
+  .grid,.grid.g3,.grid.g4,.lane,.arch,.stage,.flow{grid-template-columns:1fr}
+  .arrowcol{transform:rotate(90deg);height:24px}
+  .refs{columns:1}
+  .bar .desk{display:none}
+  .slide{min-height:0}
+  .formula{white-space:normal}
+  .formula .eq{float:none;display:block;margin:0 0 4px}
+}
+@media (prefers-reduced-motion:reduce){.prog i{transition:none}}
+</style>
+
+<header class="bar">
+  <div class="brand">Skor Esai Teraudit<small>Topik 4 · Revisi presentasi pasca-presentasi awal</small></div>
+  <span class="sp"></span>
+  <span class="who" id="who"></span>
+  <button class="btn desk" id="ovBtn" type="button">Daftar slide</button>
+  <button class="btn" id="notesBtn" type="button" aria-pressed="false">Catatan presenter</button>
+</header>
+
+<main id="deck">
+
+<!-- ===================== PENELITI 1 ===================== -->
+<section class="slide" data-owner="A" data-title="Judul">
+  <div class="eyebrow"><span class="sec">Revisi 2</span> Topik 4 · Web Semantics</div>
+  <h1>Penilaian Esai Pendek yang Dapat Diaudit melalui Pencocokan Triple RDF Berbobot Rubrik</h1>
+  <p class="lede">Skor dihitung dari bukti relasi semantik yang tercatat, bukan diputuskan oleh model bahasa. LLM hanya menulis umpan balik dari bukti tersebut.</p>
+  <div class="grid g3">
+    <div class="box"><span class="label">Solusi teknis</span><p>Pencocokan triple RDF berbobot rubrik dengan <i>scoring ledger</i> dan aturan SWRL terbatas</p></div>
+    <div class="box"><span class="label">Objek</span><p>Jawaban uraian pendek berbahasa Indonesia pada satu domain</p></div>
+    <div class="box"><span class="label">Tujuan</span><p>Skor yang dapat dihitung ulang dan ditelusuri ke kriteria rubrik serta kalimat bukti</p></div>
+  </div>
+  <p class="small">Judul 13 kata, mengikuti ketentuan Sistematika Artikel Ilmiah (maks. 11–15 kata; memuat solusi teknis, objek, tujuan).</p>
+  <div class="foot"><span><b>Peneliti 1</b> · Pembuka</span><span>Rancangan penelitian · belum ada hasil eksperimen</span></div>
+  <aside class="notes"><b>Catatan:</b> Sampaikan bahwa ini revisi setelah presentasi awal. Tiga perubahan besar: gap dipertajam, temuan dari teks lengkap Xu & Corter, tabel SOTA diperluas, dan bagian Metodologi ditambahkan.</aside>
+</section>
+
+<section class="slide" data-owner="A" data-title="Yang berubah sejak presentasi awal">
+  <div class="eyebrow"><span class="sec">Revisi</span> Ringkasan perubahan</div>
+  <h2>Empat perubahan dari presentasi awal</h2>
+  <div class="grid">
+    <div class="box"><span class="label">1 · Research gap</span><p>Gap tidak lagi berbunyi "skor yang dapat ditelusuri". Gap dipusatkan pada <b>di mana angka diputuskan</b>: oleh model, atau oleh fungsi eksplisit atas bukti yang divalidasi dosen.</p></div>
+    <div class="box"><span class="label">2 · Telaah teks lengkap Xu &amp; Corter [2]</span><p>Skor pada GraphRAG mereka <b>dihasilkan GPT-4o</b> sebagai keluaran JSON. Graf acuan diekstraksi otomatis oleh GPT-4o-mini.</p></div>
+    <div class="box"><span class="label">3 · Tabel SOTA</span><p>Tetap 12 studi. Ditambah kolom wajib dosen (lokasi, masalah, hasil, sampel, kontribusi, keterangan) dan 9 dimensi analitis, termasuk <b>penentu skor akhir</b>.</p></div>
+    <div class="box"><span class="label">4 · Bagian 3: Metodologi</span><p>Arsitektur sistem, pemodelan data RDF/OWL, prosedur kerja, dan formalisasi skor sesuai Sistematika Artikel Ilmiah.</p></div>
+  </div>
+  <div class="foot"><span><b>Peneliti 1</b></span><span>Pendahuluan (rev.) → Tinjauan Pustaka (rev.) → Metodologi (baru)</span></div>
+  <aside class="notes"><b>Catatan:</b> Slide ini menjadi peta. Jelaskan bahwa perubahan gap adalah akibat langsung dari membaca teks lengkap Xu &amp; Corter.</aside>
+</section>
+
+<section class="slide" data-owner="A" data-title="Xu & Corter: alur sistem">
+  <div class="eyebrow"><span class="sec">1.3</span> Telaah teks lengkap · Xu &amp; Corter (AAAI 2026) [2]</div>
+  <h2>Bagaimana GraphRAG Xu &amp; Corter bekerja</h2>
+  <div class="grid">
+    <div class="box">
+      <span class="label">A · Pembangunan knowledge graph</span>
+      <ul>
+        <li>Dibangun di <b>Neo4j</b> (property graph, kueri Cypher), bukan RDF/OWL.</li>
+        <li>Pengisian graf <b>diotomatisasi</b>: setiap potongan teks diproses <b>GPT-4o-mini</b> mengikuti skema KG.</li>
+        <li>Dua pipeline: <i>knowledge</i> (dari jawaban acuan) dan <i>grading logic</i> (dari jawaban mahasiswa, skor, dan feedback pada data latih).</li>
+        <li>Sumber: 1.700 instans data latih SAF; potongan teks di-<i>embed</i> dengan text-embedding-3-small.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <span class="label">B · Retrieval dan pemberian nilai</span>
+      <ul>
+        <li>Vector search menemukan <i>seed node</i>, lalu traversal Cypher 1–2 hop. Konteks: 3 seed teratas + 2 tetangga.</li>
+        <li><b>GPT-4o</b> diberi peran "assessment expert", suhu 0,0, dan diwajibkan memberi <b>keluaran JSON berisi skor dan feedback</b> hanya dari konteks yang diberikan.</li>
+        <li>Skor kontinu 0,0–1,0; diuji pula prompt dengan interval diskret (0,1; 0,125; 0,2; 0,25).</li>
+      </ul>
+    </div>
+  </div>
+  <p class="cite">Data: Short Answer Feedback (SAF), 31 topik jaringan komunikasi, bahasa Inggris. Uji: Unseen Answers 313, Unseen Questions 406. Semua butir dari bagian Methods dan Experimental Setup [2].</p>
+  <div class="foot"><span><b>Peneliti 1</b></span><span>Sumber primer: teks lengkap AAAI-26</span></div>
+  <aside class="notes"><b>Catatan:</b> Tekankan bahwa abstrak menyebut "instructor-curated", tetapi bagian Methods menyatakan pengisian graf otomatis oleh GPT-4o-mini. Tidak ditemukan langkah dosen memeriksa tiap fakta. Sampaikan ini sebagai pembacaan kita atas teks, bukan tuduhan.</aside>
+</section>
+
+<section class="slide" data-owner="A" data-title="Xu & Corter: di mana skor diputuskan">
+  <div class="eyebrow"><span class="sec">1.3</span> Cara skor diproduksi</div>
+  <h2>Angka akhir diputuskan oleh LLM, bukan oleh rumus</h2>
+  <p class="lanehead">Xu &amp; Corter [2]</p>
+  <div class="lane">
+    <div><b>Jawaban mahasiswa</b>Teks bebas</div>
+    <div><b>Retrieval</b>Vector + Cypher → subgraf fakta</div>
+    <div><b>Prompt</b>Jawaban + subgraf + peran penilai</div>
+    <div class="hot"><b>GPT-4o</b>Menulis skor di JSON<span class="tagline">Angka diputuskan di sini</span></div>
+    <div><b>Keluaran</b>Skor 0–1 + feedback</div>
+  </div>
+  <p class="lanehead">Penelitian ini (usulan)</p>
+  <div class="lane">
+    <div><b>Jawaban mahasiswa</b>Teks bebas</div>
+    <div><b>Ekstraksi</b>Triple RDF + kalimat sumber</div>
+    <div><b>Matching + SWRL</b>Status per triple acuan → ledger</div>
+    <div class="cool"><b>Fungsi skor</b>Σ bobot × kredit (Pers. 6)<span class="tagline">Angka diputuskan di sini</span></div>
+    <div><b>LLM</b>Hanya menulis feedback dari ledger</div>
+  </div>
+  <div class="box">
+    <span class="label">Kutipan kunci dari teks lengkap [2]</span>
+    <p>"criterion-level evidence is aggregated along admissible, typed paths to generate scores" (bagian KG Schema). Teks tidak memberikan rumus agregasi tersebut. Bagian prompt menyatakan LLM "requires a structured JSON output for scores and feedback". Pembacaan paling didukung teks: <b>agregasi dilakukan secara implisit oleh GPT-4o</b>.</p>
+  </div>
+  <div class="foot"><span><b>Peneliti 1</b></span><span>Interpretasi kami atas teks; dicantumkan sebagai interpretasi</span></div>
+  <aside class="notes"><b>Catatan:</b> Ini slide paling penting. Bukti (fakta graf) memang ada, tetapi bukti itu menjadi masukan bagi LLM. Hubungan bukti → angka tidak dapat dihitung ulang oleh pemeriksa lain. Pada usulan kita, siapa pun dapat menjalankan ulang rumus atau kueri SPARQL atas ledger.</aside>
+</section>
+
+<section class="slide" data-owner="A" data-title="Xu & Corter: hasil dan implikasi">
+  <div class="eyebrow"><span class="sec">1.3</span> Implikasi bagi penelitian kita</div>
+  <h2>Apa arti temuan ini untuk posisi penelitian kita</h2>
+  <div class="grid">
+    <div class="box">
+      <span class="label">Hasil yang dilaporkan [2], Tabel 1</span>
+      <div class="tw" style="max-height:none"><table class="tabular">
+        <thead><tr><th>Split · Model</th><th>Pearson</th><th>RMSE</th><th>EMR</th></tr></thead>
+        <tbody>
+          <tr><td>UA · Vector-RAG</td><td>0,73</td><td>0,22</td><td>0,15</td></tr>
+          <tr><td>UA · Graph-RAG</td><td>0,74</td><td>0,22</td><td>0,15</td></tr>
+          <tr><td>UQ · Vector-RAG</td><td>0,79</td><td>0,24</td><td>0,10</td></tr>
+          <tr><td>UQ · Graph-RAG</td><td>0,79</td><td>0,25</td><td>0,08</td></tr>
+        </tbody></table></div>
+      <p class="small">UA = Unseen Answers; UQ = Unseen Questions; EMR = exact match rate. Graph-RAG setara Vector-RAG dalam akurasi. Keunggulan yang diklaim adalah atribusi sumber, tetapi <b>akurasi atribusi tidak diukur</b>.</p>
+    </div>
+    <div class="box own">
+      <span class="label">Implikasi</span>
+      <ol>
+        <li><b>Jangan klaim</b> grading berbasis KG atau feedback grounded sebagai hal baru. Itu sudah ada.</li>
+        <li>Perbedaan yang dapat diuji: <b>lokus keputusan skor</b> (rumus atas ledger vs keluaran LLM).</li>
+        <li>Graf acuan mereka diekstraksi LLM dan memakai data berlabel. Kita: gold graph dari kunci dosen, divalidasi dosen, tanpa data latih berlabel. Konsekuensinya, kita butuh waktu dosen.</li>
+        <li>Graph-RAG tidak lebih akurat dari Vector-RAG. Klaim kita sebaiknya tentang <b>auditabilitas</b>, bukan akurasi yang lebih tinggi.</li>
+        <li>Laporkan Pearson dan RMSE/MAE agar sebanding. Opsional: uji pada subset SAF.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="foot"><span><b>Peneliti 1</b></span><span>Angka dari Tabel 1 [2]; skala skor 0–1</span></div>
+  <aside class="notes"><b>Catatan:</b> Implikasi no. 4 penting secara etika ilmiah: kita tidak menjanjikan akurasi lebih tinggi. Implikasi no. 3 jujur menyebut trade-off: validasi dosen menambah biaya, tetapi itulah yang membuat bukti dapat dipertanggungjawabkan.</aside>
+</section>
+
+<section class="slide" data-owner="A" data-title="Research gap (revisi)">
+  <div class="eyebrow"><span class="sec">1.3</span> Kesenjangan penelitian · merujuk SOTA</div>
+  <h2>Research gap: bukti sudah dipakai, tetapi angka tetap diputuskan model</h2>
+  <div class="grid g3">
+    <div class="box"><span class="label">Yang sudah ada</span><p>Bukti penilaian sudah digunakan: alignment rubrik [1], fakta graf [2], graf AMR [9], triple KG [12], fitur interpretable [3].</p></div>
+    <div class="box"><span class="label">Pola pada studi terdekat</span><p>Bukti itu menjadi <b>masukan bagi model</b> yang kemudian menghasilkan angka: GPT-4o [2], model neural [1], [9], [12]. Relasi bukti → angka tidak eksplisit.</p></div>
+    <div class="box"><span class="label">Pengecualian parsial</span><p>[3] memakai regresi linear (eksplisit, tetapi atas fitur global dengan bobot yang dipelajari). [11] deterministik, tetapi leksikal tanpa relasi.</p></div>
+  </div>
+  <div class="callout">Pada 12 studi yang ditinjau, belum terlihat skema yang menjadikan <b>skor sebagai fungsi eksplisit</b> dari bukti per kriteria rubrik, dengan acuan yang <b>divalidasi dosen dalam standar Semantic Web</b>, sekaligus <b>mengukur kebenaran bukti</b> tersebut.</div>
+  <div class="grid g3">
+    <div class="box own"><span class="label">G1 · Lokus skor</span><p>Dari keluaran model → derivasi deterministik dari ledger</p></div>
+    <div class="box own"><span class="label">G2 · Kurasi acuan</span><p>Dari ekstraksi otomatis LLM → gold graph RDF yang divalidasi dosen</p></div>
+    <div class="box own"><span class="label">G3 · Evaluasi bukti</span><p>Dari atribusi yang diklaim → presisi bukti dan faithfulness yang diukur</p></div>
+  </div>
+  <div class="foot"><span><b>Peneliti 1</b></span><span>Klaim terbatas pada SOTA yang ditinjau, bukan "belum pernah ada"</span></div>
+  <aside class="notes"><b>Catatan:</b> Ucapkan dengan hati-hati: "berdasarkan 12 studi yang kami tinjau". Gombert [1] dan studi lain baru dibaca dari abstrak/ringkasan; telaah teks lengkap masih diperlukan. Pertanyaan penelitian utama: sejauh mana skor deterministik dari ledger triple berbobot rubrik selaras dengan nilai dosen, dan seberapa valid bukti dalam ledger menurut pemeriksaan dosen?</aside>
+</section>
+
+<section class="slide" data-owner="A" data-title="Kontribusi dan kebaruan (revisi)">
+  <div class="eyebrow"><span class="sec">1.4</span> Kontribusi / kebaruan · merujuk SOTA</div>
+  <h2>Tiga kontribusi yang akan diuji</h2>
+  <div class="grid g3">
+    <div class="box own"><span class="label">K1 · Mekanisme skor</span><p><b>Scoring ledger</b> berbasis triple RDF: setiap poin memiliki ID kriteria, triple acuan, triple jawaban, kalimat sumber, bobot, dan kredit. Skor = fungsi yang dipublikasikan atas ledger.</p><p class="small">Pembeda dari [1], [2], [9]: angka tidak dihasilkan model.</p></div>
+    <div class="box own"><span class="label">K2 · Representasi standar</span><p>Gold graph RDF/OWL dengan kosakata predikat terkontrol dan aturan inkompatibilitas SWRL untuk membedakan <b>hilang</b> dari <b>kontradiksi</b>.</p><p class="small">Pembeda dari [2] (Neo4j, tanpa reasoning formal) dan [9] (AMR neural).</p></div>
+    <div class="box own"><span class="label">K3 · Protokol evaluasi audit</span><p>Selain Pearson/Spearman/MAE, mengukur <b>presisi bukti</b> (entri ledger yang dibenarkan dosen) dan <b>faithfulness feedback</b>.</p><p class="small">Pembeda dari [2]: atribusi diklaim tetapi tidak diukur.</p></div>
+  </div>
+  <div class="grid">
+    <div class="box"><span class="label">Nilai tambah</span><p>Dosen dapat memeriksa satu entri ledger, mengoreksinya, lalu skor dihitung ulang secara otomatis. Ini mendukung proses banding nilai dan konsistensi antarpenilai.</p></div>
+    <div class="box"><span class="label">Yang tidak diklaim</span><p>Akurasi lebih tinggi dari LLM; generalisasi lintas domain; kemampuan mendeteksi semua kontradiksi bahasa alami.</p></div>
+  </div>
+  <div class="foot"><span><b>Peneliti 1</b> · selesai</span><span>Kebaruan bersifat hipotesis dan perlu divalidasi</span></div>
+  <aside class="notes"><b>Catatan:</b> Antisipasi pertanyaan "kalau skornya dari rumus, bukankah rekonstruksi otomatis selalu 100%?" Jawab: ya, rekonstruksi bersifat by design. Yang diuji adalah apakah isi ledger benar (presisi bukti) dan apakah skornya selaras dengan dosen.</aside>
+</section>
+
+<!-- ===================== PENELITI 2 ===================== -->
+<section class="slide" data-owner="B" data-title="Dimensi baru tabel SOTA">
+  <div class="eyebrow"><span class="sec">2.2</span> Perbandingan penelitian · revisi tabel SOTA</div>
+  <h2>Mengapa tabel SOTA diperluas</h2>
+  <p class="lede">Matriks sebelumnya hanya punya empat kolom (graf, rubrik, ledger, feedback). Kolom wajib dosen dan dimensi yang membedakan gap belum ada.</p>
+  <div class="grid">
+    <div class="box">
+      <span class="label">Kolom wajib Sistematika (sebelumnya tidak ditampilkan)</span>
+      <ul><li>Lokasi · Masalah penelitian · Hasil penelitian</li><li>Kontribusi bagi penelitian ini · Responden/sampel</li><li>Keterangan tambahan (posisi / research gap)</li></ul>
+    </div>
+    <div class="box own">
+      <span class="label">Dimensi analitis baru</span>
+      <ul>
+        <li><b>Penentu skor akhir</b>: model neural, LLM, regresi, atau rumus eksplisit. Inti gap G1.</li>
+        <li><b>Penyusun acuan</b>: dosen, dataset, atau ekstraksi LLM. Inti G2.</li>
+        <li><b>Unit bukti</b>: token, fitur, subgraf, atau triple.</li>
+        <li><b>Hilang vs kontradiksi</b>: dibedakan atau tidak.</li>
+        <li><b>Standar W3C</b>: RDF, OWL, SWRL, SPARQL.</li>
+        <li><b>Data berlabel</b> yang dibutuhkan; <b>bahasa</b>; <b>metrik</b>; <b>status telaah</b> (teks lengkap atau abstrak).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span><b>Peneliti 2</b> · Tinjauan Pustaka</span><span>Jumlah studi tetap 12; tidak ada sumber baru</span></div>
+  <aside class="notes"><b>Catatan:</b> Kolom "status telaah" penting untuk kejujuran: hanya Xu &amp; Corter yang sudah dibaca teks lengkapnya. Isian lain berasal dari abstrak atau ringkasan, sehingga tanda "?" berarti belum terverifikasi, bukan "tidak ada".</aside>
+</section>
+
+<section class="slide" data-owner="B" data-title="Tabel SOTA format dosen">
+  <div class="eyebrow"><span class="sec">2.2</span> Tabel 1 · SOTA sesuai kolom Sistematika</div>
+  <h2>Tabel SOTA (kolom wajib)</h2>
+  <div class="tw"><table class="wide" id="tDosen"></table></div>
+  <p class="small">Geser tabel ke samping untuk melihat semua kolom. Baris bertanda garis ungu = studi terdekat. Jumlah sampel yang belum diverifikasi ditulis apa adanya.</p>
+  <div class="foot"><span><b>Peneliti 2</b></span><span>Isian dari publikasi; [2] dari teks lengkap, lainnya dari abstrak/ringkasan</span></div>
+  <aside class="notes"><b>Catatan:</b> Jangan baca tabel. Tunjuk tiga baris terdekat (Gombert, Xu &amp; Corter, Agarwal) dan kolom "Keterangan".</aside>
+</section>
+
+<section class="slide" data-owner="B" data-title="Matriks dimensi analitis">
+  <div class="eyebrow"><span class="sec">2.2</span> Tabel 2 · Dimensi analitis</div>
+  <h2>Siapa yang memutuskan angka, dan dari bukti apa?</h2>
+  <div class="tw"><table class="wide" id="tDim"></table></div>
+  <p class="small"><span class="chip ok">ya</span> eksplisit · <span class="chip mid">sebagian</span> · <span class="chip no">tidak</span> · <span class="chip unk">?</span> belum terverifikasi dari sumber yang ditelaah. Baris terakhir = rancangan penelitian ini.</p>
+  <div class="foot"><span><b>Peneliti 2</b></span><span>Kolom "Penentu skor" adalah dasar gap G1</span></div>
+  <aside class="notes"><b>Catatan:</b> Arahkan audiens ke kolom "Penentu skor akhir". Hampir semua berisi model (neural, LLM, regresi terlatih). Hanya [11] dan rancangan kita yang memakai aturan eksplisit; [11] tidak memakai relasi.</aside>
+</section>
+
+<section class="slide" data-owner="B" data-title="Posisi penelitian">
+  <div class="eyebrow"><span class="sec">2.3</span> Posisi penelitian</div>
+  <h2>Penelitian ini menggabungkan dan memperbaiki, bukan menemukan dari nol</h2>
+  <div class="tw" style="max-height:none"><table>
+    <thead><tr><th>Sifat posisi</th><th>Terhadap studi</th><th>Uraian</th></tr></thead>
+    <tbody>
+      <tr><td><span class="chip ok">Memperbaiki</span></td><td>Xu &amp; Corter [2]</td><td>Mengganti keputusan skor oleh LLM dengan fungsi eksplisit; acuan divalidasi dosen; atribusi diukur.</td></tr>
+      <tr><td><span class="chip ok">Memperbaiki</span></td><td>Chamidah dkk. [11]</td><td>Dari pencocokan kata kunci ke pencocokan relasi subjek–predikat–objek dengan sinonim dan polaritas.</td></tr>
+      <tr><td><span class="chip mid">Menggabungkan</span></td><td>Gombert dkk. [1], Urrutia dkk. [3]</td><td>Rubrik sebagai unit penilaian [1] dan skor yang dapat ditafsirkan [3], diwujudkan dalam satu ledger per kriteria.</td></tr>
+      <tr><td><span class="chip mid">Menerapkan</span></td><td>Agarwal dkk. [9], Gautam &amp; Rus [12]</td><td>Representasi relasional dipertahankan, tetapi dengan standar W3C (RDF/OWL/SWRL) dan tanpa embedding neural untuk skor.</td></tr>
+      <tr><td><span class="chip unk">Pembanding</span></td><td>Stahl dkk. [6], Li dkk. [5]</td><td>Skor langsung oleh LLM dijadikan baseline untuk menguji pemisahan skor dan narasi.</td></tr>
+      <tr><td><span class="chip unk">Rujukan evaluasi</span></td><td>Törnqvist dkk. [7], Pinto &amp; Shin [4]</td><td>Explainability tingkat token sebagai kontras terhadap bukti tingkat konsep.</td></tr>
+    </tbody></table></div>
+  <div class="foot"><span><b>Peneliti 2</b></span><span>Transisi → Bagian 3 Metodologi</span></div>
+  <aside class="notes"><b>Catatan:</b> Sistematika meminta posisi dinyatakan sebagai memperbaiki, menggabungkan, atau menerapkan. Slide ini menjawab permintaan itu secara eksplisit.</aside>
+</section>
+
+<section class="slide" data-owner="B" data-title="Arsitektur sistem">
+  <div class="eyebrow"><span class="sec">3.1</span> Metodologi · Arsitektur sistem</div>
+  <h2>Aliran data dari kunci jawaban sampai skor dan feedback</h2>
+  <div class="arch">
+    <div>
+      <span class="label">Input</span>
+      <div class="node"><b>Dosen</b>Soal, kunci jawaban ideal, rubrik dan bobot</div>
+      <div class="node"><b>Mahasiswa</b>Jawaban uraian pendek (teks bebas)</div>
+      <div class="node"><b>Dosen (terpisah)</b>Nilai manual, diberikan tanpa melihat keluaran sistem</div>
+    </div>
+    <div>
+      <span class="label">Proses (lima tahap Topik 4)</span>
+      <div class="stage">
+        <div class="node"><span class="num">1</span><b style="display:inline">Gold graph</b><br>Kunci → triple RDF acuan + bobot + kriteria; divalidasi dosen</div>
+        <div class="node"><span class="num">2</span><b style="display:inline">Ekstraksi</b><br>NLP/IE: kalimat → triple RDF + provenance (PROV-O)</div>
+        <div class="node core"><span class="num">3</span><b style="display:inline">Matching + SWRL</b><br>Status cocok/parsial/hilang/kontradiksi → <b style="display:inline">ledger</b> → skor (Pers. 6)</div>
+        <div class="node"><span class="num">4</span><b style="display:inline">Feedback LLM</b><br>Narasi dari entri ledger; skor terkunci</div>
+      </div>
+      <div class="node store"><b>Triple store (RDF)</b>gold.ttl · jawaban.ttl · ledger.ttl · ontologi ag: (OWL) · aturan SWRL · kueri SPARQL</div>
+    </div>
+    <div>
+      <span class="label">Output</span>
+      <div class="node"><b>Skor 0–100</b>Dapat dihitung ulang dengan SPARQL</div>
+      <div class="node"><b>Ledger</b>Tabel bukti per kriteria</div>
+      <div class="node"><b>Feedback</b>Konsep benar, hilang, bertentangan</div>
+      <div class="node core"><span class="num">5</span><b style="display:inline">Validasi</b><br>Pearson, Spearman, MAE, metrik audit</div>
+    </div>
+  </div>
+  <div class="foot"><span><b>Peneliti 2</b></span><span>Diagram blok: input → proses → output</span></div>
+  <aside class="notes"><b>Catatan:</b> Kelima tahap dosen tetap terlihat. Fokus kebaruan ada di tahap 3 (kotak berwarna). Validasi (tahap 5) memakai nilai dosen yang diberikan terpisah agar tidak bias.</aside>
+</section>
+
+<section class="slide" data-owner="B" data-title="Pemodelan data RDF/OWL">
+  <div class="eyebrow"><span class="sec">3.2</span> Metodologi · Pemodelan data</div>
+  <h2>Skema RDF: triple acuan, triple jawaban, dan entri ledger</h2>
+  <div class="grid">
+    <div class="box">
+      <span class="label">Kelas dan properti (ontologi <span class="mono">ag:</span>)</span>
+      <div class="tw" style="max-height:none"><table>
+        <thead><tr><th>Elemen</th><th>Fungsi</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">ag:ReferenceTriple</td><td>Satu proposisi kunci jawaban; punya <span class="mono">ag:weight</span> dan <span class="mono">ag:criterion</span></td></tr>
+          <tr><td class="mono">ag:StudentTriple</td><td>Proposisi hasil ekstraksi; <span class="mono">prov:wasDerivedFrom</span> kalimat sumber</td></tr>
+          <tr><td class="mono">ag:LedgerEntry</td><td>Satu baris audit per triple acuan per jawaban</td></tr>
+          <tr><td class="mono">ag:status</td><td>Individu <span class="mono">ag:Status</span>: Cocok · Parsial · Hilang · Kontradiksi</td></tr>
+          <tr><td class="mono">ag:credit</td><td>Nilai <i>m</i><sub>i</sub> ∈ {0; δ; 1}; <span class="mono">ag:contradiction</span> = κ<sub>i</sub></td></tr>
+          <tr><td class="mono">ag:negated</td><td>Polaritas triple jawaban (selalu ditegaskan, juga <i>false</i>)</td></tr>
+          <tr><td class="mono">ag:equivalentPredicate</td><td>Predikat setara (mis. menyerap ≡ menggunakan)</td></tr>
+          <tr><td class="mono">ag:incompatibleWith</td><td>Predikat yang saling meniadakan; <span class="mono">owl:SymmetricProperty</span></td></tr>
+        </tbody></table></div>
+      <p class="small">Triple direifikasi sebagai sumber daya agar dapat diberi bobot, kriteria, dan provenance.</p>
+    </div>
+    <div class="box">
+      <span class="label">Contoh Turtle (domain fotosintesis)</span>
+<pre><span class="cmt"># triple acuan dari kunci dosen</span>
+key:Q1_R5 a ag:ReferenceTriple ;
+  ag:hasSubject   key:Fotosintesis, key:Tumbuhan ;  <span class="cmt"># subjek yang diterima</span>
+  ag:hasPredicate ag:menghasilkan ;
+  ag:hasObject    key:Oksigen ;
+  ag:criterion    key:Q1_K2_Produk ;
+  ag:weight       "2"^^xsd:decimal .
+
+<span class="cmt"># triple dari jawaban A07, kalimat 1</span>
+ans:Q1_A07_t3 a ag:StudentTriple ;
+  ag:hasSubject   key:Tumbuhan ;
+  ag:hasPredicate ag:menghasilkan ;
+  ag:hasObject    key:Oksigen ;
+  ag:negated      false ;
+  prov:wasDerivedFrom ans:Q1_A07_s1 .
+
+<span class="cmt"># entri ledger</span>
+ans:L_Q1_A07_R5 a ag:LedgerEntry ;
+  ag:answer ans:Q1_A07 ; ag:reference key:Q1_R5 ;
+  ag:matchedBy ans:Q1_A07_t3 ;
+  ag:status ag:Cocok ;
+  ag:credit "1.0"^^xsd:decimal ;
+  ag:contradiction "0"^^xsd:decimal .
+
+key:Glukosa skos:broader key:Makanan .  <span class="cmt"># hierarki konsep dosen</span>
+
+ag:menghasilkan ag:incompatibleWith ag:mengonsumsi .</pre>
+    </div>
+  </div>
+  <div class="foot"><span><b>Peneliti 2</b> · selesai</span><span>ag: skema (ontologi) · key: data dosen · ans: data mahasiswa</span></div>
+  <aside class="notes"><b>Catatan:</b> Jelaskan kenapa triple direifikasi: triple RDF biasa tidak bisa langsung diberi bobot dan sumber kalimat. Ledger juga berbentuk RDF, sehingga bisa dikueri dengan SPARQL.</aside>
+</section>
+
+<!-- ===================== PENELITI 3 ===================== -->
+<section class="slide" data-owner="C" data-title="Prosedur kerja">
+  <div class="eyebrow"><span class="sec">3.3</span> Metodologi · Prosedur kerja</div>
+  <h2>Langkah sistematis dari pengumpulan data sampai analisis</h2>
+  <div class="flow">
+    <div><b>1 · Pengumpulan data</b>3–5 soal satu domain; kunci, rubrik, bobot; jawaban mahasiswa dengan izin dan dianonimkan</div>
+    <div><b>2 · Nilai dosen</b>Dosen menilai manual per kriteria rubrik secara independen, sebelum melihat keluaran sistem</div>
+    <div><b>3 · Gold graph</b>Kunci → triple RDF acuan; subjek yang diterima; daftar predikat terkontrol; pasangan ekuivalen dan inkompatibel; validasi dosen</div>
+    <div><b>4 · Kalibrasi pilot</b>Set pilot semua soal digabung untuk menetapkan τ<sub>h</sub>, τ<sub>l</sub>; δ = 0,5 dan λ ditetapkan tetap; parameter lalu <b>dibekukan</b></div>
+    <div><b>5 · Ekstraksi</b>LLM dibatasi skema JSON dan daftar predikat → konversi ke RDF + kalimat sumber</div>
+    <div><b>6 · Cek sampel ekstraksi</b>Peneliti memeriksa sampel triple untuk memisahkan galat ekstraksi dari galat penilaian</div>
+    <div class="dec"><b>7 · Matching</b>Predikat setara, tidak dinegasi, kemiripan subjek/objek ≥ τ<sub>h</sub>? Cocok. Antara τ<sub>l</sub> dan τ<sub>h</sub>? Parsial + tandai tinjauan. Lainnya: hilang</div>
+    <div class="dec"><b>8 · Reasoning SWRL</b>Subjek/objek selaras dan predikat inkompatibel (tanpa negasi), atau predikat setara yang dinegasi → Kontradiksi</div>
+    <div class="ev"><b>9 · Ledger → skor → feedback</b>Pers. (6), kueri SPARQL ulang, lalu LLM menulis feedback dari ledger</div>
+  </div>
+  <div class="box"><span class="label">10 · Analisis</span><p>Bandingkan dengan nilai dosen dan dua baseline: pencocokan kata kunci (gaya [11]) dan skor langsung oleh LLM (gaya [6]). Analisis galat per kriteria.</p></div>
+  <div class="foot"><span><b>Peneliti 3</b> · Metodologi</span><span>Kotak kuning = titik keputusan</span></div>
+  <aside class="notes"><b>Catatan:</b> Langkah 2 dan 4 menjaga validitas: dosen menilai buta, dan parameter tidak disetel pada data uji. Langkah 6 memisahkan sumber kesalahan.</aside>
+</section>
+
+<section class="slide" data-owner="C" data-title="Formalisasi: pencocokan">
+  <div class="eyebrow"><span class="sec">3.4</span> Metodologi · Formalisasi (1)</div>
+  <h2>Definisi graf dan fungsi pencocokan</h2>
+  <div class="formula"><span class="eq">(1)</span><var>G</var><sub>R</sub> = { (<var>r</var><sub>i</sub>, <var>w</var><sub>i</sub>, <var>c</var><sub>i</sub>) }<sub><var>i</var>=1..<var>n</var></sub>,&nbsp; <var>r</var><sub>i</sub> = ⟨<var>S</var><sub>i</sub>, <var>p</var><sub>i</sub>, <var>o</var><sub>i</sub>⟩,&nbsp; <var>S</var><sub>i</sub> = himpunan subjek yang diterima,&nbsp; <var>w</var><sub>i</sub> &gt; 0,&nbsp; <var>c</var><sub>i</sub> ∈ <var>C</var> (kriteria rubrik)</div>
+  <div class="formula"><span class="eq">(2)</span><var>G</var><sub>S</sub> = { (<var>t</var><sub>j</sub>, <var>e</var><sub>j</sub>) }<sub><var>j</var>=1..<var>m</var></sub>,&nbsp; <var>t</var><sub>j</sub> = ⟨<var>s</var><sub>j</sub>, <var>p</var><sub>j</sub>, <var>o</var><sub>j</sub>, neg<sub>j</sub>⟩,&nbsp; <var>e</var><sub>j</sub> = kalimat sumber</div>
+  <div class="formula"><span class="eq">(3)</span>μ(<var>r</var><sub>i</sub>, <var>t</var><sub>j</sub>) = 1 jika eq(<var>p</var><sub>i</sub>,<var>p</var><sub>j</sub>) ∧ ¬neg<sub>j</sub> ∧ σ<sub>ij</sub> ≥ τ<sub>h</sub>;&nbsp; δ jika eq(<var>p</var><sub>i</sub>,<var>p</var><sub>j</sub>) ∧ ¬neg<sub>j</sub> ∧ τ<sub>l</sub> ≤ σ<sub>ij</sub> &lt; τ<sub>h</sub>;&nbsp; 0 lainnya,&nbsp;&nbsp; σ<sub>ij</sub> = min(max<sub><var>s</var>∈<var>S</var><sub>i</sub></sub> sim(<var>s</var>,<var>s</var><sub>j</sub>), sim(<var>o</var><sub>i</sub>,<var>o</var><sub>j</sub>))</div>
+  <div class="formula"><span class="eq">(4)</span><var>m</var><sub>i</sub> = max<sub><var>j</var></sub> μ(<var>r</var><sub>i</sub>, <var>t</var><sub>j</sub>)</div>
+  <div class="formula"><span class="eq">(5)</span>κ<sub>i</sub> = 1 jika ∃ <var>t</var><sub>j</sub>: σ<sub>ij</sub> ≥ τ<sub>h</sub> ∧ [ (inc(<var>p</var><sub>i</sub>,<var>p</var><sub>j</sub>) ∧ ¬neg<sub>j</sub>) ∨ (eq(<var>p</var><sub>i</sub>,<var>p</var><sub>j</sub>) ∧ neg<sub>j</sub>) ]; maka <var>m</var><sub>i</sub> := 0 dan status = Kontradiksi</div>
+  <div class="grid g3">
+    <div class="box"><span class="label">sim(·,·)</span><p>1 jika konsep sama atau lebih khusus; 0,7 (parsial) jika lebih umum menurut hierarki <span class="mono">skos:broader</span> dosen; 0 jika konsep dikenal lain; selain itu kemiripan kosinus embedding</p></div>
+    <div class="box"><span class="label">eq, inc</span><p>Relasi predikat ekuivalen dan inkompatibel dalam ontologi, ditetapkan dosen (bukan dipelajari)</p></div>
+    <div class="box"><span class="label">τ<sub>h</sub>, τ<sub>l</sub>, δ</span><p>Ambang tinggi/rendah disetel pada set pilot; kredit parsial δ = 0,5 tetap</p></div>
+  </div>
+  <div class="foot"><span><b>Peneliti 3</b></span><span>Notasi rancangan; bukan rumus dari studi sebelumnya</span></div>
+  <aside class="notes"><b>Catatan:</b> Jelaskan dengan bahasa sederhana: triple dianggap cocok jika predikatnya setara dan subjek serta objeknya cukup mirip maknanya. Jika ada triple dengan predikat berlawanan, atau predikat yang sama tetapi dinegasi, itu kontradiksi, bukan sekadar hilang. Pernyataan seperti "fotosintesis tidak menghasilkan CO₂" benar, sehingga tidak dihitung kontradiksi. Dua konsep berbeda yang sudah dikenal (misalnya oksigen dan CO₂) tidak pernah dianggap mirip.</aside>
+</section>
+
+<section class="slide" data-owner="C" data-title="Formalisasi: skor dan contoh">
+  <div class="eyebrow"><span class="sec">3.4</span> Metodologi · Formalisasi (2)</div>
+  <h2>Fungsi skor dan contoh perhitungan ledger</h2>
+  <div class="formula"><span class="eq">(6)</span><var>S</var> = 100 · max(0, Σ<sub><var>i</var></sub> <var>w</var><sub>i</sub><var>m</var><sub>i</sub> − λ Σ<sub><var>i</var></sub> <var>w</var><sub>i</sub>κ<sub>i</sub>) / Σ<sub><var>i</var></sub> <var>w</var><sub>i</sub>,&nbsp;&nbsp; λ ∈ [0, 1] (baseline λ = 0)</div>
+  <div class="grid">
+    <div class="box">
+      <span class="label">Jawaban A07 (contoh hipotetis)</span>
+      <p>"Tumbuhan menyerap sinar matahari dan menghasilkan makanan serta oksigen. Tumbuhan juga mengonsumsi karbon dioksida."</p>
+      <p class="small">Asumsi ilustrasi: δ = 0,5; λ = 0; dosen menyatakan Glukosa <span class="mono">skos:broader</span> Makanan, sehingga "makanan" mendapat kredit parsial.</p>
+    </div>
+    <div class="box">
+      <span class="label">Ledger A07</span>
+      <div class="tw" style="max-height:none"><table class="ledger tabular">
+        <thead><tr><th>ID</th><th>Triple acuan</th><th>w</th><th>Status</th><th>m</th><th>w·m</th></tr></thead>
+        <tbody>
+          <tr><td>R1</td><td class="mono">Tumbuhan–menggunakan–Cahaya</td><td>2</td><td><span class="chip ok">Cocok</span></td><td>1</td><td>2</td></tr>
+          <tr><td>R2</td><td class="mono">Fotosintesis–mengonsumsi–CO₂</td><td>2</td><td><span class="chip ok">Cocok</span></td><td>1</td><td>2</td></tr>
+          <tr><td>R3</td><td class="mono">Fotosintesis–mengonsumsi–Air</td><td>2</td><td><span class="chip no">Hilang</span></td><td>0</td><td>0</td></tr>
+          <tr><td>R4</td><td class="mono">Fotosintesis–menghasilkan–Glukosa</td><td>2</td><td><span class="chip mid">Parsial</span></td><td>0,5</td><td>1</td></tr>
+          <tr><td>R5</td><td class="mono">Fotosintesis–menghasilkan–Oksigen</td><td>2</td><td><span class="chip ok">Cocok</span></td><td>1</td><td>2</td></tr>
+          <tr><td colspan="2"><b>Total</b></td><td>10</td><td></td><td></td><td><b>7</b></td></tr>
+        </tbody></table></div>
+      <p><b>S = 100 · 7 / 10 = 70</b>. R1 cocok karena <span class="mono">menyerap ≡ menggunakan</span>. R2, R4, R5 menerima subjek "tumbuhan" karena Tumbuhan termasuk subjek yang diterima.</p>
+    </div>
+  </div>
+  <div class="note"><b>Kasus kontradiksi:</b> jika kalimat terakhir A07 diganti "fotosintesis menghasilkan karbon dioksida", aturan <span class="mono">menghasilkan inc mengonsumsi</span> menandai R2 sebagai Kontradiksi (κ = 1). Dengan λ = 0,5, skor turun dari 50 menjadi 40.</div>
+  <div class="foot"><span><b>Peneliti 3</b></span><span>Angka ilustrasi rancangan, bukan hasil</span></div>
+  <aside class="notes"><b>Catatan:</b> Hitung bersama audiens. Tanpa R2, Σ w·m = 5 → 50; penalti λ·w·κ = 0,5·2 = 1 → 4/10 → 40. Tekankan R3 "hilang" tidak dihukum sebagai salah.</aside>
+</section>
+
+<section class="slide" data-owner="C" data-title="Formalisasi: SWRL dan SPARQL">
+  <div class="eyebrow"><span class="sec">3.4</span> Metodologi · Formalisasi (3)</div>
+  <h2>Aturan SWRL untuk kontradiksi, kueri SPARQL untuk audit skor</h2>
+  <div class="grid">
+    <div class="box">
+      <span class="label">Aturan SWRL (tahap 3)</span>
+<pre>ag:StudentTriple(?t) ^ ag:ReferenceTriple(?r) ^
+ag:hasPredicate(?t, ?pt) ^ ag:hasPredicate(?r, ?pr) ^
+ag:incompatibleWith(?pt, ?pr) ^ ag:negated(?t, false) ^
+ag:alignedSubject(?t, ?r) ^ ag:alignedObject(?t, ?r)
+  -&gt; ag:contradicts(?t, ?r)</pre>
+      <p class="small">Aturan 1 dari 3. Aturan 2–3: predikat sama atau <span class="mono">equivalentPredicate</span> dengan <span class="mono">ag:negated(?t, true)</span> → kontradiksi. <span class="mono">alignedSubject/alignedObject</span> ditegaskan oleh modul matching (σ ≥ τ<sub>h</sub>) karena SWRL tidak menghitung embedding. Asumsi dunia terbuka: ketiadaan triple tidak menghasilkan kontradiksi.</p>
+    </div>
+    <div class="box">
+      <span class="label">Kueri SPARQL rekonstruksi skor (Pers. 6)</span>
+<pre>PREFIX ag: &lt;http://example.org/autograde#&gt;
+SELECT ?ans
+  ((100 * (SUM(?w * ?c)
+     - ?lambda * SUM(?w * ?k))) / SUM(?w) AS ?raw)
+WHERE {
+  ?e a ag:LedgerEntry ;
+     ag:answer ?ans ;
+     ag:reference ?r ;
+     ag:credit ?c ;
+     ag:contradiction ?k .
+  ?r ag:weight ?w .
+}
+GROUP BY ?ans ?lambda</pre>
+      <p class="small">Setiap triple acuan punya entri ledger (termasuk yang hilang, kredit 0). <span class="mono">?lambda</span> diikat ke nilai yang dibekukan; skor = max(0, ?raw). Pemeriksa lain cukup menjalankan kueri ini untuk mereproduksi skor.</p>
+    </div>
+  </div>
+  <div class="foot"><span><b>Peneliti 3</b></span><span>Inilah bentuk konkret "skor yang dapat diaudit"</span></div>
+  <aside class="notes"><b>Catatan:</b> Kalau ditanya "di mana Web Semantics-nya", tunjuk slide ini: RDF untuk data, OWL untuk properti simetris, SWRL untuk aturan, SPARQL untuk audit.</aside>
+</section>
+
+<section class="slide" data-owner="C" data-title="Rencana evaluasi">
+  <div class="eyebrow"><span class="sec">3.4</span> Metodologi · Ukuran evaluasi</div>
+  <h2>Dua pertanyaan: apakah skornya selaras, dan apakah buktinya benar?</h2>
+  <div class="grid">
+    <div class="box">
+      <span class="label">A · Keselarasan skor (wajib Topik 4)</span>
+      <div class="formula">Pearson <var>r</var>, Spearman ρ antara <var>S</var><sub>k</sub> dan nilai dosen <var>H</var><sub>k</sub></div>
+      <div class="formula">MAE = (1/<var>N</var>) Σ<sub><var>k</var></sub> |<var>S</var><sub>k</sub> − <var>H</var><sub>k</sub>|,&nbsp; RMSE untuk pembanding [2]</div>
+      <p class="small">Korelasi tinggi tidak berarti nilai sama; MAE menangkap selisih sistematis.</p>
+    </div>
+    <div class="box own">
+      <span class="label">B · Kebenaran bukti (kontribusi K3)</span>
+      <div class="formula">EP = |entri Cocok/Parsial yang dibenarkan dosen| / |entri Cocok/Parsial|</div>
+      <div class="formula">ER = |triple acuan terdeteksi| / |triple acuan yang menurut dosen ada di jawaban|</div>
+      <div class="formula">FF = |klaim feedback didukung ledger| / |klaim feedback|</div>
+      <p class="small">Rekonstruksi skor via SPARQL bernilai 100% <i>by design</i>; dilaporkan sebagai uji kewajaran, bukan temuan.</p>
+    </div>
+  </div>
+  <div class="box"><span class="label">Pembanding</span><p>B1 pencocokan kata kunci (gaya [11]) · B2 skor langsung oleh LLM dengan rubrik (gaya [6]) · opsional: subset SAF agar sebanding dengan [2].</p></div>
+  <div class="foot"><span><b>Peneliti 3</b></span><span>EP = evidence precision · ER = evidence recall · FF = feedback faithfulness</span></div>
+  <aside class="notes"><b>Catatan:</b> EP dan FF adalah jawaban terhadap kelemahan Xu &amp; Corter: mereka mengklaim atribusi tetapi tidak mengukurnya. Kita mengukurnya.</aside>
+</section>
+
+<section class="slide" data-owner="C" data-title="Sisa artikel dan langkah berikut">
+  <div class="eyebrow"><span class="sec">4–7</span> Peta sisa artikel</div>
+  <h2>Setelah Metodologi: bagian yang diisi setelah prototipe berjalan</h2>
+  <div class="grid g4">
+    <div class="box"><span class="label">4 · Implementasi</span><p>Lingkungan pengembangan, spesifikasi (versi API, library RDF, reasoner SWRL), proof of concept</p></div>
+    <div class="box"><span class="label">5 · Eksperimen &amp; hasil</span><p>Skenario uji, tabel/grafik r, ρ, MAE, EP, ER, FF; temuan tanpa opini</p></div>
+    <div class="box"><span class="label">6 · Diskusi</span><p>Kaitkan hasil dengan Bab 2; implikasi; keterbatasan</p></div>
+    <div class="box"><span class="label">7 · Kesimpulan</span><p>Jawab rumusan masalah; kontribusi akhir; saran</p></div>
+  </div>
+  <div class="grid">
+    <div class="box own">
+      <span class="label">Langkah berikut (urutan kerja)</span>
+      <ol>
+        <li>Telaah teks lengkap Gombert dkk. [1]: bagaimana skor dihasilkan dari alignment.</li>
+        <li>Pilih domain dan 3–5 soal; minta dosen menyusun rubrik berbobot.</li>
+        <li>Susun gold graph dan daftar predikat; validasi dosen.</li>
+        <li>Kumpulkan jawaban (izin, anonim) dan nilai dosen independen.</li>
+        <li>Implementasi ekstraksi, matching, SWRL, ledger, SPARQL, feedback.</li>
+      </ol>
+    </div>
+    <div class="box">
+      <span class="label">Luaran akhir (Sistematika)</span>
+      <ul>
+        <li>Artikel A4, 12–15 halaman</li>
+        <li>User manual dengan tangkapan layar ≥ 300 dpi</li>
+        <li>Video penggunaan sistem</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span><b>Peneliti 3</b></span><span>Bagian 4–7 belum dapat ditulis sebelum implementasi</span></div>
+  <aside class="notes"><b>Catatan:</b> Pertanyaan untuk dosen: (1) apakah jawaban uraian pendek diterima sebagai objek "esai"; (2) apakah boleh menambah subset SAF berbahasa Inggris sebagai pembanding.</aside>
+</section>
+
+<section class="slide" data-owner="C" data-title="Daftar pustaka">
+  <div class="eyebrow">Daftar pustaka · IEEE</div>
+  <h2>Referensi</h2>
+  <ol class="refs">
+    <li>[1] S. Gombert <i>et al.</i>, "Are rubrics all you need? Towards rubric-based automatic short answer scoring via guided rubric-answer alignment," in <i>Proc. LAK26</i>, 2026, pp. 272–282, doi: <a href="https://doi.org/10.1145/3785022.3785064" target="_blank" rel="noopener">10.1145/3785022.3785064</a>.</li>
+    <li>[2] G. Xu and J. Corter, "Graph RAG for automated short answer grading with feedback: Bridging pedagogical needs and technical capabilities," in <i>Proc. AAAI Conf. Artif. Intell.</i>, vol. 40, no. 48, 2026, pp. 40916–40924, doi: <a href="https://doi.org/10.1609/aaai.v40i48.42125" target="_blank" rel="noopener">10.1609/aaai.v40i48.42125</a>.</li>
+    <li>[3] F. Urrutia, C. Buc, R. Araya, and V. Barriere, "Unsupervised automatic short answer grading and essay scoring: A weakly supervised explainable approach," in <i>Proc. 20th Workshop Innov. Use NLP Build. Educ. Appl. (BEA)</i>, 2025, pp. 38–54, doi: <a href="https://doi.org/10.18653/v1/2025.bea-1.4" target="_blank" rel="noopener">10.18653/v1/2025.bea-1.4</a>.</li>
+    <li>[4] Pinto and Shin, "Evaluating the consistency and reliability of attribution methods in automated short answer grading (ASAG) systems: Toward an explainable scoring system," <i>J. Educ. Meas.</i>, 2025, doi: <a href="https://doi.org/10.1111/jedm.12438" target="_blank" rel="noopener">10.1111/jedm.12438</a>.</li>
+    <li>[5] Li <i>et al.</i>, "AERA Chat: An interactive platform for automated explainable student answer assessment," in <i>Proc. EMNLP 2025: System Demonstrations</i>, 2025. [Online]. Available: <a href="https://aclanthology.org/2025.emnlp-demos.39/" target="_blank" rel="noopener">aclanthology.org/2025.emnlp-demos.39</a></li>
+    <li>[6] M. Stahl, L. Biermann, A. Nehring, and H. Wachsmuth, "Exploring LLM prompting strategies for joint essay scoring and feedback generation," in <i>Proc. 19th BEA Workshop</i>, 2024, pp. 283–298. [Online]. Available: <a href="https://aclanthology.org/2024.bea-1.23/" target="_blank" rel="noopener">aclanthology.org/2024.bea-1.23</a></li>
+    <li>[7] M. Törnqvist, M. Mahamud, E. Mendez Guzman, and A. Farazouli, "ExASAG: Explainable framework for automatic short answer grading," in <i>Proc. 18th BEA Workshop</i>, 2023, pp. 361–371. [Online]. Available: <a href="https://aclanthology.org/2023.bea-1.29/" target="_blank" rel="noopener">aclanthology.org/2023.bea-1.29</a></li>
+    <li>[8] del Gobbo <i>et al.</i>, "GradeAid: A framework for automatic short answers grading in educational contexts—design, implementation and evaluation," <i>Knowl. Inf. Syst.</i>, 2023, doi: <a href="https://doi.org/10.1007/s10115-023-01892-9" target="_blank" rel="noopener">10.1007/s10115-023-01892-9</a>.</li>
+    <li>[9] R. Agarwal, V. Khurana, K. Grover, M. Mohania, and V. Goyal, "Multi-relational graph transformer for automatic short answer grading," in <i>Proc. NAACL-HLT</i>, 2022, pp. 2001–2012, doi: <a href="https://doi.org/10.18653/v1/2022.naacl-main.146" target="_blank" rel="noopener">10.18653/v1/2022.naacl-main.146</a>.</li>
+    <li>[10] Teranishi and Araki, "Automatic short answer grading to pedagogical questions using knowledge graphs and pre-trained models," <i>Trans. Jpn. Soc. Artif. Intell.</i>, vol. 37, no. 4, 2022, doi: <a href="https://doi.org/10.1527/tjsai.37-4_B-LC2" target="_blank" rel="noopener">10.1527/tjsai.37-4_B-LC2</a>.</li>
+    <li>[11] N. Chamidah, M. M. Santoni, H. N. Irmanda, and R. Astriratma, "Penilaian esai pendek otomatis dengan pencocokan kata kunci frasa nomina," <i>Techno.COM</i>, vol. 20, no. 4, 2021, doi: <a href="https://doi.org/10.33633/tc.v20i4.5043" target="_blank" rel="noopener">10.33633/tc.v20i4.5043</a>.</li>
+    <li>[12] D. Gautam and V. Rus, "Using neural tensor networks for open ended short answer assessment," in <i>Artificial Intelligence in Education (AIED)</i>, 2020, pp. 191–203, doi: <a href="https://doi.org/10.1007/978-3-030-52237-7_16" target="_blank" rel="noopener">10.1007/978-3-030-52237-7_16</a>.</li>
+  </ol>
+  <p class="note"><b>Perlu dilengkapi:</b> inisial nama depan penulis [4], [5], [8], [10] serta volume/halaman [4], [8], dari halaman penerbit sebelum naskah final.</p>
+  <div class="foot"><span><b>Referensi</b></span><span>Terima kasih · sesi tanya jawab</span></div>
+  <aside class="notes"><b>Catatan:</b> Tidak ada sumber baru dibanding presentasi awal; hanya [2] yang kini dibaca dari teks lengkap.</aside>
+</section>
+
+</main>
+
+<div class="prog"><i id="pb"></i></div>
+<nav class="nav" aria-label="Navigasi slide">
+  <button class="btn" id="prev" type="button">← Sebelumnya</button>
+  <span class="count" id="count">1 / 1</span>
+  <button class="btn" id="next" type="button">Berikutnya →</button>
+</nav>
+
+<div id="ov" hidden>
+  <div class="in">
+    <h2>Daftar slide <button class="btn" id="ovClose" type="button">Tutup</button></h2>
+    <div class="list" id="ovList"></div>
+  </div>
+</div>
+
+<script>
+/* ---------- SOTA data (12 studi; tidak ada sumber baru) ---------- */
+const S=[
+ {id:1,a:"Gombert dkk. (2026)",topik:"Rubric-based automatic short answer scoring via guided rubric–answer alignment",lok:"Jerman (data Jerman &amp; Inggris)",mas:"Sebagian besar ASAS hampir tidak memakai rubrik secara eksplisit",met:"GRAASP dan ToLeGRAA: alignment jawaban–rubrik berbasis transformer; ToLeGRAA menghasilkan peta alignment tingkat token",has:"Kinerja kompetitif; transfer ke soal baru lebih baik daripada classifier berbasis instans (menurut ringkasan penulis)",kon:"Rubrik sebagai unit penilaian eksplisit",sam:"ALICE-LP (Jerman) dan ASAP-SAS (AS); jumlah belum diekstraksi",ket:"Prior art terdekat untuk rubrik; klaim 'pakai rubrik' tidak boleh menjadi kebaruan. Cara skor dihasilkan perlu dicek di teks lengkap.",focus:1},
+ {id:2,a:"Xu &amp; Corter (2026)",topik:"Graph RAG untuk ASAG dengan feedback",lok:"Columbia University, AS",mas:"Transparansi, keselarasan pedagogis, dan biaya ASAG-F",met:"KG Neo4j diisi otomatis oleh GPT-4o-mini; retrieval vector + Cypher; GPT-4o (suhu 0) menghasilkan skor dan feedback dalam JSON",has:"Pearson 0,74 (UA) dan 0,79 (UQ), setara Vector-RAG; atribusi sumber diklaim, tidak diukur",kon:"Grading dan feedback grounded pada graf fakta; metrik pembanding (Pearson, RMSE)",sam:"SAF, 31 topik; latih 1.700; uji UA 313, UQ 406",ket:"Skor diputuskan LLM; acuan diekstraksi LLM. Dasar gap G1–G3.",focus:1},
+ {id:3,a:"Urrutia dkk. (2025)",topik:"ASAG dan essay scoring tanpa supervisi yang dapat dijelaskan",lok:"Beragam dataset",mas:"Data berlabel terbatas; model mahal dan tidak transparan",met:"Label lemah dari metode grading yang ada; regresi linear ringan atas sedikit fitur",has:"Kompetitif terhadap SOTA termasuk LLM; mengungguli LLM pada dataset AES publik",kon:"Interpretabilitas dapat dibangun pada mekanisme skor",sam:"Dataset baru + dataset AES Inggris publik; jumlah perlu teks lengkap",ket:"Skor eksplisit, tetapi atas fitur global dengan bobot dipelajari, bukan bukti per kriteria"},
+ {id:4,a:"Pinto &amp; Shin (2025)",topik:"Konsistensi dan reliabilitas metode atribusi pada ASAG",lok:"University of Florida, AS",mas:"Apakah penjelasan atribusi konsisten mewakili keputusan penilai",met:"Membandingkan LIME, Integrated Gradients, HEDGE, leave-one-out pada model transformer",has:"Kesimpulan numerik perlu diverifikasi dari teks lengkap",kon:"Motivasi penjelasan yang terikat langsung pada bukti skor",sam:"Dataset publik; jumlah belum diverifikasi",ket:"Explainability post-hoc tingkat token, berbeda dari ledger tingkat konsep"},
+ {id:5,a:"Li dkk. (2025)",topik:"AERA Chat: platform penilaian jawaban yang dapat dijelaskan",lok:"Setting demo, beragam dataset",mas:"Rasional LLM bisa berisik; verifikasi oleh pendidik sulit",met:"Platform interaktif: skor dan rasional dari beberapa LLM, alat anotasi",has:"Mendemonstrasikan alur evaluasi dan visualisasi rasional",kon:"Ide desain UI demo dan pemeriksaan rasional oleh pakar",sam:"Beberapa dataset; jumlah belum diekstraksi",ket:"Penjelasan buatan model bukan bukti kesetiaan skor"},
+ {id:6,a:"Stahl dkk. (2024)",topik:"Strategi prompting LLM untuk skor esai dan feedback",lok:"Data esai berbahasa Inggris",mas:"Apakah prompting gabungan meningkatkan skor dan kegunaan feedback",met:"Prompt zero/few-shot; skor dan feedback naratif dalam satu tugas",has:"Formulasi gabungan meningkatkan kinerja AES; dampak feedback kurang jelas",kon:"Baseline B2: skor langsung oleh LLM",sam:"Dataset esai + evaluasi manual kegunaan feedback",ket:"Pembanding untuk memisahkan skor deterministik dari narasi"},
+ {id:7,a:"Törnqvist dkk. (2023)",topik:"ExASAG: kerangka ASAG yang dapat dijelaskan",lok:"Mata kuliah Data Mining",mas:"Model transformer sulit dijelaskan",met:"Classifier fine-tuned; SHAP dan Integrated Gradients; IoU token terhadap rasional pakar",has:"Penjelasan sebagian selaras dengan penilaian pakar pada sampel terbatas",kon:"Kontras granularitas: token vs relasi konsep",sam:"Pasangan soal–jawaban mata kuliah; subset beranotasi rasional",ket:"Explainability tingkat token"},
+ {id:8,a:"del Gobbo dkk. (2023)",topik:"GradeAid: kerangka ASAG di konteks pendidikan",lok:"Multibahasa, dataset publik",mas:"Perlu benchmark kuat dan penerapan lintas bahasa",met:"Fitur leksikal dan semantik + model regresi",has:"Divalidasi pada dataset publik dan dataset baru; mendukung bahasa non-Inggris",kon:"Baseline fitur leksikal–semantik",sam:"Beberapa dataset publik + satu dataset baru",ket:"Bukti bahwa ASAG non-Inggris sudah diteliti"},
+ {id:9,a:"Agarwal dkk. (2022)",topik:"Multi-relational graph transformer (MitiGaTe) untuk ASAG",lok:"Dataset Mohler",mas:"Pencocokan sekuensial mengabaikan struktur kalimat",met:"Graf AMR dipecah per relasi; Graph Transformer; representasi subgraf acuan vs jawaban dibandingkan untuk skor",has:"Mengungguli SOTA sebelumnya pada dataset Mohler (dilaporkan)",kon:"Perbandingan struktural relasi berguna untuk ASAG",sam:"Dataset Mohler; jumlah di teks lengkap",ket:"Graf relasional, tetapi skor dari representasi neural",focus:1},
+ {id:10,a:"Teranishi &amp; Araki (2022)",topik:"ASAG soal pedagogis memakai knowledge graph dan model pre-trained",lok:"Jepang; mata kuliah Informatika I",mas:"Kesamaan kata melewatkan detail jawaban",met:"KG dari buku teks + model bahasa pre-trained; membandingkan representasi graf",has:"Representasi KG yang mempertahankan informasi sintaksis informatif",kon:"Bukti bahwa KG sudah dipakai untuk grading rinci",sam:"Soal Informatika I; 7 label evaluasi; total belum diekstraksi",ket:"Bedakan dengan pencocokan RDF berbobot rubrik"},
+ {id:11,a:"Chamidah dkk. (2021)",topik:"Penilaian esai pendek otomatis dengan pencocokan kata kunci frasa nomina",lok:"Indonesia",mas:"Waktu dan inkonsistensi penilaian manual",met:"Ekstraksi frasa nomina dan pencocokan kata kunci",has:"Skor otomatis dibandingkan dengan pengajar; metrik perlu dicek",kon:"Baseline leksikal berbahasa Indonesia (B1)",sam:"36 mahasiswa × 4 soal = 144 jawaban (dari draf; cek ulang)",ket:"Deterministik tetapi leksikal; tidak menangkap relasi dan polaritas"},
+ {id:12,a:"Gautam &amp; Rus (2020)",topik:"Neural tensor network untuk penilaian jawaban terbuka",lok:"Intelligent tutoring system",mas:"Perlu memasukkan pengetahuan terstruktur",met:"Embedding NTN dari triple KG domain dan umum",has:"Peningkatan atas pendekatan LSTM sebelumnya (dilaporkan)",kon:"Pembanding awal berbasis embedding graf",sam:"Respons ITS berbasis dialog; jumlah belum dikonfirmasi",ket:"Embedding graf tidak menghasilkan ledger per poin rubrik"}
+];
+const ok=t=>`<span class="chip ok">${t}</span>`, mid=t=>`<span class="chip mid">${t}</span>`, no=t=>`<span class="chip no">${t}</span>`, unk=t=>`<span class="chip unk">${t||'?'}</span>`;
+const D={
+ 1:{rep:"Teks rubrik + jawaban dalam encoder transformer",acu:"Rubrik dari dataset",skor:mid("Model neural")+" alignment → skor",buk:"Peta alignment token (ToLeGRAA)",rub:ok("ya"),fb:unk(),kon:unk(),w3c:no("tidak"),bhs:"Jerman, Inggris",lab:unk("? kemungkinan ya"),met:unk(),st:"Ringkasan penulis"},
+ 2:{rep:"Property graph Neo4j: fakta, konsep, kesalahan umum, kriteria",acu:mid("LLM")+" GPT-4o-mini ekstraksi otomatis",skor:no("LLM")+" GPT-4o menulis skor di JSON",buk:"Subgraf hasil retrieval",rub:mid("tipe node"),fb:ok("ya"),kon:mid("node kesalahan umum"),w3c:no("tidak")+" Cypher",bhs:"Inggris",lab:mid("ya")+" 1.700 instans untuk KG, tanpa fine-tuning",met:"Pearson, RMSE, EMR, TM",st:"Teks lengkap"},
+ 3:{rep:"Fitur interpretable",acu:"Label lemah",skor:mid("Regresi linear")+" bobot dipelajari",buk:"Bobot fitur",rub:unk(),fb:unk(),kon:unk(),w3c:no("tidak"),bhs:"Dataset baru + Inggris",lab:ok("tidak perlu")+" label lemah",met:unk(),st:"Abstrak"},
+ 4:{rep:"Representasi transformer",acu:"Dataset",skor:no("Model neural"),buk:"Atribusi LIME/IG/HEDGE/LOO",rub:unk(),fb:no("tidak"),kon:unk(),w3c:no("tidak"),bhs:unk(),lab:unk("? kemungkinan ya"),met:"Konsistensi atribusi",st:"Ringkasan SOTA kerja"},
+ 5:{rep:"Teks",acu:"Dataset",skor:no("LLM")+" beberapa model",buk:"Rasional LLM",rub:unk(),fb:ok("ya"),kon:unk(),w3c:no("tidak"),bhs:unk(),lab:unk(),met:unk(),st:"Ringkasan SOTA kerja"},
+ 6:{rep:"Teks",acu:"Dataset esai",skor:no("LLM")+" prompting",buk:"Narasi feedback",rub:unk(),fb:ok("ya"),kon:unk(),w3c:no("tidak"),bhs:"Inggris",lab:ok("tidak")+" prompting",met:"Kinerja AES + kegunaan feedback",st:"Ringkasan SOTA kerja"},
+ 7:{rep:"Representasi transformer",acu:"Data mata kuliah",skor:no("Classifier fine-tuned"),buk:"Atribusi token SHAP/IG",rub:unk(),fb:no("tidak"),kon:unk(),w3c:no("tidak"),bhs:unk(),lab:mid("ya"),met:"IoU token vs rasional pakar",st:"Ringkasan SOTA kerja"},
+ 8:{rep:"Fitur leksikal–semantik",acu:"Dataset",skor:mid("Model regresi"),buk:"Fitur",rub:unk(),fb:unk(),kon:unk(),w3c:no("tidak"),bhs:"Multibahasa",lab:mid("ya"),met:unk(),st:"Ringkasan SOTA kerja"},
+ 9:{rep:"Graf AMR per relasi",acu:"Jawaban acuan dataset",skor:no("Model neural")+" perbandingan representasi",buk:"Embedding subgraf",rub:no("tidak"),fb:no("tidak"),kon:unk(),w3c:no("tidak"),bhs:"Inggris (Mohler)",lab:mid("ya"),met:unk(),st:"Abstrak"},
+ 10:{rep:"KG buku teks + PLM",acu:"Buku teks",skor:no("Model pre-trained"),buk:"Representasi graf",rub:unk(),fb:unk(),kon:unk(),w3c:unk(),bhs:"Jepang",lab:unk(),met:unk(),st:"Ringkasan SOTA kerja"},
+ 11:{rep:"Frasa nomina",acu:"Kunci dosen",skor:ok("Aturan")+" pencocokan kata kunci",buk:"Kata kunci yang cocok",rub:mid("sebagian"),fb:no("tidak"),kon:no("tidak"),w3c:no("tidak"),bhs:"Indonesia",lab:ok("tidak"),met:unk(),st:"Ringkasan SOTA kerja"},
+ 12:{rep:"Triple KG → embedding NTN",acu:"KG domain + umum",skor:no("Model neural"),buk:"Embedding triple",rub:unk(),fb:unk(),kon:unk(),w3c:mid("triple"),bhs:unk(),lab:mid("ya"),met:unk(),st:"Ringkasan SOTA kerja"}
+};
+const OURS={rep:"Triple RDF + ontologi OWL ringan",acu:ok("Dosen")+" gold graph divalidasi",skor:ok("Rumus eksplisit")+" Pers. (6) atas ledger",buk:"Entri ledger: ID triple, kalimat, bobot",rub:ok("ya")+" per triple",fb:ok("ya")+" LLM, skor terkunci",kon:ok("ya")+" aturan SWRL terbatas",w3c:ok("ya")+" RDF, OWL, SWRL, SPARQL",bhs:"Indonesia",lab:ok("tidak untuk skor")+" nilai dosen hanya untuk evaluasi",met:"r, ρ, MAE, EP, ER, FF",st:"Rancangan"};
+
+function buildDosen(){
+  const h=["Peneliti/Studi","Topik penelitian","Lokasi","Masalah penelitian","Metode penelitian","Hasil penelitian","Kontribusi bagi penelitian ini","Responden/sampel","Keterangan (posisi/gap)"];
+  let html="<thead><tr>"+h.map(x=>`<th>${x}</th>`).join("")+"</tr></thead><tbody>";
+  S.forEach(s=>{html+=`<tr class="${s.focus?'focus':''}"><td><b>[${s.id}]</b> ${s.a}</td><td>${s.topik}</td><td>${s.lok}</td><td>${s.mas}</td><td>${s.met}</td><td>${s.has}</td><td>${s.kon}</td><td>${s.sam}</td><td>${s.ket}</td></tr>`});
+  document.getElementById("tDosen").innerHTML=html+"</tbody>";
+}
+function buildDim(){
+  const cols=[["rep","Representasi pengetahuan"],["acu","Penyusun acuan"],["skor","Penentu skor akhir"],["buk","Unit bukti"],["rub","Rubrik eksplisit"],["fb","Feedback"],["kon","Hilang vs kontradiksi"],["w3c","Standar W3C"],["bhs","Bahasa"],["lab","Butuh data berlabel"],["met","Metrik"],["st","Status telaah"]];
+  let html="<thead><tr><th>Studi</th>"+cols.map(c=>`<th class="newcol">${c[1]}</th>`).join("")+"</tr></thead><tbody>";
+  S.forEach(s=>{const d=D[s.id];html+=`<tr class="${s.focus?'focus':''}"><td><b>[${s.id}]</b> ${s.a}</td>`+cols.map(c=>`<td>${d[c[0]]}</td>`).join("")+"</tr>"});
+  html+=`<tr class="ours"><td>Penelitian ini</td>`+cols.map(c=>`<td>${OURS[c[0]]}</td>`).join("")+"</tr>";
+  document.getElementById("tDim").innerHTML=html+"</tbody>";
+}
+buildDosen();buildDim();
+
+/* ---------- deck navigation ---------- */
+const owners={A:"Peneliti 1 · Pendahuluan (revisi)",B:"Peneliti 2 · Tinjauan Pustaka & Metodologi",C:"Peneliti 3 · Metodologi & penutup"};
+const slides=[...document.querySelectorAll(".slide")];
+let cur=0;
+function go(n){
+  cur=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>s.classList.toggle("on",i===cur));
+  const o=slides[cur].dataset.owner;
+  document.getElementById("who").innerHTML=`<b style="color:var(--${o.toLowerCase()})">●</b> ${owners[o]}`;
+  document.getElementById("count").textContent=`${cur+1} / ${slides.length}`;
+  document.getElementById("pb").style.width=((cur+1)/slides.length*100)+"%";
+  document.getElementById("prev").disabled=cur===0;
+  document.getElementById("next").disabled=cur===slides.length-1;
+  try{history.replaceState(null,"","#slide-"+(cur+1))}catch(e){}
+  window.scrollTo(0,0);
+}
+document.getElementById("prev").onclick=()=>go(cur-1);
+document.getElementById("next").onclick=()=>go(cur+1);
+const nb=document.getElementById("notesBtn");
+nb.onclick=()=>{const on=document.body.classList.toggle("notes-on");nb.setAttribute("aria-pressed",on);nb.textContent=on?"Sembunyikan catatan":"Catatan presenter"};
+const ov=document.getElementById("ov"), list=document.getElementById("ovList");
+let lastO="";
+list.innerHTML=slides.map((s,i)=>{const o=s.dataset.owner;let head="";if(o!==lastO){head=`<div class="secrow">${owners[o]}</div>`;lastO=o}
+  return head+`<button type="button" data-i="${i}" style="--c1:var(--${o.toLowerCase()})"><b>${i+1}. ${s.dataset.title}</b><small>${owners[o]}</small></button>`}).join("");
+list.querySelectorAll("button").forEach(b=>b.onclick=()=>{ov.hidden=true;go(+b.dataset.i)});
+document.getElementById("ovBtn").onclick=()=>{ov.hidden=false};
+document.getElementById("ovClose").onclick=()=>{ov.hidden=true};
+document.addEventListener("keydown",e=>{
+  if(e.target.matches("input,textarea,select"))return;
+  if(e.key==="Escape"){ov.hidden=true;return}
+  if(!ov.hidden)return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){e.preventDefault();go(cur+1)}
+  if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();go(cur-1)}
+  if(e.key==="Home")go(0); if(e.key==="End")go(slides.length-1);
+});
+const m=(location.hash.match(/slide-(\d+)/)||[])[1];
+go(m?+m-1:0);
+</script>

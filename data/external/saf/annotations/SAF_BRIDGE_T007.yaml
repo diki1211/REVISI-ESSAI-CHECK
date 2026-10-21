@@ -1,0 +1,7 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: table, p: has, o: information that a certain address can be reached by a certain LAN, sentences: [1]}
+  - {s: the bridge, p: uses, o: the source of the received packet, sentences: [2]}
+  - {s: forwarding, p: uses, o: the table, sentences: [3]}   # implied subject
+  - {s: forwarding, p: reduces, o: flood, sentences: [4]}   # implied subject

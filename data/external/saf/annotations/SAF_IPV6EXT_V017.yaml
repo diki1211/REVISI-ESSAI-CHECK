@@ -1,0 +1,6 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: Extension headers, p: follows, o: the header, sentences: [1]}
+  - {s: Extension headers, p: precedes, o: the playload, sentences: [1]}
+  - {s: extension headers, p: allows, o: extra information, sentences: [2]}

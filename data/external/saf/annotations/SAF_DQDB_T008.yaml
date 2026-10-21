@@ -1,0 +1,5 @@
+annotated_by: Claude (AI draft, not checked by a human)
+
+triples:
+  - {s: the location, p: affects, o: fairness, sentences: [1]}
+  - {s: everyone, p: has, o: the same access to data, negated: true, sentences: [1]}
