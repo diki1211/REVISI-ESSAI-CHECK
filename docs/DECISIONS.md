@@ -77,6 +77,36 @@ Agent Rule 2: formula changes need a human decision recorded here. Newest last.
 - **Q1 hierarchy (demonstration, to confirm with the lecturer):** Glukosa → Makanan, Oksigen → Gas, CO2 → Gas, Cahaya → Energi. With it, the deck's answer A07 scores 70 with the real embedding model, through a link the lecturer wrote. (Before, it scored 60, because cos(makanan, glukosa) = 0.36.)
 - A broader concept never aligns for the reasoner (0.70 < τh), so a vague answer can't trigger a contradiction.
 
+## 2026-10-21 — Lecturer tools, argument logic and graph metrics (requested by the user)
+
+The user (repository owner) asked for four additions. None of them changes Eq. 3–6 or the frozen parameters.
+
+1. **Gold triple proposals** (`propose.py`, `python -m autograde propose`, app page *Usulan Kunci*). Drafts reference triples from `reference_answer.md`:
+   - `rule`: offline and deterministic. Predicate surface forms from `predicates.yaml` split each sentence; words before are the subject, words after (split on *dan/serta/and*, cut at clause markers) are objects; spans map to concepts through the gold.yaml alias table, or become new concept ids. Negated statements are skipped.
+   - `llm`: Claude, constrained to the controlled predicates and the rubric criteria, with an importance level (essential/supporting/optional → suggested weight 2/1/0.5). Subjects and objects must pass the same grounding check as student extraction. Cached like every LLM call.
+   - The draft goes to `gold_proposed.yaml` and `docs/gold_<qid>_proposed_review.md`. **It is never written into `gold.yaml` and never read by grading**; the lecturer copies accepted triples by hand (Agent Rules 1 and 4). The criterion is left empty by the rule method on purpose: the lecturer decides it.
+   - When a `gold.yaml` exists, the draft is compared with it (precision, recall, weighted recall): a measure of how far the key can be built automatically. Rule method, current keys: Q1 5/5 recovered with no extra triples; the AI-drafted SAF keys are mostly not recovered (they abstract from the wording, e.g. "most efficient in terms of bandwidth" → `BinaryEncoding has BandwidthEfficiency`). The LLM method has not been measured yet (needs an API key).
+2. **Rule 4, premise gaps (argument logic).** A gold triple may list `requires: [R2, R3]` (written to `gold.ttl` as `ag:requiresPremise`). After the ledger is built, a credited conclusion (MATCHED/PARTIAL) whose premise is MISSING or CONTRADICTED is inferred as `ag:lacksPremise` between the two ledger entries.
+   - SWRL Rule 4 under Pellet, the same query in SPARQL, and plain Python (`premise.py`) are parity-tested on all 64 status combinations (Pellet on a subset, for time).
+   - SWRL has no negation as failure, so each `ag:Status` individual asserts `ag:isCredited` (Cocok/Parsial true, Hilang/Kontradiksi false). "Not credited" is then a positive fact about an entry whose status was asserted; the open-world assumption still holds (MISSING still means "not found", never "wrong").
+   - **Diagnostic only:** credit, status and the score are unchanged (a test grades Q1 with and without `requires` and compares). Gaps go to `ledger.ttl`, `trace.json`, a `premise` feedback claim (validated: it must cite a recorded gap) and the lecturer review page.
+   - The ontology gained `ag:requiresPremise`, `ag:lacksPremise`, `ag:isCredited` and Rule 4. `autograde.owl` was byte-identical to the generator's output (not yet edited in Protégé), so it was regenerated with `ontology/build_ontology.py`.
+   - **Q1 demonstration, to confirm with the lecturer:** R4 (glukosa) requires R2 (CO2) and R3 (air). Deck answer A07 gets one gap (R4 without R3); its score stays 70.
+   - Reasoning is now two stages: contradictions before the ledger, premise gaps after it. Questions without `requires` skip the second reasoner call.
+3. **Lecturer review page** (*Tinjauan Dosen*, `review.py`). **This departs from plan Phase 10** ("corrections are made only through overrides.yaml and the CLI"); the user asked for it. What stays the same:
+   - the page writes `data/human/overrides.yaml` (status, reason, reviewer, date; reason and reviewer are required) and then runs the same code as `python -m autograde override`, now in `review.apply_run`;
+   - the system's `ledger.*` and `score.json` are never changed; corrections produce `ledger_corrected.*` and `score_corrected.json` with the SPARQL parity check, and premise gaps are recomputed for the corrected ledger;
+   - corrected scores are still never used by `evaluate`;
+   - choosing the system's own status again removes that override.
+
+   The queue lists answers with PARTIAL, CONTRADICTED or premise-gap entries first.
+4. **Graph-level similarity** (`graphsim.py`), reported by `evaluate` next to B1/B2 and in `graph_similarity.csv`, never used for the score:
+   - **B3 exact triple**: weighted recall with exact concept ids (no embeddings, no hierarchy, no partial credit);
+   - **G1 graph F1**: B3's recall with precision over the student's own edges, so extra statements lower it (unlike Eq. 6, by design of the contrast);
+   - **G2 graph edit similarity**: 1 − GED / (|V|+|E| of both graphs), unit costs, nodes match on concept id, edges on equivalent predicates; exact for these small graphs (5 s timeout, then the best bound).
+
+   A student subject that a key triple accepts as an alternative is renamed to that triple's first subject, as in matching. Negated triples are left out.
+
 ## Open — needs a human decision
 
 - **Pronoun subjects.** Many SAF answers start "It is used to…". In LLM mode the grounding check keeps "it" as the subject, which doesn't match "DHCP". Options: resolve pronouns to the question's topic concept, or accept the miss. (The AI-drafted annotations keep the student's explicit subjects.)
@@ -84,3 +114,5 @@ Agent Rule 2: formula changes need a human decision recorded here. Newest last.
 
 - ~~The deck's partial-credit example does not hold with the chosen embedding model~~: resolved by the concept hierarchy (see the namespaces and hierarchy entry above).
 - **Unknown concept vs gold concept** compares against the concept's id label only ("glukosa"), not its aliases ("gula", cos 0.541). Taking the max over id and aliases is a candidate change to `sim`.
+- **Premise links for real questions.** `requires` is set only for Q1 R4, as a demonstration. The lecturer decides which key facts are premises of which conclusions, if any.
+- **Using the gold proposals in the article.** Measuring the LLM method (precision/recall against lecturer keys) needs an API key and lecturer-written keys; the SAF keys were AI-drafted, so comparing against them measures agreement between two AI drafts.

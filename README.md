@@ -12,7 +12,7 @@ uv pip install --python .venv/bin/python -r requirements.txt -e .
 cp .env.example .env          # add ANTHROPIC_API_KEY for LLM extraction, feedback and baseline B2
 ```
 
-Pellet needs **Java 25+** (Owlready2 0.51). It is looked up in `JAVA_EXE`, `JAVA_HOME`, `~/.local/share/jdk/*`, then `PATH`. Without Java, set `reasoner: sparql` in `config/config.yaml`.
+Pellet needs **Java 25+** (Owlready2 0.51). Without a system JDK, `pip install jdk4py` provides one; point `JAVA_EXE` at `python -c "import jdk4py; print(jdk4py.JAVA)"`. It is looked up in `JAVA_EXE`, `JAVA_HOME`, `~/.local/share/jdk/*`, then `PATH`. Without Java, set `reasoner: sparql` in `config/config.yaml`.
 
 ## Run
 
@@ -20,9 +20,21 @@ Pellet needs **Java 25+** (Owlready2 0.51). It is looked up in `JAVA_EXE`, `JAVA
 .venv/bin/pytest                                   # all tests, offline
 python -m autograde gold --question Q1             # validate gold.yaml -> gold.ttl + docs/gold_Q1_review.md
 python -m autograde run --question Q1 --mode gold --split all --synthetic --template-feedback   # offline demo
-python -m autograde evaluate --run <run_id>
+python -m autograde evaluate --run <run_id>         # also reports B3/G1/G2 graph metrics (comparison only)
 streamlit run app/streamlit_app.py
 ```
+
+Lecturer tools (see `docs/DECISIONS.md`, 2026-10-21 lecturer tools):
+
+```bash
+python -m autograde propose --question Q1          # draft gold triples -> gold_proposed.yaml (never gold.yaml)
+python -m autograde propose --question all --no-write   # compare drafts with the current keys
+python -m autograde override --run <run_id>        # apply data/human/overrides.yaml (also from the app's Tinjauan Dosen page)
+```
+
+- **Usulan Kunci** (app): draft triples from the reference answer, pick criteria and weights, download the accepted ones in `gold.yaml` format.
+- **Tinjauan Dosen** (app): review queue (partial, contradicted, premise gaps), per-triple corrections with reason and reviewer; corrected copies only.
+- **Rule 4** (premise gaps): `requires: [..]` on a gold triple marks its premises; a credited conclusion without credited premises is flagged in feedback. It never changes the score.
 
 SAF subset (real English answers, AI-drafted gold triples; see `data/external/saf/README.md`):
 

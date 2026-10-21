@@ -276,6 +276,8 @@ This is example content from the presentation. Real questions come from the lect
 
 - `s` is a list of accepted subject concepts. A plain string is accepted and treated as a one-item list. Students often write "tumbuhan menghasilkan oksigen" instead of "fotosintesis menghasilkan oksigen"; the lecturer decides which subjects are acceptable per triple.
 - A concept may list `broader:` concepts (e.g. `Glukosa: {aliases: [gula], broader: [Makanan]}`), written as `skos:broader`.
+- A triple may list `requires:` premise triples (e.g. R4 `requires: [R2, R3]`), written as `ag:requiresPremise`. They feed Rule 4 (premise gaps), a diagnostic that never changes the score (`DECISIONS.md`, 2026-10-21 lecturer tools). Unknown ids, self-references and cycles are validation errors.
+- `python -m autograde propose --question <id>` drafts triples from `reference_answer.md` into `gold_proposed.yaml` for review; it never writes `gold.yaml`.
 - Schema and data use separate namespaces: `ag:` (`…/autograde/ontology#`) for the ontology, `key:` (`…/autograde/key/`) for the lecturer's data, `ans:` (`…/autograde/answer/`) for student data. Reference IDs repeat across questions, so key-fact IRIs are always `key:{question_id}_{ref_id}` (e.g. `key:Q1_R2`), the same in `gold.ttl` and `ledger.ttl`; criteria are `key:{question_id}_{criterion}`.
 
 ### 5.4 pydantic models (`models.py`)
@@ -375,6 +377,8 @@ class Feedback(BaseModel):
 | `ag:matchedBy` | LedgerEntry → StudentTriple | functional |
 | `ag:contradictedBy` | LedgerEntry → StudentTriple | functional |
 | `ag:status` | LedgerEntry → Status | functional |
+| `ag:requiresPremise` | ReferenceTriple → ReferenceTriple | (from gold.yaml `requires`) |
+| `ag:lacksPremise` | LedgerEntry → LedgerEntry | (inferred by Rule 4) |
 
 ### Data properties
 
@@ -382,6 +386,7 @@ class Feedback(BaseModel):
 - `ag:negated` (xsd:boolean)
 - `ag:credit` (xsd:decimal)
 - `ag:contradiction` (xsd:decimal, 1 or 0; κ_i, used by the SPARQL recompute)
+- `ag:isCredited` (xsd:boolean, on the four `ag:Status` individuals: Cocok/Parsial true, Hilang/Kontradiksi false; used by Rule 4)
 
 ### SWRL rules (author in SWRLTab; copy text into `rules.swrl.txt`)
 
@@ -400,6 +405,14 @@ negated(?t, true) ^ alignedSubject(?t, ?r) ^ alignedObject(?t, ?r)
 StudentTriple(?t) ^ ReferenceTriple(?r) ^ hasPredicate(?t, ?pt) ^ hasPredicate(?r, ?pr) ^
 equivalentPredicate(?pt, ?pr) ^ negated(?t, true) ^ alignedSubject(?t, ?r) ^ alignedObject(?t, ?r)
   -> contradicts(?t, ?r)
+```
+
+```
+# Rule 4: premise gap (argument logic; runs on the ledger, after Rules 1-3; never changes the score)
+LedgerEntry(?ec) ^ reference(?ec, ?c) ^ status(?ec, ?sc) ^ isCredited(?sc, true) ^ requiresPremise(?c, ?p) ^
+LedgerEntry(?ep) ^ reference(?ep, ?p) ^ answer(?ec, ?a) ^ answer(?ep, ?a) ^ status(?ep, ?sp) ^
+isCredited(?sp, false)
+  -> lacksPremise(?ec, ?ep)
 ```
 
 Python must assert `negated` explicitly on **every** student triple, including `false`; under the open-world assumption an absent value never satisfies `negated(?t, false)`.
@@ -594,6 +607,8 @@ Acceptance:
 
 Labels in the UI are in Indonesian. Do not show any button that changes the score. When a corrected ledger exists, page 2 shows it next to the original, with each override's reason and author; corrections are made only through `overrides.yaml` and the CLI.
 
+> **Amended 2026-10-21 (user decision, `DECISIONS.md`):** a *Tinjauan Dosen* page writes `overrides.yaml` and runs the same override code, so corrections can also be entered in the app. The system's own ledger and score are still never changed, and corrected scores are still never used in `evaluate`. A *Usulan Kunci* page shows drafted gold triples; it never writes `gold.yaml`.
+
 Acceptance:
 - `streamlit run app/streamlit_app.py` works offline, using the template feedback and cached triples.
 
@@ -609,6 +624,7 @@ Acceptance:
 
 ```
 python -m autograde gold      --question Q1
+python -m autograde propose   --question Q1|all [--method rule|llm] [--no-write]   # draft gold triples for review
 python -m autograde extract   --question Q1 --mode llm|gold [--answers A01,A02]
 python -m autograde run       --question Q1 --mode llm|gold --split pilot|test
 python -m autograde calibrate                        # pilot splits of all questions, pooled
