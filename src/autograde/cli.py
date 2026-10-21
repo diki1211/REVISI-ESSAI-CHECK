@@ -11,6 +11,21 @@ def cmd_gold(args):
     print(f"{len(refs)} reference triples -> {path}\nreview table -> docs/gold_{args.question}_review.md")
 
 
+def cmd_propose(args):
+    from autograde import propose
+    qids = io.question_ids() if args.question == "all" else [args.question]
+    for qid in qids:
+        draft = propose.propose(qid, args.method)
+        c = draft["comparison"]
+        summary = (f"{c['in_gold']}/{c['proposed']} already in gold.yaml (precision {c['precision']}), "
+                   f"gold recall {c['gold_covered']}/{c['gold_total']}" if c else "no gold.yaml to compare with")
+        where = ""
+        if not args.no_write:
+            out, md = propose.write(draft)
+            where = f" -> {out.relative_to(io.ROOT)}, {md.relative_to(io.ROOT)}"
+        print(f"{qid}: {len(draft['triples'])} drafted triples; {summary}{where}")
+
+
 def cmd_extract(args):
     from autograde import pipeline, segment
     answers = io.load_answers(args.synthetic, args.saf)
@@ -63,28 +78,12 @@ def _question_of(run_id, answer_id):
 
 
 def cmd_override(args):
-    from autograde import ledger, pipeline
-    from autograde.models import LedgerEntry
-    from autograde.score import score
-    run_dir = pipeline.runs_dir() / args.run
-    params = io.load_json(run_dir / "run.json")["params"]
-    overrides = io.load_yaml(io.ROOT / "data" / "human" / "overrides.yaml") or []
-    for answer_id in sorted({o["answer_id"] for o in overrides}):
-        d = run_dir / answer_id
-        if not d.exists():
-            print(f"{answer_id}: not in run {args.run}, skipped")
-            continue
-        qid = _question_of(args.run, answer_id)
-        entries = [LedgerEntry(**e) for e in io.load_json(d / "ledger.json")]
-        fixed = ledger.apply_overrides(entries, [o for o in overrides if o["answer_id"] == answer_id], params)
-        ledger.write(d, qid, fixed, suffix="_corrected")
-        sc = score(answer_id, fixed, params)
-        sc.sparql_score = ledger.recompute_sparql(d / "ledger_corrected.ttl", io.question_dir(qid) / "gold.ttl",
-                                                  params["lambda"])
-        if abs(sc.score - sc.sparql_score) >= 1e-9:
-            raise pipeline.ParityError(f"{answer_id}: corrected score parity failed")
-        io.save_json(sc.model_dump(), d / "score_corrected.json")
-        print(f"{answer_id}: {io.load_json(d / 'score.json')['score']:.1f} -> {sc.score:.1f} (corrected)")
+    from autograde import review
+    for row in review.apply_run(args.run):
+        if row["skipped"]:
+            print(f"{row['answer_id']}: not in run {args.run}, skipped")
+        else:
+            print(f"{row['answer_id']}: {row['original']:.1f} -> {row['corrected']:.1f} (corrected)")
 
 
 def cmd_audit_template(args):
@@ -98,6 +97,11 @@ def main(argv=None):
     s = sub.add_parser("gold", help="validate gold.yaml and write gold.ttl + review table")
     s.add_argument("--question", required=True)
     s.set_defaults(func=cmd_gold)
+    s = sub.add_parser("propose", help="draft gold triples from reference_answer.md for lecturer review")
+    s.add_argument("--question", required=True, help="question id or 'all'")
+    s.add_argument("--method", choices=["rule", "llm"], default="rule", help="rule: offline; llm: needs an API key")
+    s.add_argument("--no-write", action="store_true", help="only print the comparison with gold.yaml")
+    s.set_defaults(func=cmd_propose)
     s = sub.add_parser("extract", help="extract student triples only")
     s.add_argument("--question", required=True)
     s.add_argument("--mode", choices=["llm", "gold"], required=True)

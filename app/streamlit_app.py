@@ -1,19 +1,23 @@
 """AutoGrade-RDF demo: streamlit run app/streamlit_app.py
 
 Shows the Semantic Web pieces (OWL ontology, SWRL rules, RDF graphs, SPARQL) behind each score.
-Works offline with hand-annotated triples and template feedback. Nothing here can change a score.
+Works offline with hand-annotated triples and template feedback. Nothing here changes a system score: the lecturer
+review page stores corrections in data/human/overrides.yaml, which produce separate corrected copies
+(docs/DECISIONS.md), and the gold proposal page never writes gold.yaml.
 """
 import html
 import re
+from datetime import date
 
 import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
+import yaml
 from rdflib import OWL, RDF, Namespace
 
 import explorer
 import rdfviz
-from autograde import baselines, io, pipeline
+from autograde import baselines, graphsim, io, pipeline, propose, review
 from autograde import feedback as fb_mod
 from autograde import ledger as ledger_mod
 from autograde.evaluate import human_totals
@@ -218,6 +222,14 @@ def show_result(qid, answer_id, res):
     ok = abs(sc.score - sc.sparql_score) < 1e-9
     c[4].metric("Hitung ulang SPARQL", fb_mod.display_score(sc.sparql_score), "✓ sama" if ok else "✗ berbeda",
                 delta_color="normal" if ok else "inverse")
+    with st.expander("Metrik kemiripan graf (pembanding, tidak memengaruhi skor)"):
+        g = graphsim.all_metrics(ctx.refs, res["students"], ctx.rel)
+        gc = st.columns(3)
+        for col, (name, value) in zip(gc, g.items()):
+            col.metric(name, f"{value:.1f}")
+        st.caption("B3: recall triple dengan id konsep persis (tanpa embedding/hierarki). G1: F1 graf — sisi tambahan "
+                   "menurunkan presisi. G2: 1 − GED/ukuran graf (node = konsep, sisi = predikat setara). "
+                   "Dilaporkan di Evaluasi sebagai pembanding Pers. 6.")
     tabs = st.tabs(["Ledger & umpan balik", "Graf interaktif", "Graf penyelarasan", "Penalaran", "RDF (Turtle)", "SPARQL"])
     with tabs[0]:
         show_ledger(ctx, answer_id, res)
@@ -401,9 +413,152 @@ def page_evaluation():
             col.image(str(run / name))
 
 
-PAGES = {"Ontologi": page_ontology, "Soal & Kunci": page_question, "Penjelajah Graf": page_explorer,
-         "Nilai Jawaban": page_grade, "Konsol SPARQL": page_sparql, "Evaluasi": page_evaluation}
+STATUS_LABEL = STATUS_IRI_NAME  # MATCHED -> Cocok, …: Indonesian labels in the UI
+LABEL_STATUS = {v: k for k, v in STATUS_LABEL.items()}
+
+
+def page_propose():
+    st.header("Usulan Triple Acuan")
+    st.caption("Draf triple dari jawaban acuan dosen untuk ditinjau. Draf disimpan di `gold_proposed.yaml`, "
+               "**tidak pernah** menimpa `gold.yaml` dan tidak dipakai untuk menilai. Triple yang diterima disalin "
+               "dosen ke `gold.yaml`, lalu `python -m autograde gold --question <id>`.")
+    root = io.ROOT / "data" / "questions"
+    qids = sorted(p.name for p in root.iterdir() if (p / "reference_answer.md").exists() and (p / "rubric.yaml").exists())
+    qid = st.selectbox("Soal", qids, key="prop_q")
+    d = io.question_dir(qid)
+    st.markdown(read_md(d / "reference_answer.md"))
+    method = st.radio("Metode", list(propose.METHODS), horizontal=True, key="prop_m",
+                      format_func=lambda m: "Berbasis aturan (offline)" if m == "rule" else "LLM (butuh API key)")
+    if st.button("Buat usulan", type="primary", key="prop_run"):
+        try:
+            st.session_state["draft"] = propose.propose(qid, method)
+        except Exception as e:  # no API key, missing files
+            st.error(f"Gagal membuat usulan: {e}")
+            return
+    draft = st.session_state.get("draft")
+    if not draft or draft["question_id"] != qid or draft["method"] != method:
+        return
+    st.caption(f"Disusun oleh: {draft['proposed_by']} · {draft['proposed_on']}")
+    c = draft["comparison"]
+    if c:
+        cols = st.columns(3)
+        cols[0].metric("Triple diusulkan", c["proposed"])
+        cols[1].metric("Sudah ada di kunci (presisi)", f"{c['in_gold']} ({c['precision'] if c['precision'] is not None else '–'})")
+        cols[2].metric("Kunci yang terliput (recall)", f"{c['gold_covered']}/{c['gold_total']} ({c['recall']})")
+    else:
+        st.info("Soal ini belum punya gold.yaml, jadi usulan tidak dibandingkan.")
+    criteria = [x["id"] for x in io.load_yaml(d / "rubric.yaml")["criteria"]]
+    table = pd.DataFrame([{"Terima": bool(t["accept"]), "ID": t["id"], "Subjek": " / ".join(t["s"]), "Predikat": t["p"],
+                           "Objek": t["o"], "Kriteria": t["criterion"], "Bobot": t["weight"],
+                           "Sudah di kunci": t["in_gold"] or "", "Kalimat sumber": t["source"]} for t in draft["triples"]])
+    if table.empty:
+        st.warning("Tidak ada triple yang bisa diusulkan dari jawaban acuan ini.")
+        return
+    edited = st.data_editor(
+        table, hide_index=True, use_container_width=True, key=f"prop_edit_{qid}_{method}",
+        disabled=["ID", "Subjek", "Predikat", "Objek", "Sudah di kunci", "Kalimat sumber"],
+        column_config={"Terima": st.column_config.CheckboxColumn("Terima"),
+                       "Kriteria": st.column_config.SelectboxColumn("Kriteria", options=criteria),
+                       "Bobot": st.column_config.NumberColumn("Bobot", min_value=0.5, step=0.5)})
+    for t, row in zip(draft["triples"], edited.to_dict("records")):
+        t.update(accept=bool(row["Terima"]), criterion=row["Kriteria"] if pd.notna(row["Kriteria"]) else None,
+                 weight=float(row["Bobot"]))
+    if draft["new_concepts"]:
+        with st.expander(f"{len(draft['new_concepts'])} konsep baru (belum ada di gold.yaml)"):
+            st.dataframe(pd.DataFrame([{"Konsep": k, "Alias": ", ".join(v["aliases"])} for k, v in draft["new_concepts"].items()]),
+                         hide_index=True)
+    accepted = {t["id"] for t in draft["triples"] if t["accept"]}
+    cols = st.columns(2)
+    if cols[0].button("Simpan draf tinjauan", key="prop_save"):
+        out, md = propose.write(draft)
+        st.success(f"Disimpan: {out.relative_to(io.ROOT)} dan {md.relative_to(io.ROOT)}. gold.yaml tidak diubah.")
+    snippet = propose.as_gold_yaml(draft, accepted)
+    unready = [t["id"] for t in draft["triples"] if t["id"] in accepted and not t["criterion"]]
+    if unready:
+        cols[1].caption(f"Isi kriteria untuk {', '.join(unready)} sebelum menyalin ke gold.yaml.")
+    cols[1].download_button(f"Unduh {len(accepted)} triple diterima (format gold.yaml)",
+                            yaml.safe_dump(snippet, allow_unicode=True, sort_keys=False),
+                            file_name=f"{qid}_gold_accepted.yaml", disabled=not accepted)
+    if draft["log"]:
+        with st.expander(f"{len(draft['log'])} bagian dilewati"):
+            st.json(draft["log"])
+
+
+def page_review():
+    st.header("Tinjauan Dosen")
+    st.caption("Koreksi status per triple acuan. Koreksi disimpan ke `data/human/overrides.yaml` (dengan nama, tanggal "
+               "dan alasan), lalu dihitung ulang menjadi `ledger_corrected.*` dan `score_corrected.json` dengan cek "
+               "paritas SPARQL. Ledger dan skor sistem asli **tidak** berubah, dan skor terkoreksi **tidak** dipakai "
+               "di evaluasi.")
+    runs = pipeline.completed_runs()
+    if not runs:
+        st.info("Belum ada run. Buat dengan `python -m autograde run …`, lalu tinjau di sini.")
+        return
+    run = st.selectbox("Run", runs, format_func=lambda p: p.name, key="rev_run")
+    queue = review.queue(run.name)
+    only = st.checkbox("Hanya jawaban yang perlu ditinjau (parsial, kontradiksi, atau celah premis)", value=True,
+                       key="rev_only")
+    shown = queue[queue.needs_review | queue.has_overrides] if only else queue
+    st.dataframe(shown.rename(columns={"answer_id": "Jawaban", "question_id": "Soal", "score": "Skor sistem",
+                                       "partial": "Parsial", "contradicted": "Kontradiksi", "premise_gaps": "Celah premis",
+                                       "corrected_score": "Skor terkoreksi", "has_overrides": "Dikoreksi",
+                                       "needs_review": "Perlu ditinjau"}),
+                 hide_index=True, use_container_width=True)
+    if shown.empty:
+        st.success("Tidak ada jawaban yang perlu ditinjau di run ini.")
+        return
+    answer_id = st.selectbox("Jawaban", list(shown.answer_id), key="rev_answer")
+    qid = review.question_of(run, answer_id)
+    ctx = context(qid)
+    refs = {r.id: r for r in ctx.refs}
+    entries = review.load_entries(run, answer_id)
+    sentences = dict(io.load_json(run / answer_id / "sentences.json"))
+    st.markdown("> " + html.escape(" ".join(sentences.values())), unsafe_allow_html=True)
+    trace = io.load_json(run / answer_id / "trace.json")
+    for g in trace.get("premise_gaps", []):
+        st.warning(f"Aturan 4: {g['reference_id']} dikreditkan tanpa premis {g['premise_id']} "
+                   f"({STATUS_LABEL[g['premise_status']]}).")
+    existing = {o["reference_id"]: o for o in review.load_overrides() if o["answer_id"] == answer_id}
+    table = pd.DataFrame([{"Ref": e.reference_id, "Triple acuan": fb_mod.triple_label(refs[e.reference_id]),
+                           "Kriteria": e.criterion, "w": e.weight,
+                           "Status sistem": STATUS_LABEL[e.status] + (" ⚑" if e.needs_review else ""),
+                           "Status dosen": STATUS_LABEL[existing[e.reference_id]["status"]] if e.reference_id in existing
+                           else STATUS_LABEL[e.status],
+                           "Alasan": existing.get(e.reference_id, {}).get("reason", ""),
+                           "σ": None if e.sigma is None else round(e.sigma, 2),
+                           "Kalimat bukti": " ".join(sentences.get(s, "") for s in e.sentence_ids)} for e in entries])
+    edited = st.data_editor(
+        table, hide_index=True, use_container_width=True, key=f"rev_edit_{run.name}_{answer_id}",
+        disabled=["Ref", "Triple acuan", "Kriteria", "w", "Status sistem", "σ", "Kalimat bukti"],
+        column_config={"Status dosen": st.column_config.SelectboxColumn("Status dosen", options=list(LABEL_STATUS),
+                                                                        required=True),
+                       "Alasan": st.column_config.TextColumn("Alasan (wajib jika status diubah)", width="medium")})
+    cols = st.columns(2)
+    by = cols[0].text_input("Nama penilai", value=next(iter(existing.values()), {}).get("by", ""), key="rev_by")
+    on = cols[1].date_input("Tanggal", value=date.today(), key="rev_date")
+    if st.button("Simpan koreksi & hitung ulang", type="primary", key="rev_save"):
+        corrections = {row["Ref"]: (LABEL_STATUS[row["Status dosen"]], row["Alasan"] or "")
+                       for row in edited.to_dict("records")}
+        try:
+            review.save_corrections(answer_id, corrections, entries, by=by, on=on)
+            review.apply_run(run.name, [answer_id])
+        except (review.OverrideError, ValueError) as e:
+            st.error(f"Koreksi tidak disimpan: {e}")
+        else:
+            st.success("Koreksi disimpan ke data/human/overrides.yaml dan dihitung ulang. Skor sistem asli tidak berubah.")
+    c = st.columns(2)
+    c[0].metric("Skor sistem", fb_mod.display_score(io.load_json(run / answer_id / "score.json")["score"]))
+    corrected = run / answer_id / "score_corrected.json"
+    if corrected.exists():
+        sc = io.load_json(corrected)
+        c[1].metric("Skor terkoreksi", fb_mod.display_score(sc["score"]),
+                    "✓ SPARQL sama" if abs(sc["score"] - sc["sparql_score"]) < 1e-9 else "✗ SPARQL berbeda")
+
+
+PAGES = {"Ontologi": page_ontology, "Soal & Kunci": page_question, "Usulan Kunci": page_propose,
+         "Penjelajah Graf": page_explorer, "Nilai Jawaban": page_grade, "Tinjauan Dosen": page_review,
+         "Konsol SPARQL": page_sparql, "Evaluasi": page_evaluation}
 st.sidebar.title("AutoGrade-RDF")
-page = st.sidebar.radio("Halaman", list(PAGES), index=3)
+page = st.sidebar.radio("Halaman", list(PAGES), index=list(PAGES).index("Nilai Jawaban"))
 st.sidebar.caption("Skor = fungsi eksplisit atas ledger triple RDF (Pers. 6). LLM tidak pernah menentukan skor.")
 PAGES[page]()
