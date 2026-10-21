@@ -1,0 +1,2 @@
+<!-- AI-drafted (Claude) from the public sources listed below; not lecturer-validated. -->
+Informasi elektronik, dokumen elektronik, dan hasil cetaknya merupakan alat bukti hukum yang sah. Alat bukti elektronik merupakan perluasan dari alat bukti yang sah sesuai hukum acara yang berlaku di Indonesia. Informasi elektronik dinyatakan sah apabila menggunakan sistem elektronik sesuai ketentuan UU ITE.

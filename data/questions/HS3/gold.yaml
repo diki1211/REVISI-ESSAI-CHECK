@@ -1,0 +1,19 @@
+# Cyber law & security set (HS/KS): drafted by an AI (Claude) from the public sources in question.md.
+# NOT lecturer-validated. Validate the triples, weights and aliases with the lecturer before real use.
+question_id: HS3
+validated_by: null
+validated_on: null
+drafted_by: Claude (AI draft)
+concepts:
+  InformasiElektronik:  {aliases: [informasi elektronik, data elektronik, bukti digital]}
+  DokumenElektronik:    {aliases: [dokumen elektronik, dokumen digital]}
+  HasilCetak:           {aliases: [hasil cetaknya, hasil cetak, cetakan, print out, tangkapan layar yang dicetak]}
+  AlatBuktiElektronik:  {aliases: [alat bukti elektronik, bukti elektronik]}
+  AlatBuktiSah:         {aliases: [alat bukti hukum yang sah, alat bukti yang sah, alat bukti sah, alat bukti]}
+  PerluasanAlatBukti:   {aliases: [perluasan dari alat bukti yang sah, perluasan alat bukti, perluasan dari alat bukti yang sah sesuai hukum acara, perluasan dari alat bukti yang sah sesuai hukum acara yang berlaku di indonesia]}
+  SistemElektronikSah:  {aliases: [sistem elektronik sesuai ketentuan uu ite, sistem elektronik sesuai ketentuan, sistem elektronik yang sesuai ketentuan, sistem elektronik yang andal, sistem elektronik]}
+# requires (Rule 4, demonstration): the conclusion "sah sebagai alat bukti" rests on the condition in ayat (3).
+triples:
+  - {id: R1, s: [InformasiElektronik, DokumenElektronik, HasilCetak, AlatBuktiElektronik], p: merupakan, o: AlatBuktiSah, criterion: K1_Kedudukan, weight: 2, requires: [R3]}
+  - {id: R2, s: [AlatBuktiElektronik, InformasiElektronik, DokumenElektronik], p: merupakan, o: PerluasanAlatBukti, criterion: K2_Perluasan, weight: 1}
+  - {id: R3, s: [InformasiElektronik, DokumenElektronik], p: menggunakan, o: SistemElektronikSah, criterion: K3_Syarat, weight: 2}

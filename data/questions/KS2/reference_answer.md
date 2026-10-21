@@ -1,0 +1,2 @@
+<!-- AI-drafted (Claude) from the public sources listed below; not lecturer-validated. -->
+Ransomware merupakan malware. Ransomware mengenkripsi file pada perangkat korban. Penyerang meminta tebusan untuk mendekripsi file. Backup offline yang terenkripsi dan diuji secara berkala memulihkan data tanpa membayar tebusan. Pembaruan perangkat lunak mencegah eksploitasi kerentanan. Autentikasi multifaktor mencegah pengambilalihan akun. Segmentasi jaringan mengurangi penyebaran serangan.

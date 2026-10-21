@@ -1,0 +1,6 @@
+# SYNTHETIC: invented answer, annotated by an AI (Claude) for the offline demo. Not real data.
+annotated_by: Claude (AI)
+triples:
+  - {s: kerahasiaan, p: menyebabkan, o: pengungkapan informasi yang tidak sah, sentences: [1]}
+  - {s: integritas, p: mencegah, o: perubahan data yang tidak sah, sentences: [2]}
+  - {s: ddos, p: mengancam, o: kerahasiaan, sentences: [3]}

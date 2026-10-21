@@ -1,0 +1,29 @@
+# Cyber law & security set (HS/KS): drafted by an AI (Claude) from the public sources in question.md.
+# NOT lecturer-validated. Validate the triples, weights and aliases with the lecturer before real use.
+question_id: HS2
+validated_by: null
+validated_on: null
+drafted_by: Claude (AI draft)
+concepts:
+  PengendaliDataPribadi: {aliases: [pengendali data pribadi, pengendali data, pengendali, controller, data controller]}
+  ProsesorDataPribadi:   {aliases: [prosesor data pribadi, prosesor data, prosesor, processor, data processor, pemroses data]}
+  TujuanPemrosesan:      {aliases: [tujuan pemrosesan data pribadi, tujuan pemrosesan, tujuan pengolahan data, tujuan]}
+  KendaliPemrosesan:     {aliases: [kendali atas pemrosesan data pribadi, kendali pemrosesan, kendali atas pemrosesan, cara pemrosesan]}
+  PerintahPengendali:    {aliases: [perintah pengendali data pribadi, perintah pengendali, instruksi pengendali, pemrosesan atas perintah pengendali data pribadi, pemrosesan atas nama pengendali]}
+  DataPribadiSpesifik:   {aliases: [data pribadi yang bersifat spesifik, data pribadi spesifik, data spesifik, data sensitif, data pribadi sensitif]}
+  DataKesehatan:         {aliases: [data kesehatan, informasi kesehatan, rekam medis]}
+  DataBiometrik:         {aliases: [data biometrik, biometrik, sidik jari]}
+  DataGenetika:          {aliases: [data genetika, data genetik, dna]}
+  CatatanKejahatan:      {aliases: [catatan kejahatan, catatan kriminal, riwayat kejahatan]}
+  DataAnak:              {aliases: [data anak, data pribadi anak]}
+  DataKeuanganPribadi:   {aliases: [data keuangan pribadi, data keuangan, informasi keuangan]}
+triples:
+  - {id: R1, s: PengendaliDataPribadi, p: menentukan,   o: TujuanPemrosesan,    criterion: K1_Peran,    weight: 2}
+  - {id: R2, s: PengendaliDataPribadi, p: menentukan,   o: KendaliPemrosesan,   criterion: K1_Peran,    weight: 1}
+  - {id: R3, s: ProsesorDataPribadi,   p: melaksanakan, o: PerintahPengendali,  criterion: K1_Peran,    weight: 2}
+  - {id: R4, s: DataPribadiSpesifik,   p: mencakup,     o: DataKesehatan,       criterion: K2_Spesifik, weight: 0.5}
+  - {id: R5, s: DataPribadiSpesifik,   p: mencakup,     o: DataBiometrik,       criterion: K2_Spesifik, weight: 0.5}
+  - {id: R6, s: DataPribadiSpesifik,   p: mencakup,     o: DataGenetika,        criterion: K2_Spesifik, weight: 0.5}
+  - {id: R7, s: DataPribadiSpesifik,   p: mencakup,     o: CatatanKejahatan,    criterion: K2_Spesifik, weight: 0.5}
+  - {id: R8, s: DataPribadiSpesifik,   p: mencakup,     o: DataAnak,            criterion: K2_Spesifik, weight: 0.5}
+  - {id: R9, s: DataPribadiSpesifik,   p: mencakup,     o: DataKeuanganPribadi, criterion: K2_Spesifik, weight: 0.5}

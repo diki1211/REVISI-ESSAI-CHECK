@@ -1,0 +1,88 @@
+@prefix ag: <http://example.org/autograde/ontology#> .
+@prefix key: <http://example.org/autograde/key/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+key:KS3_R1 a ag:ReferenceTriple ;
+    ag:criterion key:KS3_K1_Penyebab ;
+    ag:hasObject key:SQLInjection ;
+    ag:hasPredicate ag:menyebabkan ;
+    ag:hasSubject key:QueryDinamis ;
+    ag:weight 2.0 .
+
+key:KS3_R2 a ag:ReferenceTriple ;
+    ag:criterion key:KS3_K1_Penyebab ;
+    ag:hasObject key:PerintahSQL ;
+    ag:hasPredicate ag:menyisipkan ;
+    ag:hasSubject key:Penyerang ;
+    ag:weight 1.0 .
+
+key:KS3_R4 a ag:ReferenceTriple ;
+    ag:criterion key:KS3_K2_Pencegahan ;
+    ag:hasObject key:SQLInjection ;
+    ag:hasPredicate ag:mencegah ;
+    ag:hasSubject key:PreparedStatement ;
+    ag:requiresPremise key:KS3_R3 ;
+    ag:weight 2.0 .
+
+key:KS3_R5 a ag:ReferenceTriple ;
+    ag:criterion key:KS3_K2_Pencegahan ;
+    ag:hasObject key:RisikoSQLInjection ;
+    ag:hasPredicate ag:mengurangi ;
+    ag:hasSubject key:ValidasiAllowList ;
+    ag:weight 1.0 .
+
+key:KS3_R6 a ag:ReferenceTriple ;
+    ag:criterion key:KS3_K3_Mitigasi ;
+    ag:hasObject key:DampakSerangan ;
+    ag:hasPredicate ag:mengurangi ;
+    ag:hasSubject key:LeastPrivilege ;
+    ag:weight 1.0 .
+
+key:DampakSerangan a ag:Concept,
+        skos:Concept .
+
+key:KS3_K3_Mitigasi a ag:Criterion ;
+    rdfs:comment "Menyebutkan pertahanan tambahan"@id .
+
+key:KS3_R3 a ag:ReferenceTriple ;
+    ag:criterion key:KS3_K2_Pencegahan ;
+    ag:hasObject key:KodeDanData ;
+    ag:hasPredicate ag:memisahkan ;
+    ag:hasSubject key:PreparedStatement ;
+    ag:weight 1.0 .
+
+key:KodeDanData a ag:Concept,
+        skos:Concept .
+
+key:LeastPrivilege a ag:Concept,
+        skos:Concept .
+
+key:Penyerang a ag:Concept,
+        skos:Concept .
+
+key:PerintahSQL a ag:Concept,
+        skos:Concept .
+
+key:QueryDinamis a ag:Concept,
+        skos:Concept .
+
+key:RisikoSQLInjection a ag:Concept,
+        skos:Concept .
+
+key:ValidasiAllowList a ag:Concept,
+        skos:Concept .
+
+key:KS3_K1_Penyebab a ag:Criterion ;
+    rdfs:comment "Menjelaskan penyebab SQL injection"@id .
+
+key:PreparedStatement a ag:Concept,
+        skos:Concept .
+
+key:SQLInjection a ag:Concept,
+        skos:Concept .
+
+key:KS3_K2_Pencegahan a ag:Criterion ;
+    rdfs:comment "Menjelaskan pertahanan utama dan alasannya"@id .
+

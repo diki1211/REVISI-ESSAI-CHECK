@@ -1,0 +1,5 @@
+# SYNTHETIC: invented answer, annotated by an AI (Claude) for the offline demo. Not real data.
+annotated_by: Claude (AI)
+triples:
+  - {s: ransomware, p: merupakan, o: virus, sentences: [1]}
+  - {s: segmentasi jaringan, p: meningkatkan, o: penyebaran serangan, sentences: [3]}

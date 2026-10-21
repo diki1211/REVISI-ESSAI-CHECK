@@ -1,0 +1,2 @@
+<!-- AI-drafted (Claude) from the public sources listed below; not lecturer-validated. -->
+Query dinamis yang menggabungkan input pengguna tanpa validasi menyebabkan SQL injection. Penyerang menyisipkan perintah SQL melalui input tersebut. Prepared statement memisahkan kode SQL dari data. Prepared statement mencegah SQL injection. Validasi input dengan allow-list mengurangi risiko SQL injection. Prinsip hak akses minimal mengurangi dampak serangan.

@@ -1,0 +1,31 @@
+# Cyber law & security set (HS/KS): drafted by an AI (Claude) from the public sources in question.md.
+# NOT lecturer-validated. Validate the triples, weights and aliases with the lecturer before real use.
+question_id: HS1
+validated_by: null
+validated_on: null
+drafted_by: Claude (AI draft)
+concepts:
+  PengendaliDataPribadi: {aliases: [pengendali data pribadi, pengendali data, pengendali, controller, data controller, perusahaan, penyelenggara]}
+  SubjekDataPribadi:     {aliases: [subjek data pribadi, subjek data, pemilik data, pemilik data pribadi, pengguna, korban, orang yang datanya bocor]}
+  LembagaPDP:            {aliases: [lembaga, lembaga pelindungan data pribadi, lembaga pengawas, otoritas pelindungan data, pemerintah, kominfo, komdigi]}
+  Pemberitahuan:         {aliases: [pemberitahuan, pemberitahuan tertulis, notifikasi, laporan]}
+  BatasWaktu72Jam:       {aliases: [3 x 24 jam, 3x24 jam, batas waktu 3x24 jam, 72 jam, tiga kali dua puluh empat jam, batas waktu 3 x 24 jam, paling lambat 3 x 24 jam, batas waktu paling lambat 3 x 24 jam]}
+  DataTerungkap:         {aliases: [data pribadi yang terungkap, data yang terungkap, data yang bocor, data pribadi yang bocor]}
+  WaktuDanCaraTerungkap: {aliases: [waktu dan cara data terungkap, kapan dan bagaimana data terungkap, kapan dan bagaimana data pribadi terungkap, waktu kejadian]}
+  UpayaPemulihan:        {aliases: [upaya penanganan dan pemulihan, upaya penanganan, upaya pemulihan, penanganan dan pemulihan, langkah pemulihan]}
+  SanksiAdministratif:   {aliases: [sanksi administratif, sanksi, sanksi administrasi]}
+  PeringatanTertulis:    {aliases: [peringatan tertulis, teguran tertulis, peringatan]}
+  PenghentianPemrosesan: {aliases: [penghentian sementara kegiatan pemrosesan, penghentian sementara pemrosesan, penghentian pemrosesan, penghentian sementara kegiatan pemrosesan data pribadi]}
+  PenghapusanData:       {aliases: [penghapusan atau pemusnahan data pribadi, penghapusan data pribadi, pemusnahan data pribadi, penghapusan data]}
+  DendaAdministratif:    {aliases: [denda administratif, denda]}
+triples:
+  - {id: R1, s: PengendaliDataPribadi, p: memberitahu, o: SubjekDataPribadi,     criterion: K1_Pemberitahuan, weight: 2}
+  - {id: R2, s: PengendaliDataPribadi, p: memberitahu, o: LembagaPDP,            criterion: K1_Pemberitahuan, weight: 2}
+  - {id: R3, s: Pemberitahuan,         p: memiliki,    o: BatasWaktu72Jam,       criterion: K1_Pemberitahuan, weight: 2}
+  - {id: R4, s: Pemberitahuan,         p: memuat,      o: DataTerungkap,         criterion: K2_Isi,           weight: 1}
+  - {id: R5, s: Pemberitahuan,         p: memuat,      o: WaktuDanCaraTerungkap, criterion: K2_Isi,           weight: 1}
+  - {id: R6, s: Pemberitahuan,         p: memuat,      o: UpayaPemulihan,        criterion: K2_Isi,           weight: 1}
+  - {id: R7, s: SanksiAdministratif,   p: mencakup,    o: PeringatanTertulis,    criterion: K3_Sanksi,        weight: 0.5}
+  - {id: R8, s: SanksiAdministratif,   p: mencakup,    o: PenghentianPemrosesan, criterion: K3_Sanksi,        weight: 0.5}
+  - {id: R9, s: SanksiAdministratif,   p: mencakup,    o: PenghapusanData,       criterion: K3_Sanksi,        weight: 0.5}
+  - {id: R10, s: SanksiAdministratif,  p: mencakup,    o: DendaAdministratif,    criterion: K3_Sanksi,        weight: 0.5}

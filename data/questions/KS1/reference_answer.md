@@ -1,0 +1,2 @@
+<!-- AI-drafted (Claude) from the public sources listed below; not lecturer-validated. -->
+Kerahasiaan mencegah pengungkapan informasi yang tidak sah. Integritas mencegah modifikasi atau perusakan informasi yang tidak sah. Ketersediaan menjamin akses yang tepat waktu dan andal terhadap informasi. Penyadapan mengancam kerahasiaan. Manipulasi data mengancam integritas. Serangan DDoS mengancam ketersediaan.

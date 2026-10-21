@@ -1,0 +1,11 @@
+# Cyber law & security set (HS/KS): drafted by an AI (Claude) from the public sources in question.md.
+# NOT lecturer-validated. Validate the triples, weights and aliases with the lecturer before real use.
+question_id: HS3
+language: id
+criteria:
+  - id: K1_Kedudukan
+    description: Menyatakan informasi elektronik sebagai alat bukti hukum yang sah
+  - id: K2_Perluasan
+    description: Menjelaskan hubungannya dengan alat bukti menurut hukum acara
+  - id: K3_Syarat
+    description: Menyebutkan syarat keabsahan informasi elektronik

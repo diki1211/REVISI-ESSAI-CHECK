@@ -1,0 +1,2 @@
+<!-- AI-drafted (Claude) from the public sources listed below; not lecturer-validated. -->
+Pengendali Data Pribadi menentukan tujuan pemrosesan data pribadi. Pengendali Data Pribadi juga menentukan kendali atas pemrosesan data pribadi. Prosesor Data Pribadi melaksanakan pemrosesan atas perintah Pengendali Data Pribadi. Data pribadi yang bersifat spesifik mencakup data kesehatan, data biometrik, data genetika, catatan kejahatan, data anak, dan data keuangan pribadi.

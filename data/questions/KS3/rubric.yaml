@@ -1,0 +1,11 @@
+# Cyber law & security set (HS/KS): drafted by an AI (Claude) from the public sources in question.md.
+# NOT lecturer-validated. Validate the triples, weights and aliases with the lecturer before real use.
+question_id: KS3
+language: id
+criteria:
+  - id: K1_Penyebab
+    description: Menjelaskan penyebab SQL injection
+  - id: K2_Pencegahan
+    description: Menjelaskan pertahanan utama dan alasannya
+  - id: K3_Mitigasi
+    description: Menyebutkan pertahanan tambahan

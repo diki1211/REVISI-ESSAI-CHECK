@@ -1,0 +1,8 @@
+# SYNTHETIC: invented answer, annotated by an AI (Claude) for the offline demo. Not real data.
+annotated_by: Claude (AI)
+triples:
+  - {s: pengendali data pribadi, p: menentukan, o: tujuan pemrosesan data, sentences: [1]}
+  - {s: prosesor, p: menjalankan, o: perintah pengendali, sentences: [2]}
+  - {s: data spesifik, p: meliputi, o: data kesehatan, sentences: [3]}
+  - {s: data spesifik, p: meliputi, o: biometrik, sentences: [3]}
+  - {s: data spesifik, p: meliputi, o: data anak, sentences: [3]}
